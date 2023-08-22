@@ -1,21 +1,28 @@
 package com.musthave0145.mochelins;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,10 +36,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
 
 import org.apache.commons.io.IOUtils;
 
@@ -42,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MeetingCreateActivity extends AppCompatActivity {
@@ -52,10 +65,15 @@ public class MeetingCreateActivity extends AppCompatActivity {
     ImageView[] imgButtonList = new ImageView[imgButtons.length];
 
     TextView txtPlace;
-    TextView txtSchedule;
+    Button btnDate;
+    Button btnTime;
     EditText editPerson;
 
+    Toolbar toolbar;
     File photoFile;
+
+    String date = "";
+    String time = "";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -63,16 +81,31 @@ public class MeetingCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_create);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+
         for (int i = 0; i < imgButtons.length ; i++) {
             imgButtonList[i] = findViewById(imgButtons[i]);}
         txtPlace = findViewById(R.id.txtPlace);
-        txtSchedule = findViewById(R.id.txtSchedule);
+        btnDate = findViewById(R.id.btnDate);
+        btnTime = findViewById(R.id.btnTime);
+
+        editPerson = findViewById(R.id.editPerson);
+
+        imgButtonList[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+
+            }
+        });
 
         imgButtonList[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDialog();
-
             }
         });
 
@@ -83,10 +116,91 @@ public class MeetingCreateActivity extends AppCompatActivity {
             }
         });
 
-        txtSchedule.setOnClickListener(new View.OnClickListener() {
+        btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 일정 선택
+
+                Calendar current = Calendar.getInstance();
+//                현재의 년 월 일 (오늘날짜)가져오는 코드
+//                current.get(Calendar.YEAR);
+//                current.get(Calendar.MONTH);
+//                current.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        MeetingCreateActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                // i : 년, i1 : 월(0부터시작, 화면에 보일라면 +1), i2 : 일
+                                // date : 유저가 설정한 날짜 ex)
+
+                                int month = i1 + 1;
+                                String strMonth;
+                                if(month < 10) {
+                                    strMonth = "0" + month;
+                                } else {
+                                    strMonth = "" + month;
+                                }
+
+
+                                String strDay;
+                                if(i2 < 10) {
+                                    strDay = "0" + i2;
+                                } else {
+                                    strDay = "" + i2;
+                                }
+
+                                date = i + "-" + strMonth + "-" + strDay;
+                                btnDate.setText(date);
+
+
+                            } // 다른건 다 상관없고, 월만 0으로 시작한디.. 1월은 0, 2월은 1월 ...
+                        },current.get(Calendar.YEAR),current.get(Calendar.MONTH),current.get(Calendar.DAY_OF_MONTH)
+                );
+                dialog.show();
+
+            }
+        });
+
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Calendar current = Calendar.getInstance();
+
+                TimePickerDialog dialog = new TimePickerDialog(
+                        MeetingCreateActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
+                                String hour;
+                                if(i < 10) {
+                                    hour = "0" + i;
+                                } else {
+                                    hour = "" + i;
+                                }
+
+                                String minute;
+                                if(i1 < 10){
+                                    minute = "0" + i1;
+                                } else {
+                                    minute = "" + i1;
+                                }
+
+                                time = hour + ":" + minute;
+                                btnTime.setText(time);
+
+
+                            }
+                        },
+                        current.get(Calendar.HOUR_OF_DAY),
+                        current.get(Calendar.MINUTE),
+                        true
+
+                );
+                dialog.show();
+
             }
         });
 
@@ -303,8 +417,11 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
             photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
+            imgButtonList[0].setVisibility(View.GONE);
+            imgButtonList[1].setVisibility(View.VISIBLE);
             imgButtonList[1].setImageBitmap(photo);
             imgButtonList[1].setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imgButtonList[1].setClipToOutline(true);
 
             // 네트워크로 데이터 보낸다.
 
@@ -340,7 +457,8 @@ public class MeetingCreateActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
                 }
-
+                imgButtonList[0].setVisibility(View.GONE);
+                imgButtonList[1].setVisibility(View.VISIBLE);
                 imgButtonList[1].setImageBitmap(photo);
                 imgButtonList[1].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
@@ -434,6 +552,22 @@ public class MeetingCreateActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
     }
 
 

@@ -47,7 +47,9 @@
                     android:layout_centerInParent="false"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:visibility="gone"
+                    android:background="@drawable/corner"
                     app:srcCompat="@drawable/baseline_image_24" />
 
             </RelativeLayout>
@@ -68,7 +70,8 @@
                     android:background="@null"
                     android:ems="10"
                     android:hint="작성할 내용을 입력하세요."
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:scrollHorizontally="true"
                     tools:ignore="TouchTargetSizeCheck" />
 
                 <View
@@ -110,6 +113,12 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#ACACAC" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -131,17 +140,31 @@
                         android:text="일정"
                         android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/txtSchedule"
+                    <Button
+                        android:id="@+id/btnDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="130dp"
+                        android:text="날짜 선택" />
+
+                    <Button
+                        android:id="@+id/btnTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:text="일정을 선택하세요."
-                        android:textSize="18sp" />
+                        android:text="시간 선택" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#ACACAC" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -199,6 +222,12 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#ACACAC" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -228,6 +257,81 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
                         app:srcCompat="@drawable/baseline_keyboard_arrow_down_24" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="60dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/baseline_location_on_24" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="65dp"
+                                android:layout_marginTop="16dp"
+                                android:text="계산 방법"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="150dp"
+                                android:layout_marginTop="16dp"
+                                android:text="더치페이 여부"
+                                android:textSize="18sp" />
+
+                            <Switch
+                                android:id="@+id/switchDutch"
+                                android:layout_width="70dp"
+                                android:layout_height="50dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="10dp" />
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/baseline_location_on_24" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="150dp"
+                                android:layout_marginTop="16dp"
+                                android:text="더치페이 여부"
+                                android:textSize="18sp" />
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
                 </RelativeLayout>
 
             </LinearLayout>

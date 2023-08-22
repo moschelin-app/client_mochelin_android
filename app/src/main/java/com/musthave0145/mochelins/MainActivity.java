@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (itemId == R.id.menuAdd) {
 
+            Intent intent = new Intent(MainActivity.this, MeetingCreateActivity.class);
+            startActivity(intent);
+
         } else if (itemId == R.id.menuRecommend) {
 
         }
