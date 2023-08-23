@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.musthave0145.mochelins.config.Config;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment mapFragment;
     Fragment plannerFragment;
     Toolbar toolbar;
+    String token;
 
 
     @Override
@@ -37,6 +40,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
+
+        // 회원가입이나 로그인이 되어있는 유저인지 체크해야 한다.
+        // 억세스토큰이 있는지를 확인하는 코드로 작성.
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        token = sp.getString(Config.ACCESS_TOKEN, "");
+
+        if(token.isEmpty()){
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+
+            finish();
+            return;
+        }
 
 
         // 탭바 화면이랑 연결

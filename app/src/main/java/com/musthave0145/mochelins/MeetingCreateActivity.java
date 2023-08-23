@@ -37,10 +37,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -60,7 +63,7 @@ import java.util.Date;
 public class MeetingCreateActivity extends AppCompatActivity {
 
     Integer[] imgButtons = {R.id.imgButton, R.id.imgView, R.id.btnPlus,
-                           R.id.btnMinus, R.id.imgMenu};
+                           R.id.btnMinus};
 
     ImageView[] imgButtonList = new ImageView[imgButtons.length];
 
@@ -68,6 +71,10 @@ public class MeetingCreateActivity extends AppCompatActivity {
     Button btnDate;
     Button btnTime;
     EditText editPerson;
+    EditText editMoney;
+    TextView txtPay;
+    RelativeLayout moneyLayout;
+    Switch switchPay;
 
     Toolbar toolbar;
     File photoFile;
@@ -91,6 +98,11 @@ public class MeetingCreateActivity extends AppCompatActivity {
         txtPlace = findViewById(R.id.txtPlace);
         btnDate = findViewById(R.id.btnDate);
         btnTime = findViewById(R.id.btnTime);
+        editMoney = findViewById(R.id.editMoney);
+        txtPay = findViewById(R.id.txtPay);
+        moneyLayout = findViewById(R.id.moneyLayout);
+
+        switchPay = findViewById(R.id.switchPay);
 
         editPerson = findViewById(R.id.editPerson);
 
@@ -221,7 +233,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String strDistance = editPerson.getText().toString().trim();
                 int distance = Integer.parseInt(strDistance);
-                if (distance < 100) {
+                if (distance < 10) {
                     distance = distance + 1;
                     editPerson.setText(distance+"");
                 }
@@ -247,13 +259,28 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
                 try {
                     value = Integer.parseInt(text);
-                    if (value < 2 || value > 100) {
-                        editPerson.setError("2명과 100명 사이의 값을 입력하세요.");
+                    if (value < 2 || value > 10) {
+                        editPerson.setError("2명과 10명 사이의 값을 입력하세요.");
                     } else {
                         editPerson.setError(null); // 에러 메시지 제거
                     }
                 } catch (NumberFormatException e) {
                     editPerson.setError("올바른 숫자를 입력하세요.");
+                }
+            }
+        });
+
+        switchPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (switchPay.isChecked()) {
+                    // switch가 체크되어 있는 경우
+                    moneyLayout.setVisibility(View.VISIBLE);
+                    txtPay.setText("사용자 지정");
+                } else {
+                    // switch가 체크되어 있지 않은 경우
+                    moneyLayout.setVisibility(View.GONE);
+                    txtPay.setText("각자 계산");
                 }
             }
         });
@@ -460,7 +487,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
                 imgButtonList[0].setVisibility(View.GONE);
                 imgButtonList[1].setVisibility(View.VISIBLE);
                 imgButtonList[1].setImageBitmap(photo);
-                imgButtonList[1].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                imgButtonList[1].setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 //                imageView.setImageBitmap( getBitmapAlbum( imageView, albumUri ) );
 

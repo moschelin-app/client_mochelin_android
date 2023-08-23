@@ -57,7 +57,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         }
 
         holder.txtDistance.setText(meeting.distance+"");
-        holder.txtStoreName.setText(meeting.storeName);
+        holder.txtStoreName.setText(" "+meeting.storeName+" ");
         holder.txtMeetName.setText(meeting.content);
 
         // TODO: 스토어ID로 주소를 가져와야 한다.

@@ -27,6 +27,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MeetingCreateActivity"
             android:exported="false" />
         <activity
@@ -50,7 +56,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.musthave0145.mochelins.fileprovider"
+            android:authorities="com.musthave0145.Mochelins.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -59,8 +65,8 @@
         </provider>
 
         <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="s4m7wlm1g0" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
     </application>
 
 </manifest>

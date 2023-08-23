@@ -302,12 +302,13 @@
                         android:text="인천광역시 서구 서곶로 294" />
                 </LinearLayout>
 
-                <com.naver.maps.map.MapView
+                <com.google.android.gms.maps.MapView
                     android:id="@+id/mapView"
                     android:layout_width="350dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    tools:ignore="SpeakableTextPresentCheck"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

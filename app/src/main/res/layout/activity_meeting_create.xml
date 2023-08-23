@@ -48,8 +48,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:visibility="gone"
                     android:background="@drawable/corner"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/baseline_image_24" />
 
             </RelativeLayout>
@@ -249,15 +250,6 @@
                         android:text="추가정보"
                         android:textSize="18sp" />
 
-                    <ImageView
-                        android:id="@+id/imgMenu"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="5dp"
-                        app:srcCompat="@drawable/baseline_keyboard_arrow_down_24" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -274,8 +266,7 @@
                                 android:layout_marginLeft="15dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:visibility="invisible"
-                                app:srcCompat="@drawable/baseline_location_on_24" />
+                                app:srcCompat="@drawable/outline_payment_24" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -287,16 +278,17 @@
                                 android:textSize="18sp" />
 
                             <TextView
+                                android:id="@+id/txtPay"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="150dp"
                                 android:layout_marginTop="16dp"
-                                android:text="더치페이 여부"
+                                android:text="각자 계산"
                                 android:textSize="18sp" />
 
                             <Switch
-                                android:id="@+id/switchDutch"
+                                android:id="@+id/switchPay"
                                 android:layout_width="70dp"
                                 android:layout_height="50dp"
                                 android:layout_alignParentRight="true"
@@ -307,8 +299,10 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/moneyLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:visibility="gone">
 
                             <ImageView
                                 android:layout_width="40dp"
@@ -323,9 +317,31 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="150dp"
+                                android:layout_marginLeft="65dp"
                                 android:layout_marginTop="16dp"
-                                android:text="더치페이 여부"
+                                android:text="최소 금액"
+                                android:textSize="18sp" />
+
+                            <EditText
+                                android:id="@+id/editMoney"
+                                android:layout_width="184dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="50dp"
+                                android:ems="10"
+                                android:hint="금액을 입력하세요."
+                                android:inputType="number"
+                                tools:ignore="TouchTargetSizeCheck" />
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="30dp"
+                                android:text="원"
                                 android:textSize="18sp" />
 
 

@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.adapter.ItemAdapter;
 import com.musthave0145.mochelins.model.Meeting;
-import com.naver.maps.geometry.LatLng;
-import com.naver.maps.map.CameraPosition;
-import com.naver.maps.map.MapView;
-import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.OnMapReadyCallback;
-import com.naver.maps.map.UiSettings;
-import com.naver.maps.map.overlay.Marker;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,8 +31,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MeetingDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    MapView mapView;
-    static NaverMap naverMap;
 
 //    ViewPager2 viewPager2;
 //    int[] images= {R.drawable.avatar1,R.drawable.avatar2,R.drawable.smile2,R.drawable.balloon};
@@ -52,6 +50,10 @@ public class MeetingDetailActivity extends AppCompatActivity implements OnMapRea
 
     Meeting meeting;
 
+    MapView mapView;
+
+    // TODO: 구글맵을 셋팅하자
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -61,6 +63,11 @@ public class MeetingDetailActivity extends AppCompatActivity implements OnMapRea
         setContentView(R.layout.activity_meeting_detail);
         meeting = (Meeting) getIntent().getSerializableExtra("meeting");
         // TODO: 이 방법 말고, 특정 게시물의 아이디를 가져와 이쪽에서 다시 요청하는 것으로 바꿔보자!!!
+
+
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(MeetingDetailActivity.this);
 
 
         for (int i = 0; i < imgProfiles.length ; i++) {
@@ -79,17 +86,13 @@ public class MeetingDetailActivity extends AppCompatActivity implements OnMapRea
 
 
 
-
-        mapView = findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-
         textViewsList[1].setText(meeting.content);
 
         String count = meeting.attend + "/" + meeting.maximum;
 
         textViewsList[2].setText(count);
 
-        textViewsList[3].setText(meeting.storeName);
+        textViewsList[3].setText(" "+meeting.storeName+" ");
 
         textViewsList[4].setText("최대 " + meeting.maximum + "명 참여 가능");
 
@@ -122,49 +125,12 @@ public class MeetingDetailActivity extends AppCompatActivity implements OnMapRea
 
         }
 
-
     @Override
-    public void onMapReady(@NonNull NaverMap naverMap) {
-        this.naverMap = naverMap;
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        LatLng myLocation = new LatLng(meeting.storeLat, meeting.storeLng);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15f));
+        googleMap.addMarker(new MarkerOptions().position(myLocation).title(meeting.storeName));
 
-        //TODO: 나중에 지도와 마커를 셋팅하자!!
-
-//        LatLng latLng = new LatLng(33.38, 126.55);
-//
-//        CameraPosition cameraPosition = new CameraPosition(latLng, 10);
-//        naverMap.setCameraPosition(cameraPosition);
-//
-//        Marker marker = new Marker();
-//        marker.setPosition(latLng);
-//        marker.setCaptionText("못찾겠쥐~~멍충멍충");
-//
-//        UiSettings uiSettings = naverMap.getUiSettings();
-//        uiSettings.setZoomControlEnabled(false);
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
     }
 }
