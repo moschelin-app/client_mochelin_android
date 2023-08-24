@@ -27,19 +27,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".meeting.MeetingPlaceSelectActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".user.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MeetingCreateActivity"
+            android:name=".user.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MeetingDetailActivity"
+            android:name=".meeting.MeetingCreateActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviewDetailActivity"
+            android:name=".meeting.MeetingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".review.ReviewDetailActivity"
             android:exported="false" />
         <activity
             android:name=".FilterActivity"

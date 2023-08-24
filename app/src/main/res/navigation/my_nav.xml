@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/reviewFragment"
-        android:name="com.musthave0145.mochelins.ReviewFragment"
+        android:name="com.musthave0145.mochelins.review.ReviewFragment"
         android:label="fragment_review"
         tools:layout="@layout/fragment_review" />
     <fragment
         android:id="@+id/meetingFragment"
-        android:name="com.musthave0145.mochelins.MeetingFragment"
+        android:name="com.musthave0145.mochelins.meeting.MeetingFragment"
         android:label="fragment_meeting"
         tools:layout="@layout/fragment_meeting" />
     <fragment

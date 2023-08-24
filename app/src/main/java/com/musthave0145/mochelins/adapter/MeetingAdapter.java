@@ -14,11 +14,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.musthave0145.mochelins.MeetingDetailActivity;
+import com.musthave0145.mochelins.meeting.MeetingDetailActivity;
 import com.musthave0145.mochelins.R;
-import com.musthave0145.mochelins.ReviewDetailActivity;
 import com.musthave0145.mochelins.model.Meeting;
-import com.musthave0145.mochelins.model.Review;
 
 import java.util.ArrayList;
 
@@ -47,7 +45,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meeting meeting = meetingArrayList.get(position);
 
-        Log.i("확인", meeting.content);
+//        Log.i("확인", meeting.content);
 
 
         // 미팅 사진이 없으면, 기본 이미지 표시 / 있으면, 그 사진을 표시하는 로직.

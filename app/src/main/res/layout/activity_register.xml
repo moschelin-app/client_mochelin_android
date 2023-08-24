@@ -1,50 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    android:orientation="vertical"
+    tools:context=".user.RegisterActivity" >
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:minHeight="?attr/actionBarSize" >
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/baseline_clear_24_3" />
 
         <TextView
             android:id="@+id/txtRegister"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="120dp"
-            android:layout_marginTop="29dp"
-            android:layout_marginEnd="8dp"
+            android:layout_alignParentTop="false"
+            android:layout_centerInParent="true"
             android:gravity="center_horizontal|top"
             android:text="회원가입"
-            android:textSize="32sp" />
+            android:textSize="28sp" />
 
         <TextView
             android:id="@+id/txtLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
             android:text="로그인"
             android:textAlignment="center"
             android:textColor="#D82323"
             android:textColorLink="#D81B1B" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="413dp"
-        android:layout_height="467dp"
-        android:layout_marginTop="190dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,73 +57,96 @@
         <EditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/corner"
             android:ems="10"
-            android:hint="이메일"
+            android:hint="  이메일"
             android:inputType="textEmailAddress"
             tools:ignore="TouchTargetSizeCheck" />
 
         <EditText
             android:id="@+id/editNickName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/corner"
             android:ems="10"
-            android:hint="닉네임"
+            android:hint="  닉네임"
             android:inputType="text"
             tools:ignore="TouchTargetSizeCheck" />
+
 
         <EditText
             android:id="@+id/editName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/corner"
             android:ems="10"
-            android:hint="이름"
+            android:hint="  이름"
             android:inputType="text"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <EditText
-            android:id="@+id/editPassword1"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
-            android:hint="비밀번호 입력"
-            android:inputType="textPassword"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:passwordToggleEnabled="true">
 
-        <EditText
-            android:id="@+id/editPassword2"
+
+            <EditText
+                android:id="@+id/editPassword1"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/corner"
+                android:ems="10"
+                android:hint="비밀번호 입력"
+                android:inputType="textPassword"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
-            android:hint="비밀번호 확인"
-            android:inputType="textPassword"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:layout_height="match_parent"
+            app:passwordToggleEnabled="true">
+
+
+            <EditText
+                android:id="@+id/editPassword2"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/corner"
+                android:ems="10"
+                android:hint="비밀번호 입력"
+                android:inputType="textPassword"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
 
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="#E42828"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="70dp"
             android:text="회원가입"
-            android:textSize="24sp"/>
+            android:textSize="20sp" />
+
     </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

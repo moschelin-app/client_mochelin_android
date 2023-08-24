@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.musthave0145.mochelins.R;
-import com.musthave0145.mochelins.ReviewDetailActivity;
+import com.musthave0145.mochelins.review.ReviewDetailActivity;
 import com.musthave0145.mochelins.model.Review;
 
 import java.util.ArrayList;
