@@ -78,7 +78,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
     RelativeLayout moneyLayout;
     Switch switchPay;
 
-    Toolbar toolbar;
+
     File photoFile;
 
     String date = "";
@@ -89,11 +89,6 @@ public class MeetingCreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_create);
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
 
         for (int i = 0; i < imgButtons.length ; i++) {
             imgButtonList[i] = findViewById(imgButtons[i]);}

@@ -1,18 +1,25 @@
 package com.musthave0145.mochelins.meeting;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.MeetingAdapter;
 import com.musthave0145.mochelins.api.MeetingApi;
@@ -75,8 +82,15 @@ public class MeetingFragment extends Fragment {
     }
 
 
+    ImageView imgMenu;
+    ImageView imgAdd;
+    DrawerLayout meetingDrawer;
     RecyclerView recyclerView;
     ProgressBar progressBar;
+    ImageView imgMenuClear;
+    Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+                            R.id.cardMap, R.id.cardPlanner};
+    CardView[] cardViewList = new CardView[cardViews.length];
     MeetingAdapter adapter;
     ArrayList<Meeting> meetingArrayList = new ArrayList<>();
     @Override
@@ -84,10 +98,43 @@ public class MeetingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_meeting, container, false);
+        imgMenu = rootView.findViewById(R.id.imgMenu);
+        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
+        meetingDrawer = rootView.findViewById(R.id.meetingDrawer);
         progressBar = rootView.findViewById(R.id.progressBar);
+        imgAdd = rootView.findViewById(R.id.imgAdd);
+
+
+        // 사이드 메뉴바를 열고 닫는 코드
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                meetingDrawer.openDrawer(GravityCompat.END);
+            }
+        });
+
+        imgMenuClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                meetingDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+
+        for(int i = 0; i < cardViews.length; i++) {
+            cardViewList[i] = rootView.findViewById(cardViews[i]);
+        }
+        imgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MeetingCreateActivity.class);
+                startActivity(intent);
+            }
+        });
+
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
 
 
@@ -120,7 +167,7 @@ public class MeetingFragment extends Fragment {
             @Override
             public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
                 progressBar.setVisibility(View.GONE);
-                Log.i("성공", response.body().items.get(0).content);
+//                Log.i("성공", response.body().items.get(0).content);
 
 
                 if(response.isSuccessful()){

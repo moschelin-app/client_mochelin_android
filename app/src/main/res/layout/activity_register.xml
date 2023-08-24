@@ -13,7 +13,7 @@
         android:minHeight="?attr/actionBarSize" >
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/imgMenu"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerHorizontal="false"

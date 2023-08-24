@@ -2,11 +2,15 @@ package com.musthave0145.mochelins;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +59,41 @@ public class MapFragment extends Fragment {
         }
     }
 
+    ImageView imgMenu;
+    ImageView imgMenuClear;
+    DrawerLayout mapDrawer;
+    Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+            R.id.cardMap, R.id.cardPlanner};
+    CardView[] cardViewList = new CardView[cardViews.length];
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_map, container, false);
+
+        imgMenu = rootView.findViewById(R.id.imgMenu);
+        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
+        mapDrawer = rootView.findViewById(R.id.mapDrawer);
+
+        // 사이드 메뉴바를 열고 닫는 코드
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapDrawer.openDrawer(GravityCompat.END);
+            }
+        });
+
+        imgMenuClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        // 사이드 메뉴바 안에 카드뷰 연결코드
+        for(int i = 0; i < cardViews.length; i++) {
+            cardViewList[i] = rootView.findViewById(cardViews[i]);
+        }
+
+        return rootView;
     }
 }

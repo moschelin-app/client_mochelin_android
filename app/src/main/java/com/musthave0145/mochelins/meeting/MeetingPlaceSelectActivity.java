@@ -55,7 +55,7 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
     double lat;
     double lng;
 
-    int radius = 2000; // 미터 단위
+    int radius = 5000; // 미터 단위
 
     String keyword;
 

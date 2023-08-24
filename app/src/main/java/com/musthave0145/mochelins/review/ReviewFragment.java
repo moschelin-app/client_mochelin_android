@@ -3,7 +3,12 @@ package com.musthave0145.mochelins.review;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +16,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.musthave0145.mochelins.FilterActivity;
+import com.musthave0145.mochelins.MapFragment;
+import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.adapter.ReviewAdapter;
+import com.musthave0145.mochelins.meeting.MeetingFragment;
+import com.musthave0145.mochelins.model.Review;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,16 +75,49 @@ public class ReviewFragment extends Fragment {
         }
     }
 
-    RecyclerView recyclerView;
+
+    ImageView imgMenu;
+    ImageView imgMenuClear;
+    DrawerLayout reviewDrawer;
+    Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+            R.id.cardMap, R.id.cardPlanner};
+    CardView[] cardViewList = new CardView[cardViews.length];
     Button btnFilter;
+    RecyclerView recyclerView;
+    ReviewAdapter adapter;
+    ArrayList<Review> reviewArrayList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_review, container, false);
 
+        imgMenu = rootView.findViewById(R.id.imgMenu);
+        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
+        reviewDrawer = rootView.findViewById(R.id.reviewDrawer);
+
         btnFilter = rootView.findViewById(R.id.btnFilter);
         recyclerView = rootView.findViewById(R.id.recyclerView);
+
+        // 사이드 메뉴바를 열고 닫는 코드
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewDrawer.openDrawer(GravityCompat.END);
+            }
+        });
+
+        imgMenuClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        // 사이드 메뉴바 안에 카드뷰 연결코드
+        for(int i = 0; i < cardViews.length; i++) {
+            cardViewList[i] = rootView.findViewById(cardViews[i]);
+        }
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -82,6 +128,41 @@ public class ReviewFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                fragmentTransaction.replace(R.id.reviewFragment, new ReviewFragment());
+//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
+//                fragmentTransaction.commit();
+//            }
+//        });
+//        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                fragmentTransaction.replace(R.id.meetingFragment, new MeetingFragment());
+//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
+//                fragmentTransaction.commit();
+//            }
+//        });
+//        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                fragmentTransaction.replace(R.id.mapFragment, new MapFragment());
+//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
+//                fragmentTransaction.commit();
+//            }
+//        });
+//        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                fragmentTransaction.replace(R.id.plannerFragment, new PlannerFragment());
+//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
+//                fragmentTransaction.commit();
+//            }
+//        });
 
 
 

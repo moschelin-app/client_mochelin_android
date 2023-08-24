@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment meetingFragment;
     Fragment mapFragment;
     Fragment plannerFragment;
-    Toolbar toolbar;
+//    Toolbar toolbar;
     String token;
 
 
@@ -36,10 +36,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
+//        toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayShowTitleEnabled(false);
+
+//        // 액티비티 시작 시 첫 번째 프래그먼트를 표시
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.reviewFragment, new ReviewFragment())
+//                    .commit();
+//        }
 
         // 회원가입이나 로그인이 되어있는 유저인지 체크해야 한다.
         // 억세스토큰이 있는지를 확인하는 코드로 작성.

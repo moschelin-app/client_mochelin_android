@@ -51,6 +51,13 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
             holder.txtNewAddress.setText(placeSelect.vicinity);
         }
 
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     @Override
