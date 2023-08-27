@@ -15,13 +15,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.musthave0145.mochelins.R;
@@ -69,11 +70,12 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_place_select);
 
-        imgBack = findViewById(R.id.imgBack);
+
         editKeyword = findViewById(R.id.editKeyword);
         imgSearch = findViewById(R.id.imgSearch);
         btnSelect = findViewById(R.id.btnSelect);
         progressBar = findViewById(R.id.progressBar);
+        imgBack = findViewById(R.id.imgBack);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -97,6 +99,31 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
 
             }
         });
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 어댑터에서 사용자가 선택한 장소를 가지고 옴
+                PlaceSelect placeSelect = placeSelectArrayList.get(adapter.selectedItem);
+                Intent intent = new Intent();
+                intent.putExtra("placeSelect", placeSelect);
+                setResult(1004,intent);
+                finish();
+
+
+            }
+        });
+
+
         // 폰의 위치를 가져오기 위해서는, 시스템서비스로부터 로케이션 매니져를
         // 받아온다.
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -138,28 +165,29 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
                 locationListener);
 
 
+        // 돋보기 모양을 눌러도, 검색!
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(isLocationReady == false){
-                    Snackbar.make(imgBack,
-                            "현재 위치를 수신중입니다. 잠시만 기다려 주세요.",
-                            Snackbar.LENGTH_LONG).show();
-                    return;
+                searchPlace();
+
+            }
+        });
+
+        // 엔터키를 눌러도, 검색!
+        editKeyword.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER) {
+                    Log.d("MY_TAG", "KeyEvent.KEYCODE_ENTER");
+                    InputMethodManager imm = (InputMethodManager) getSystemService(MeetingCreateActivity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editKeyword.getWindowToken(), 0);//hide keyboard
+                    searchPlace();
+
+                    return true;
                 }
-
-                keyword = editKeyword.getText().toString().trim();
-
-                Log.i("AAA", keyword);
-
-                if(keyword.isEmpty()){
-                    Log.i("AAA", "isEmpty");
-                    return;
-                }
-
-                getNetworkData();
-
+                return false;
             }
         });
 
@@ -279,6 +307,25 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
 
         }
 
+    }
+    void searchPlace() {
+        if(isLocationReady == false){
+            Toast.makeText(MeetingPlaceSelectActivity.this,
+                    "현재 위치를 수신중입니다. 잠시만 기다려 주세요.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        keyword = editKeyword.getText().toString().trim();
+
+        Log.i("AAA", keyword);
+
+        if(keyword.isEmpty()){
+            Log.i("AAA", "isEmpty");
+            return;
+        }
+
+        getNetworkData();
     }
 
 

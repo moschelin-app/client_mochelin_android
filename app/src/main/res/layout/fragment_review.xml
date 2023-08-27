@@ -27,7 +27,25 @@
                 android:layout_centerHorizontal="false"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                app:srcCompat="@drawable/baseline_menu_24_3" />
+                android:src="@drawable/baseline_menu_24_3"/>
+
+            <ImageView
+                android:id="@+id/imgAdd"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="60dp"
+                android:src="@drawable/baseline_add_24_4" />
+
+            <ImageView
+                android:id="@+id/imgSearch"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="110dp"
+                android:src="@drawable/baseline_search_24_4" />
 
         </RelativeLayout>
 

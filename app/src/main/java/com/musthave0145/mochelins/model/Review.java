@@ -5,7 +5,13 @@ import java.util.ArrayList;
 
 public class Review implements Serializable {
 
+    public int id;
+    public int storeId;
+    public int userId;
+    public String content;
+
     public String personUrl;
+
     public String person;
     public String time;
 

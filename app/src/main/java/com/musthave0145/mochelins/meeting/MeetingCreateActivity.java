@@ -1,10 +1,12 @@
 package com.musthave0145.mochelins.meeting;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -16,6 +18,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -49,7 +52,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
+import com.google.android.material.snackbar.Snackbar;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.api.MeetingApi;
+import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.model.MeetingListRes;
+import com.musthave0145.mochelins.model.PlaceSelect;
 
 import org.apache.commons.io.IOUtils;
 
@@ -62,10 +71,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MeetingCreateActivity extends AppCompatActivity {
 
-    Integer[] imgButtons = {R.id.imgButton, R.id.imgView, R.id.btnPlus,
-                           R.id.btnMinus};
+    Integer[] imgButtons = {R.id.imgButton, R.id.imgView, R.id.btnStar5,
+                           R.id.btnStar1};
 
     ImageView[] imgButtonList = new ImageView[imgButtons.length];
 
@@ -74,15 +91,37 @@ public class MeetingCreateActivity extends AppCompatActivity {
     Button btnTime;
     EditText editPerson;
     EditText editMoney;
+    EditText editContent;
     TextView txtPay;
     RelativeLayout moneyLayout;
     Switch switchPay;
+    ImageView imgBack;
+    TextView txtSave;
 
 
     File photoFile;
 
     String date = "";
     String time = "";
+
+    int pay = 0;
+    PlaceSelect placeSelect;
+
+    ActivityResultLauncher<Intent> launcher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            // 로그 무조건 찍어보자!!
+                            Log.i("MeetingCreate", ((PlaceSelect)result.getData().getSerializableExtra("placeSelect")).name);
+                            placeSelect = ((PlaceSelect)result.getData().getSerializableExtra("placeSelect"));
+                            if (result.getResultCode() == 1004){
+                                Log.i("MeetingCreate", "MeetingCreateSuccess");
+
+                                txtPlace.setText(placeSelect.name + "\n" + placeSelect.vicinity);
+                            }
+                        }
+                    });
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -98,10 +137,21 @@ public class MeetingCreateActivity extends AppCompatActivity {
         editMoney = findViewById(R.id.editMoney);
         txtPay = findViewById(R.id.txtPay);
         moneyLayout = findViewById(R.id.moneyLayout);
-
+        editContent = findViewById(R.id.editContent);
         switchPay = findViewById(R.id.switchPay);
 
         editPerson = findViewById(R.id.editPerson);
+        imgBack = findViewById(R.id.imgMenu);
+        txtSave = findViewById(R.id.txtSave);
+
+
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         imgButtonList[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +176,8 @@ public class MeetingCreateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(MeetingCreateActivity.this, MeetingPlaceSelectActivity.class);
-                        startActivity(intent);
+//                        startActivity(intent);
+                        launcher.launch(intent);
                     }
                 });
             }
@@ -137,19 +188,11 @@ public class MeetingCreateActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Calendar current = Calendar.getInstance();
-//                현재의 년 월 일 (오늘날짜)가져오는 코드
-//                current.get(Calendar.YEAR);
-//                current.get(Calendar.MONTH);
-//                current.get(Calendar.DAY_OF_MONTH);
-
                 DatePickerDialog dialog = new DatePickerDialog(
                         MeetingCreateActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                                // i : 년, i1 : 월(0부터시작, 화면에 보일라면 +1), i2 : 일
-                                // date : 유저가 설정한 날짜 ex)
-
                                 int month = i1 + 1;
                                 String strMonth;
                                 if(month < 10) {
@@ -157,8 +200,6 @@ public class MeetingCreateActivity extends AppCompatActivity {
                                 } else {
                                     strMonth = "" + month;
                                 }
-
-
                                 String strDay;
                                 if(i2 < 10) {
                                     strDay = "0" + i2;
@@ -168,9 +209,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
                                 date = i + "-" + strMonth + "-" + strDay;
                                 btnDate.setText(date);
-
-
-                            } // 다른건 다 상관없고, 월만 0으로 시작한디.. 1월은 0, 2월은 1월 ...
+                            }
                         },current.get(Calendar.YEAR),current.get(Calendar.MONTH),current.get(Calendar.DAY_OF_MONTH)
                 );
                 dialog.show();
@@ -206,8 +245,6 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
                                 time = hour + ":" + minute;
                                 btnTime.setText(time);
-
-
                             }
                         },
                         current.get(Calendar.HOUR_OF_DAY),
@@ -281,13 +318,89 @@ public class MeetingCreateActivity extends AppCompatActivity {
                     // switch가 체크되어 있는 경우
                     moneyLayout.setVisibility(View.VISIBLE);
                     txtPay.setText("사용자 지정");
+//                    pay = Integer.parseInt(editMoney.getText().toString());
                 } else {
                     // switch가 체크되어 있지 않은 경우
                     moneyLayout.setVisibility(View.GONE);
                     txtPay.setText("각자 계산");
+                    pay = 0;
+
                 }
             }
         });
+
+
+        // TODO: 입력받은 정보를 서버에 보내주자!! 보내줄 것 : 사진과 글(+), 장소이름과 위도경도, 주소, 일정, 모집인원, 각자계산 아님 금액
+        txtSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String content= editContent.getText().toString();
+                // TODO: Lat, Lng, 가게이름을 서버로 보내주자
+                String name = placeSelect.name;
+                double lat = placeSelect.geometry.location.lat;
+                double lng = placeSelect.geometry.location.lng;
+
+                String scheduel = date + " " + time;
+                int maximum = Integer.parseInt(editPerson.getText().toString().trim());
+
+                showProgress();
+
+                Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingCreateActivity.this);
+                MeetingApi api = retrofit.create(MeetingApi.class);
+
+//                // 헤더에 셋팅할 토큰
+                SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+                String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+//                // 보낼 파일
+                RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
+                MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
+
+//                // 보낼 미팅의 사진, 내용, 장소 등...
+                RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                RequestBody storeAddrBody = RequestBody.create(placeSelect.vicinity, MediaType.parse("text/plain"));
+                RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+//
+                Call<MeetingListRes> call = api.addMeeting("Bearer "+token,  photo, contentBody, storeNameBody, storeLatBody, storeLngBody
+                                                                    , storeAddrBody, dateBody, maximumBody);
+
+                call.enqueue(new Callback<MeetingListRes>() {
+                    @Override
+                    public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                        dismissProgress();
+
+                        if(response.isSuccessful()){
+
+                            finish();
+
+                        }else{
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<MeetingListRes> call, Throwable t) {
+
+                        dismissProgress();
+                    }
+                });
+
+
+                if(photoFile == null || content.isEmpty() ){
+                    Snackbar.make(txtSave,
+                            "필수항목입니다. 모두 입력하세요.",
+                            Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        });
+
 
     }
     private void showDialog(){
@@ -330,7 +443,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
                 photoFile = getPhotoFile(fileName);
 
                 Uri fileProvider = FileProvider.getUriForFile(MeetingCreateActivity.this,
-                        "com.musthave0145.mochelins.fileprovider", photoFile);
+                        "com.musthave0145.Mochelins.fileprovider", photoFile);
                 i.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
                 startActivityForResult(i, 100);
 
@@ -566,24 +679,6 @@ public class MeetingCreateActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.meeting_create_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-
-        if (itemId == R.id.btnDone) {
-
-            finish();
-
-        }
-        return super.onOptionsItemSelected(item);
-
-    }
 
     Dialog dialog;
 
@@ -600,7 +695,6 @@ public class MeetingCreateActivity extends AppCompatActivity {
     void dismissProgress(){
         dialog.dismiss();
     }
-
 
 
 }

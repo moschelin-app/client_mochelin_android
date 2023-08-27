@@ -173,8 +173,8 @@ public class FilterActivity extends AppCompatActivity {
 
 
 
-        btnMinus = findViewById(R.id.btnMinus);
-        btnPlus = findViewById(R.id.btnPlus);
+        btnMinus = findViewById(R.id.btnStar1);
+        btnPlus = findViewById(R.id.btnStar5);
         editDistance = findViewById(R.id.editPerson);
 
         for (int i = 0; i < btnStarInteger.length ; i++){

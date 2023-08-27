@@ -1,14 +1,14 @@
 package com.musthave0145.mochelins.review;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,14 +19,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.musthave0145.mochelins.FilterActivity;
-import com.musthave0145.mochelins.MapFragment;
-import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.ReviewAdapter;
-import com.musthave0145.mochelins.meeting.MeetingFragment;
+import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.api.UserApi;
+import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Review;
+import com.musthave0145.mochelins.model.UserRes;
+import com.musthave0145.mochelins.user.LoginActivity;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,10 +84,12 @@ public class ReviewFragment extends Fragment {
 
 
     ImageView imgMenu;
+    ImageView imgAdd;
+    ImageView imgSearch;
     ImageView imgMenuClear;
     DrawerLayout reviewDrawer;
     Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-            R.id.cardMap, R.id.cardPlanner};
+            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
     CardView[] cardViewList = new CardView[cardViews.length];
     Button btnFilter;
     RecyclerView recyclerView;
@@ -93,11 +102,15 @@ public class ReviewFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_review, container, false);
 
         imgMenu = rootView.findViewById(R.id.imgMenu);
+        imgAdd = rootView.findViewById(R.id.imgAdd);
+        imgSearch = rootView.findViewById(R.id.imgSearch);
         imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
         reviewDrawer = rootView.findViewById(R.id.reviewDrawer);
 
         btnFilter = rootView.findViewById(R.id.btnFilter);
         recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // 사이드 메뉴바를 열고 닫는 코드
         imgMenu.setOnClickListener(new View.OnClickListener() {
@@ -118,13 +131,19 @@ public class ReviewFragment extends Fragment {
             cardViewList[i] = rootView.findViewById(cardViews[i]);
         }
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FilterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ReviewCreateActivity.class);
                 startActivity(intent);
             }
         });
@@ -163,6 +182,46 @@ public class ReviewFragment extends Fragment {
 //                fragmentTransaction.commit();
 //            }
 //        });
+
+        cardViewList[6].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+                UserApi api = retrofit.create(UserApi.class);
+
+                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+                Call<UserRes> call = api.logout("Bearer " + token);
+                call.enqueue(new Callback<UserRes>() {
+                    @Override
+                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
+                        if (response.isSuccessful()){
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.commit();
+
+                            getActivity().finish();
+                        } else {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.commit();
+                            getActivity().finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserRes> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
 
 
 

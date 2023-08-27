@@ -2,7 +2,7 @@ package com.musthave0145.mochelins.model;
 
 import java.io.Serializable;
 
-public class PlaceSelect {
+public class PlaceSelect implements Serializable {
 
     public String name;
     public String vicinity;

@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="2"
+                        android:maxLines="1"
                         android:text="여기에 모임 이름이 적힐겁니다. 사랑합니다 원준님^^"
                         android:textSize="20sp" />
                 </LinearLayout>

@@ -18,7 +18,12 @@ import com.musthave0145.mochelins.meeting.MeetingDetailActivity;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.model.Meeting;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -50,21 +55,42 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
         // 미팅 사진이 없으면, 기본 이미지 표시 / 있으면, 그 사진을 표시하는 로직.
         // 원래는 null !!
-        if (meeting.photo != null) {
-            Glide.with(context).load(meeting.photo).into(holder.imgPhoto);
+        if (meeting.profile != null) {
+            Glide.with(context).load(meeting.profile).into(holder.imgPhoto);
         }
 
-        holder.txtDistance.setText(meeting.distance+"");
-        holder.txtStoreName.setText(" "+meeting.storeName+" ");
+        holder.txtDistance.setText("📍"+meeting.distance+"km");
+        holder.txtStoreName.setText("  "+meeting.storeName+"  ");
         holder.txtMeetName.setText(meeting.content);
 
         // TODO: 스토어ID로 주소를 가져와야 한다.
 //        holder.txtStoreAddress.setText(meeting.);
+        String newDate = "";
 
-        holder.txtMeetingDate.setText(meeting.date);
+        try {
+            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = inputDateFormat.parse(meeting.date);
+
+            // 날짜 형식을 변경
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat("M월 d일 (E) HH:mm", Locale.KOREA);
+
+            // Calendar 객체를 사용하여 요일을 얻음
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.KOREA);
+
+            // 변경된 날짜 형식 출력
+            String formattedDate = outputDateFormat.format(date);
+            newDate = formattedDate.replace("요일", dayOfWeek);
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+        holder.txtMeetingDate.setText(newDate);
         // TODO: imgProfile들에게 프로필 사진이 없으면 기본이미지, 있으면 해당이미지로 셋팅!
-        // 반복문과 조건문을 사용해서 만들어보자
-//        for(int i = 0, i < )
+//        if (meeting.profiles != null) {
+//            Glide.with(context).load(meeting.photo).into(holder.imgPhoto);
+//        }
 
         // 총 정원과 현재 참가한 인원수를 붙여서 출력하자
         String strCurrentPerson = meeting.attend + " / " + meeting.maximum;
@@ -137,7 +163,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
                     // TODO; 여기에 유저가 누른 모임을 상세하게 보여주도록, 상세모임 액티비티 띠우고, 해당 모임의 정보도 보내준다.
 
                     Intent intent = new Intent(context, MeetingDetailActivity.class);
-                    intent.putExtra("meeting", meeting);
+//                    intent.putExtra("meeting", meeting);
+                    intent.putExtra("meetingId", meeting.id);
                     context.startActivity(intent);
 
                 }

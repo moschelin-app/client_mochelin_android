@@ -77,35 +77,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 int itemId = item.getItemId();
-
                 Fragment fragment = null;
-
                 if(itemId == R.id.reviewFragment) {
-
                     fragment = reviewFragment;
-
-
                 } else if (itemId == R.id.meetingFragment ) {
-
                     fragment = meetingFragment;
-
-
                 } else if (itemId == R.id.mapFragment) {
-
                     fragment = mapFragment;
-
-
                 } else if (itemId == R.id.plannerFragment) {
-
                     fragment = plannerFragment;
-
                 }
                 return loadFragment(fragment);
             }
         });
-
-
-
     }
 
     boolean loadFragment(Fragment fragment){
@@ -122,34 +106,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 액션 바(ActionBar)의 메뉴가 나오도록 설정한다!!
-        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        return true;
-    }
+    protected void onDestroy() {
+        super.onDestroy();
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // 유저가 선택 한 것이 + 아이콘인 경우, AddActivity를 실행
-        // 누른 아이콘의 아이디를 가져온다.(안드로이드에서 res안에 있는 것들의 item은 정수형으로 관리한다.)
-        int itemId = item.getItemId();
-
-        // TODO: 모든 기능을 다 떄려박자, 모임, 지도, 가계부, 오늘의 추천 메뉴?
-
-        if(itemId == R.id.menuSearch) {
-
-
-        } else if (itemId == R.id.menuAdd) {
-
-            Intent intent = new Intent(MainActivity.this, MeetingCreateActivity.class);
-            startActivity(intent);
-
-        } else if (itemId == R.id.menuRecommend) {
-
-        }
-
-        return super.onOptionsItemSelected(item);
-
-
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(Config.ACCESS_TOKEN);
+        editor.commit();
+        finish();
     }
 }

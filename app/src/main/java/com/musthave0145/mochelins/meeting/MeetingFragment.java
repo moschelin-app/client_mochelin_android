@@ -1,8 +1,11 @@
 package com.musthave0145.mochelins.meeting;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -11,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +21,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.material.navigation.NavigationView;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.MeetingAdapter;
 import com.musthave0145.mochelins.api.MeetingApi;
 import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.api.UserApi;
+import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Meeting;
 import com.musthave0145.mochelins.model.MeetingListRes;
+import com.musthave0145.mochelins.model.UserRes;
+import com.musthave0145.mochelins.user.LoginActivity;
 
 import java.util.ArrayList;
 
@@ -89,7 +94,7 @@ public class MeetingFragment extends Fragment {
     ProgressBar progressBar;
     ImageView imgMenuClear;
     Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-                            R.id.cardMap, R.id.cardPlanner};
+                            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
     CardView[] cardViewList = new CardView[cardViews.length];
     MeetingAdapter adapter;
     ArrayList<Meeting> meetingArrayList = new ArrayList<>();
@@ -135,6 +140,59 @@ public class MeetingFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+//                getNetworkData();
+            }
+        });
+
+        cardViewList[6].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+                UserApi api = retrofit.create(UserApi.class);
+
+                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+                Call<UserRes> call = api.logout("Bearer " + token);
+                call.enqueue(new Callback<UserRes>() {
+                    @Override
+                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
+                        if (response.isSuccessful()){
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.commit();
+
+                            getActivity().finish();
+                        } else {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.commit();
+                            getActivity().finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserRes> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
 
 
 
@@ -146,6 +204,7 @@ public class MeetingFragment extends Fragment {
         super.onStart();
         getNetworkData();
     }
+
 
     private void getNetworkData() {
         // 중복으로 겹치지 않게 비워주쟈!
@@ -160,8 +219,11 @@ public class MeetingFragment extends Fragment {
         // API 만들기
         MeetingApi api = retrofit.create(MeetingApi.class);
 
-        // 쿼리파라미터 셋팅
-        Call<MeetingListRes> call = api.getMeetingList(0,5,35.0809745,128.8808061,1.5);
+
+        // TODO: 쿼리파라미터 초기값을 어떻게 셋팅할지 고민
+        // 쿼리파라미터 셋팅 //필터에서 다 받아와야 한드아~~~!!
+        // Lat , Lng 값을 서구청으로...
+        Call<MeetingListRes> call = api.getMeetingList(0,10,37.5453703,126.6759947,5.0);
 
         call.enqueue(new Callback<MeetingListRes>() {
             @Override

@@ -10,6 +10,7 @@ public class Meeting implements Serializable {
     public String content;
     public String date;
     public String photo;
+    public String profile;
     public String storeName;
     public double storeLat;
     public double storeLng;

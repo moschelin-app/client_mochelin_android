@@ -1,5 +1,8 @@
 package com.musthave0145.mochelins;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -11,6 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.api.UserApi;
+import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.model.UserRes;
+import com.musthave0145.mochelins.user.LoginActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +78,7 @@ public class PlannerFragment extends Fragment {
     ImageView imgMenuClear;
     DrawerLayout plannerDrawer;
     Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-            R.id.cardMap, R.id.cardPlanner};
+            R.id.cardMap, R.id.cardPlanner , R.id.cardLogout};
     CardView[] cardViewList = new CardView[cardViews.length];
 
 
@@ -96,6 +110,46 @@ public class PlannerFragment extends Fragment {
         for(int i = 0; i < cardViews.length; i++) {
             cardViewList[i] = rootView.findViewById(cardViews[i]);
         }
+
+        cardViewList[6].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+                UserApi api = retrofit.create(UserApi.class);
+
+                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+                Call<UserRes> call = api.logout("Bearer " + token);
+                call.enqueue(new Callback<UserRes>() {
+                    @Override
+                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
+                        if (response.isSuccessful()){
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.commit();
+
+                            getActivity().finish();
+                        } else {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.commit();
+                            getActivity().finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserRes> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
 
         return rootView;
     }

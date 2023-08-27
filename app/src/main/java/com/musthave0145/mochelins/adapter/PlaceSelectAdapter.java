@@ -1,5 +1,6 @@
 package com.musthave0145.mochelins.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,14 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
     Context context;
     ArrayList<PlaceSelect> placeSelectArrayList;
 
+
+    public int selectedItem = RecyclerView.NO_POSITION;
+
     public PlaceSelectAdapter(Context context, ArrayList<PlaceSelect> placeSelectArrayList) {
         this.context = context;
         this.placeSelectArrayList = placeSelectArrayList;
     }
+
 
     @NonNull
     @Override
@@ -35,26 +40,39 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         PlaceSelect placeSelect = placeSelectArrayList.get(position);
-
-
         if (placeSelect.name == null){
             holder.txtNewAddress.setText("상점명 없음");
         } else {
             holder.txtStoreName.setText(placeSelect.name);
         }
-
         if (placeSelect.vicinity == null) {
             holder.txtNewAddress.setText("주소 없음");
         } else {
             holder.txtNewAddress.setText(placeSelect.vicinity);
         }
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        // 유저가 선택한 카드뷰에 테두리를 씌워주자!
+        if (position == selectedItem) {
+            holder.cardView.setBackgroundResource(R.drawable.corner);
+        } else {
+            holder.cardView.setBackgroundResource(android.R.color.transparent);
+        }
 
+        // 서
+        holder.cardView.setOnClickListener(v -> {
+            if (selectedItem != position) {
+                int previousSelectedItem = selectedItem;
+                selectedItem = position;
+                notifyItemChanged(previousSelectedItem);
+                notifyItemChanged(selectedItem);
+                PlaceSelect selectedItemData = placeSelectArrayList.get(selectedItem);
+            } else {
+
+                int previousSelectedItem = selectedItem;
+                selectedItem = RecyclerView.NO_POSITION;
+                notifyItemChanged(previousSelectedItem);
             }
         });
 
@@ -79,6 +97,8 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
             txtStoreName = itemView.findViewById(R.id.txtStoreName);
             txtNewAddress = itemView.findViewById(R.id.txtNewAddress);
             txtOldAddress = itemView.findViewById(R.id.txtOldAddress);
+
         }
     }
+
 }

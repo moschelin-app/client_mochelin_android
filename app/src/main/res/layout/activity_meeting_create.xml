@@ -44,7 +44,7 @@
                     app:srcCompat="@drawable/baseline_arrow_back_24_2" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/txtSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -211,7 +211,7 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/btnMinus"
+                            android:id="@+id/btnStar1"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             app:srcCompat="@drawable/baseline_do_disturb_on_24" />
@@ -229,7 +229,7 @@
                             tools:ignore="TouchTargetSizeCheck" />
 
                         <ImageView
-                            android:id="@+id/btnPlus"
+                            android:id="@+id/btnStar5"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             app:srcCompat="@drawable/baseline_add_circle_24" />
