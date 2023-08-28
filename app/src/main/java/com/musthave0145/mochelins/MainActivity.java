@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
         // 탭바 화면이랑 연결
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -112,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(Config.ACCESS_TOKEN);
-        editor.commit();
+        editor.apply();
         finish();
     }
+
 }

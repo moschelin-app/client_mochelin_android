@@ -4,12 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.musthave0145.mochelins.MainActivity;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.MeetingApi;
 import com.musthave0145.mochelins.api.NetworkClient;
@@ -59,6 +66,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
     ImageView imgPhoto;
     ImageView imgBack;
+    ImageView imgMyMenu;
 
 
     Integer[] textViews = {R.id.txtPersonName, R.id.txtContent, R.id.txtMeetCount, R.id.txtStoreName,
@@ -107,6 +115,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
     }
 
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +135,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
         imgPhoto = findViewById(R.id.imgPhoto);
         imgBack = findViewById(R.id.imgBack);
         btnApply = findViewById(R.id.btnApply);
+        imgMyMenu = findViewById(R.id.imgMyButton);
+
+
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +154,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
                 // TODO: 미팅을 참가하고 또 버튼을 눌렀을 때의 처리.(중복 추가를 방지하기위해서는 어떻게 할까)
                 // TODO: 다시 누르면 모임참가 취소 API가 실행되도록 처리해보자!!!
                 // TODO: 내가 신청을 안했거나 신청했다면, 버튼의 글씨가 "모임참가"로, 신청이 되어 있다면 "모임 참가 취소"로!!
+                // TODO: 모임신청 가능인원을 넘겼을때, 신청하면 에러메시지가 한글이여서 깨진다.
                 Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
                 MeetingApi api = retrofit.create(MeetingApi.class);
 
@@ -167,6 +180,38 @@ public class MeetingDetailActivity extends AppCompatActivity {
             }
         });
 
+        imgMyMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(MeetingDetailActivity.this, imgMyMenu);
+                MenuInflater inf = popupMenu.getMenuInflater();
+                inf.inflate(R.menu.update_delete_menu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.menuUpdate){
+                            Intent intent = new Intent(MeetingDetailActivity.this, MeetingUpdateActivity.class);
+                            startActivity(intent);
+                        } else if (menuItem.getItemId() == R.id.menuDelete) {
+                            Toast.makeText(MeetingDetailActivity.this, "삭제 누름", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        return false;
+                    }
+
+                });
+
+
+                popupMenu.show();
+
+            }
+
+
+        });
+
+
 
 
 
@@ -187,7 +232,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
                     token = sp.getString(Config.ACCESS_TOKEN, "");
-                    //Todo: 내 계시물인지 알수있는 방법이 없음.
+                    //Todo: 내 게시물인지 알수있는 방법이 없음.
 
                     textViewsList[0].setText(meeting.nickname);
 

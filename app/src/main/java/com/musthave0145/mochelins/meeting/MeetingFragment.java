@@ -15,12 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.musthave0145.mochelins.MapFragment;
+import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.MeetingAdapter;
 import com.musthave0145.mochelins.api.MeetingApi;
@@ -30,6 +34,7 @@ import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Meeting;
 import com.musthave0145.mochelins.model.MeetingListRes;
 import com.musthave0145.mochelins.model.UserRes;
+import com.musthave0145.mochelins.review.ReviewFragment;
 import com.musthave0145.mochelins.user.LoginActivity;
 
 import java.util.ArrayList;
@@ -98,6 +103,11 @@ public class MeetingFragment extends Fragment {
     CardView[] cardViewList = new CardView[cardViews.length];
     MeetingAdapter adapter;
     ArrayList<Meeting> meetingArrayList = new ArrayList<>();
+
+    Fragment reviewFragment;
+    Fragment meetingFragment;
+    Fragment mapFragment;
+    Fragment plannerFragment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -153,6 +163,45 @@ public class MeetingFragment extends Fragment {
             }
         });
 
+        reviewFragment = new ReviewFragment();
+        meetingFragment = new MeetingFragment();
+        mapFragment = new MapFragment();
+        plannerFragment = new PlannerFragment();
+
+        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.reviewFragment);
+                loadFragment(reviewFragment);
+                meetingDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.meetingFragment);
+                loadFragment(meetingFragment);
+                meetingDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.mapFragment);
+                loadFragment(mapFragment);
+                meetingDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.plannerFragment);
+                loadFragment(plannerFragment);
+                meetingDrawer.closeDrawer(GravityCompat.END);
+
+            }
+        });
+
         cardViewList[6].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,7 +221,7 @@ public class MeetingFragment extends Fragment {
 
                             SharedPreferences.Editor editor = sp.edit();
                             editor.remove(Config.ACCESS_TOKEN);
-                            editor.commit();
+                            editor.apply();
 
                             getActivity().finish();
                         } else {
@@ -180,7 +229,7 @@ public class MeetingFragment extends Fragment {
                             startActivity(intent);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.remove(Config.ACCESS_TOKEN);
-                            editor.commit();
+                            editor.apply();
                             getActivity().finish();
                         }
                     }
@@ -256,5 +305,30 @@ public class MeetingFragment extends Fragment {
         });
 
 
+    }
+    boolean loadFragment(Fragment fragment){
+        if(fragment != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment, fragment)
+                    .commit();// 화면 전환 코드
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    private void selectBottomNavigationItem(int itemId) {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView); // 바텀 네비게이션 뷰의 ID를 사용합니다.
+
+        // 바텀 네비게이션 뷰에서 선택한 아이템을 찾아 선택합니다.
+        MenuItem item = bottomNavigationView.getMenu().findItem(itemId);
+
+        // 아이템을 선택한 것처럼 처리합니다.
+        if (item != null) {
+            item.setChecked(true);
+        }
     }
 }

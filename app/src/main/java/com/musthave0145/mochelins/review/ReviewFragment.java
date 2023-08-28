@@ -13,17 +13,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.musthave0145.mochelins.FilterActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.musthave0145.mochelins.MapFragment;
+import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.ReviewAdapter;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.UserRes;
 import com.musthave0145.mochelins.user.LoginActivity;
@@ -96,6 +100,15 @@ public class ReviewFragment extends Fragment {
     ReviewAdapter adapter;
     ArrayList<Review> reviewArrayList = new ArrayList<>();
 
+
+    Fragment reviewFragment;
+    Fragment meetingFragment;
+    Fragment mapFragment;
+    Fragment plannerFragment;
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -148,40 +161,45 @@ public class ReviewFragment extends Fragment {
             }
         });
 
-//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        cardViewList[2].setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                fragmentTransaction.replace(R.id.reviewFragment, new ReviewFragment());
-//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
-//                fragmentTransaction.commit();
-//            }
-//        });
-//        cardViewList[3].setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                fragmentTransaction.replace(R.id.meetingFragment, new MeetingFragment());
-//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
-//                fragmentTransaction.commit();
-//            }
-//        });
-//        cardViewList[4].setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                fragmentTransaction.replace(R.id.mapFragment, new MapFragment());
-//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
-//                fragmentTransaction.commit();
-//            }
-//        });
-//        cardViewList[5].setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                fragmentTransaction.replace(R.id.plannerFragment, new PlannerFragment());
-//                fragmentTransaction.addToBackStack(null); // 백 스택에 추가 (선택 사항)
-//                fragmentTransaction.commit();
-//            }
-//        });
+
+        reviewFragment = new ReviewFragment();
+        meetingFragment = new MeetingFragment();
+        mapFragment = new MapFragment();
+        plannerFragment = new PlannerFragment();
+
+        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.reviewFragment);
+                loadFragment(reviewFragment);
+                reviewDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.meetingFragment);
+                loadFragment(meetingFragment);
+                reviewDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.mapFragment);
+                loadFragment(mapFragment);
+                reviewDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.plannerFragment);
+                loadFragment(plannerFragment);
+                reviewDrawer.closeDrawer(GravityCompat.END);
+
+            }
+        });
 
         cardViewList[6].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,7 +220,7 @@ public class ReviewFragment extends Fragment {
 
                             SharedPreferences.Editor editor = sp.edit();
                             editor.remove(Config.ACCESS_TOKEN);
-                            editor.commit();
+                            editor.apply();
 
                             getActivity().finish();
                         } else {
@@ -210,7 +228,7 @@ public class ReviewFragment extends Fragment {
                             startActivity(intent);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.remove(Config.ACCESS_TOKEN);
-                            editor.commit();
+                            editor.apply();
                             getActivity().finish();
                         }
                     }
@@ -229,4 +247,32 @@ public class ReviewFragment extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
     }
+
+    boolean loadFragment(Fragment fragment){
+        if(fragment != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment, fragment)
+                    .commit();// 화면 전환 코드
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    private void selectBottomNavigationItem(int itemId) {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView); // 바텀 네비게이션 뷰의 ID를 사용합니다.
+
+        // 바텀 네비게이션 뷰에서 선택한 아이템을 찾아 선택합니다.
+        MenuItem item = bottomNavigationView.getMenu().findItem(itemId);
+
+        // 아이템을 선택한 것처럼 처리합니다.
+        if (item != null) {
+            item.setChecked(true);
+        }
+    }
+
+
 }

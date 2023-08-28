@@ -24,12 +24,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.PlaceSelectAdapter;
-import com.musthave0145.mochelins.api.NetworkClient2;
+import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.PlaceSelectApi;
-import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.PlaceSelect;
 import com.musthave0145.mochelins.model.PlaceSelectList;
 
@@ -51,6 +49,7 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
 
     PlaceSelectAdapter adapter;
     ArrayList<PlaceSelect> placeSelectArrayList = new ArrayList<>();
+    PlaceSelect placeSelect = new PlaceSelect();
     LocationManager locationManager;
     LocationListener locationListener;
     double lat;
@@ -112,13 +111,13 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                placeSelect = placeSelectArrayList.get(adapter.selectedItem);
                 // 어댑터에서 사용자가 선택한 장소를 가지고 옴
-                PlaceSelect placeSelect = placeSelectArrayList.get(adapter.selectedItem);
+                Log.i("몰까?" , placeSelect.storeName);
                 Intent intent = new Intent();
                 intent.putExtra("placeSelect", placeSelect);
                 setResult(1004,intent);
                 finish();
-
 
             }
         });
@@ -196,14 +195,10 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
     private void addNetworkData() {
         progressBar.setVisibility(View.VISIBLE);
 
-        Retrofit retrofit = NetworkClient2.getRetrofitClient(MeetingPlaceSelectActivity.this);
+        Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingPlaceSelectActivity.this);
         PlaceSelectApi api = retrofit.create(PlaceSelectApi.class);
 
-        Call<PlaceSelectList> call = api.getPlaceSelectList("ko",
-                lat+","+lng,
-                radius,
-                Config.GOOGLE_API_KEY,
-                keyword);
+        Call<PlaceSelectList> call = api.getPlaceSelectList(lat,lng,keyword);
 
         call.enqueue(new Callback<PlaceSelectList>() {
             @Override
@@ -211,13 +206,9 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if(response.isSuccessful()){
-
                     PlaceSelectList placeSelectList = response.body();
-
                     pagetoken = placeSelectList.next_page_token;
-
-                    placeSelectArrayList.addAll( placeSelectList.results );
-
+                    placeSelectArrayList.addAll( placeSelectList.items );
                     adapter.notifyDataSetChanged();
 
                 }else{
@@ -242,14 +233,10 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
 
         placeSelectArrayList.clear();
 
-        Retrofit retrofit = NetworkClient2.getRetrofitClient(MeetingPlaceSelectActivity.this);
+        Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingPlaceSelectActivity.this);
         PlaceSelectApi api = retrofit.create(PlaceSelectApi.class);
 
-        Call<PlaceSelectList> call = api.getPlaceSelectList("ko",
-                lat+","+lng,
-                radius,
-                Config.GOOGLE_API_KEY,
-                keyword);
+        Call<PlaceSelectList> call = api.getPlaceSelectList(lat, lng, keyword);
 
         call.enqueue(new Callback<PlaceSelectList>() {
             @Override
@@ -262,9 +249,7 @@ public class MeetingPlaceSelectActivity extends AppCompatActivity {
                     PlaceSelectList placeSelectList = response.body();
 
                     pagetoken = placeSelectList.next_page_token;
-
-                    placeSelectArrayList.addAll(placeSelectList.results);
-
+                    placeSelectArrayList.addAll(placeSelectList.items);
                     adapter = new PlaceSelectAdapter(MeetingPlaceSelectActivity.this, placeSelectArrayList);
                     recyclerView.setAdapter(adapter);
 

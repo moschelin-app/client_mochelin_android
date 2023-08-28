@@ -6,5 +6,5 @@ public class PlaceSelectList {
 
     public String next_page_token;
 
-    public ArrayList<PlaceSelect> results;
+    public ArrayList<PlaceSelect> items;
 }

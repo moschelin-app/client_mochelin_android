@@ -17,46 +17,32 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txtStoreName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="상호명"
-                    android:textColor="#4E80FF"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
 
                 <TextView
+                    android:id="@+id/txtStoreName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="상호명"
+                    android:textColor="#4E80FF"
+                    android:textSize="20sp" />
+
+                <TextView
                     android:id="@+id/txtNewAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:text="인천광역시 서구 서곶로 294" />
 
-                <TextView
-                    android:id="@+id/txtOldAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="인천광역시 서구 심곡동 산 7-4 서구청역(인천2호선)" />
             </LinearLayout>
 
         </LinearLayout>

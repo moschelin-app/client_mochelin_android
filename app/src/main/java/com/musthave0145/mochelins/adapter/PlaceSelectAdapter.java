@@ -2,6 +2,7 @@ package com.musthave0145.mochelins.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
 
     Context context;
     ArrayList<PlaceSelect> placeSelectArrayList;
+
 
 
     public int selectedItem = RecyclerView.NO_POSITION;
@@ -42,15 +44,15 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         PlaceSelect placeSelect = placeSelectArrayList.get(position);
-        if (placeSelect.name == null){
+        if (placeSelect.storeName == null){
             holder.txtNewAddress.setText("상점명 없음");
         } else {
-            holder.txtStoreName.setText(placeSelect.name);
+            holder.txtStoreName.setText(placeSelect.storeName);
         }
-        if (placeSelect.vicinity == null) {
+        if (placeSelect.storeAddr == null) {
             holder.txtNewAddress.setText("주소 없음");
         } else {
-            holder.txtNewAddress.setText(placeSelect.vicinity);
+            holder.txtNewAddress.setText(placeSelect.storeAddr);
         }
 
         // 유저가 선택한 카드뷰에 테두리를 씌워주자!
@@ -62,6 +64,7 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
 
         // 서
         holder.cardView.setOnClickListener(v -> {
+            Log.i("어뎁터", placeSelect.storeName);
             if (selectedItem != position) {
                 int previousSelectedItem = selectedItem;
                 selectedItem = position;
@@ -89,14 +92,14 @@ public class PlaceSelectAdapter extends RecyclerView.Adapter<PlaceSelectAdapter.
         CardView cardView;
         TextView txtStoreName;
         TextView txtNewAddress;
-        TextView txtOldAddress;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             cardView = itemView.findViewById(R.id.cardView);
             txtStoreName = itemView.findViewById(R.id.txtStoreName);
             txtNewAddress = itemView.findViewById(R.id.txtNewAddress);
-            txtOldAddress = itemView.findViewById(R.id.txtOldAddress);
+
 
         }
     }

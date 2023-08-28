@@ -12,13 +12,16 @@ import retrofit2.http.Part;
 
 public interface ReviewApi {
 
-//    // 리뷰 작성 API
-//    @Multipart
-//    @POST("/review/add")
-//    Call<ReviewRes> addReview(@Header("Authorization") String token,
-//                              @Part MultipartBody.Part photo,
-//                              @Part("content") RequestBody content,
-//                              @Part("storeName") RequestBody storeName,
-//                              @Part("storeLat") RequestBody storeLat,
-//                              @Part("storeLng") RequestBody storeLng);
+    // 리뷰 작성 API (최종)
+    @Multipart
+    @POST("/review/add")
+    Call<ReviewRes> addReview(@Header("Authorization") String token,
+                              @Part MultipartBody.Part photo,
+                              @Part("content") RequestBody content,
+                              @Part("storeName") RequestBody storeName,
+                              @Part("storeLat") RequestBody storeLat,
+                              @Part("storeLng") RequestBody storeLng,
+                              @Part("rating") RequestBody rating,
+                              @Part("tag") RequestBody tag
+    );
 }

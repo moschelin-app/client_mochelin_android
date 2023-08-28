@@ -11,14 +11,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.UserRes;
+import com.musthave0145.mochelins.review.ReviewFragment;
 import com.musthave0145.mochelins.user.LoginActivity;
 
 import retrofit2.Call;
@@ -81,6 +85,11 @@ public class PlannerFragment extends Fragment {
             R.id.cardMap, R.id.cardPlanner , R.id.cardLogout};
     CardView[] cardViewList = new CardView[cardViews.length];
 
+    Fragment reviewFragment;
+    Fragment meetingFragment;
+    Fragment mapFragment;
+    Fragment plannerFragment;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,6 +120,45 @@ public class PlannerFragment extends Fragment {
             cardViewList[i] = rootView.findViewById(cardViews[i]);
         }
 
+        reviewFragment = new ReviewFragment();
+        meetingFragment = new MeetingFragment();
+        mapFragment = new MapFragment();
+        plannerFragment = new PlannerFragment();
+
+        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.reviewFragment);
+                loadFragment(reviewFragment);
+                plannerDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.meetingFragment);
+                loadFragment(meetingFragment);
+                plannerDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.mapFragment);
+                loadFragment(mapFragment);
+                plannerDrawer.closeDrawer(GravityCompat.END);
+            }
+        });
+        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBottomNavigationItem(R.id.plannerFragment);
+                loadFragment(plannerFragment);
+                plannerDrawer.closeDrawer(GravityCompat.END);
+
+            }
+        });
+
         cardViewList[6].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,7 +178,7 @@ public class PlannerFragment extends Fragment {
 
                             SharedPreferences.Editor editor = sp.edit();
                             editor.remove(Config.ACCESS_TOKEN);
-                            editor.commit();
+                            editor.apply();
 
                             getActivity().finish();
                         } else {
@@ -138,7 +186,7 @@ public class PlannerFragment extends Fragment {
                             startActivity(intent);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.remove(Config.ACCESS_TOKEN);
-                            editor.commit();
+                            editor.apply();
                             getActivity().finish();
                         }
                     }
@@ -152,5 +200,31 @@ public class PlannerFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    boolean loadFragment(Fragment fragment){
+        if(fragment != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment, fragment)
+                    .commit();// 화면 전환 코드
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    private void selectBottomNavigationItem(int itemId) {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView); // 바텀 네비게이션 뷰의 ID를 사용합니다.
+
+        // 바텀 네비게이션 뷰에서 선택한 아이템을 찾아 선택합니다.
+        MenuItem item = bottomNavigationView.getMenu().findItem(itemId);
+
+        // 아이템을 선택한 것처럼 처리합니다.
+        if (item != null) {
+            item.setChecked(true);
+        }
     }
 }

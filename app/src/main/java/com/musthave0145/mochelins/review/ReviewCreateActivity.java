@@ -1,5 +1,9 @@
 package com.musthave0145.mochelins.review;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +32,8 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +51,9 @@ import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.ReviewApi;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.meeting.MeetingCreateActivity;
+import com.musthave0145.mochelins.meeting.MeetingPlaceSelectActivity;
+import com.musthave0145.mochelins.model.PlaceSelect;
+import com.musthave0145.mochelins.model.ReviewRes;
 
 import org.apache.commons.io.IOUtils;
 
@@ -56,10 +65,15 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ReviewCreateActivity extends AppCompatActivity {
@@ -70,17 +84,41 @@ public class ReviewCreateActivity extends AppCompatActivity {
     EditText editContent;
     EditText editTag;
 
-    Integer[] imageViews = {R.id.imgPhoto1, R.id.imgPhoto2, R.id.imgPhoto3, R.id.imgPhoto4, R.id.imgPhoto5,
-                            R.id.imgStar1, R.id.imgStar2, R.id.imgStar3, R.id.imgStar4, R.id.imgStar5};
+    ImageView imgClear;
+    ImageView imgBack;
+
+    Integer[] imageViews = {R.id.imgPhoto1, R.id.imgPhoto2, R.id.imgPhoto3, R.id.imgPhoto4, R.id.imgPhoto5};
 
     ImageView[] imageViewList = new ImageView[imageViews.length];
 
+    Integer[] starImageViews = {R.id.imgStar1, R.id.imgStar2, R.id.imgStar3, R.id.imgStar4, R.id.imgStar5};
+
+    ImageView[] starImageViewList = new ImageView[starImageViews.length];
+
     File photoFile;
+    PlaceSelect placeSelect = new PlaceSelect();
 
     // 사진을 여러개 담아서 처리할 어레이리스트!
     ArrayList<File> photoFiles = new ArrayList<>();
 
+    // 파일을 여러개 담는 방법.
 
+
+    // 별점을 담을 별점 전역변수
+    private int currentRating = 0;
+
+    ActivityResultLauncher<Intent> launcher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            // 로그 무조건 찍어보자!!
+//                            Log.i("MeetingCreate", ((PlaceSelect)result.getData().getSerializableExtra("placeSelect")).storeName);
+                            Log.i("reviewcreate", "reviewsuccess");
+                            placeSelect = ((PlaceSelect)result.getData().getSerializableExtra("placeSelect"));
+                            txtPlace.setText(placeSelect.storeName + "\n" + placeSelect.storeAddr);
+                        }
+                    });
 
 
     @SuppressLint("MissingInflatedId")
@@ -93,32 +131,117 @@ public class ReviewCreateActivity extends AppCompatActivity {
         txtPlace = findViewById(R.id.txtPlace);
         editContent = findViewById(R.id.editContent);
         editTag = findViewById(R.id.editTag);
+        imgBack = findViewById(R.id.imgBack);
+        imgClear = findViewById(R.id.imgClear);
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        imgClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoFiles.clear();
+                for (int i = 0; i < imageViews.length; i++) {
+                    imageViewList[i].setImageResource(R.drawable.outline_camera_alt_24);
+                    Log.i("리뷰크리에이트" , String.valueOf(photoFiles));
+                }
+            }
+        });
 
         for(int i = 0; i < imageViews.length; i++){
             imageViewList[i] = findViewById(imageViews[i]);
         }
 
+        for(int i = 0; i < starImageViews.length; i++){
+            starImageViewList[i] = findViewById(starImageViews[i]);
+        }
+
+        for (int i = 0; i < starImageViews.length; i++) {
+            final int rating = i + 1; // 별점 값은 1부터 시작
+
+            starImageViewList[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 별점을 클릭한 이미지뷰의 위치까지 업데이트
+                    updateRating(rating);
+                }
+            });
+        }
+
+        txtPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReviewCreateActivity.this, ReviewPlaceSelectActivity.class);
+//                        startActivity(intent);
+                launcher.launch(intent);
+
+            }
+        });
+
+
+
+
+
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 리뷰 작성 버튼을 누르고 나서, 레트로핏으로 api 호출!
+                // 유저가 작성한 데이터를 갖고오쟈
+                String strContent = editContent.getText().toString();
                 Retrofit retrofit = NetworkClient.getRetrofitClient(ReviewCreateActivity.this);
                 ReviewApi api = retrofit.create(ReviewApi.class);
 
                 SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
                 String token = sp.getString(Config.ACCESS_TOKEN, "");
 
-                RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
-                MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
+                // 해시태그 처리하기.
+                String text = editTag.getText().toString();
+                Pattern pattern = Pattern.compile("#\\w+"); // 해시태그 패턴
+                Matcher matcher = pattern.matcher(text);
 
-//                RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
-//                RequestBody storeNameBody = RequestBody.create(storeName, MediaType.parse("text/plain"));
-//                RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
-//                RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-//                RequestBody storeAddrBody = RequestBody.create(placeSelect.vicinity, MediaType.parse("text/plain"));
-//                RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
-//                RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
-////
+                ArrayList<String> hashtags = new ArrayList<>();
+                while (matcher.find()) {
+                    String hashtag = matcher.group().substring(1); // '#' 제외
+                    hashtags.add(hashtag);
+                }
+
+                // TODO: 사진을 여러개 선택해서 보내줘야한다.
+
+                // TODO: 필터에서 셋팅한 값을 불러와야 한다.
+                // 사진의 갯수만큼 꺼내서 주쟈!
+                RequestBody fileBody = RequestBody.create(photoFiles.get(0), MediaType.parse("image/jpg"));
+                MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFiles.get(0).getName(), fileBody );
+                RequestBody contentBody = RequestBody.create(strContent, MediaType.parse("text/plain"));
+                RequestBody ratingBody = RequestBody.create(String.valueOf(currentRating), MediaType.parse("text/plain"));
+
+                RequestBody storeNameBody = RequestBody.create(placeSelect.storeName, MediaType.parse("text/plain"));
+                RequestBody storeLatBody = RequestBody.create(String.valueOf(placeSelect.storeLat),MediaType.parse("text/plain"));
+                RequestBody storeLngBody = RequestBody.create(String.valueOf(placeSelect.storeLng),MediaType.parse("text/plain"));
+
+                RequestBody tagBody = RequestBody.create(hashtags.get(0), MediaType.parse("text/plain"));
+
+                Call<ReviewRes> call = api.addReview("Bearer " + token, photo, contentBody,storeNameBody,storeLatBody,storeLngBody, ratingBody, tagBody);
+
+                call.enqueue(new Callback<ReviewRes>() {
+                    @Override
+                    public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(ReviewCreateActivity.this, "정상적으로 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else  {
+                            Toast.makeText(ReviewCreateActivity.this, "문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ReviewRes> call, Throwable t) {
+
+                    }
+                });
             }
         });
 
@@ -131,6 +254,22 @@ public class ReviewCreateActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void updateRating(int rating) {
+        // 현재 별점 값 업데이트
+        currentRating = rating;
+
+        // 이미지뷰 업데이트
+        for (int i = 0; i < starImageViews.length; i++) {
+            if (i < rating) {
+                // 별점 이상의 이미지뷰는 별 이미지로 변경
+                starImageViewList[i].setImageResource(R.drawable.baseline_star_24);
+            } else {
+                // 나머지 이미지뷰는 빈 별 이미지로 변경
+                starImageViewList[i].setImageResource(R.drawable.baseline_star_border_24);
+            }
+        }
     }
 
     private void showDialog(){
@@ -178,8 +317,11 @@ public class ReviewCreateActivity extends AppCompatActivity {
                     i.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
                     startActivityForResult(i, 100);
 
-                    // 여기서 새로 찍은 사진 파일을 photoFiles 리스트에 추가
-                    photoFiles.add(photoFile);
+                    // TODO: 사진을 찍어도 똑같이 선택이 되어야한다@!!@##$#@$%ㅆ$#%^^ㅕ%$#%^&*ㅒ
+//                    photoFiles.add(photoFile);
+//                    Log.i("리뷰크리에이트", String.valueOf(photoFiles));
+
+
                 } else {
                     Toast.makeText(ReviewCreateActivity.this, "이 기기에는 카메라 앱이 없습니다.",
                             Toast.LENGTH_SHORT).show();
@@ -229,6 +371,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
     private void displayFileChoose() {
         Intent i = new Intent();
         i.setType("image/*");
+        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         i.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(i, "SELECT IMAGE"), 300);
     }
@@ -297,30 +440,27 @@ public class ReviewCreateActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
             }
-
             photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+            ArrayList<Bitmap> photos = new ArrayList<>();
+            photos.add(photo);
 
-
-            for (int i = 0; i < photoFiles.size(); i++){
+            for (int i = 0; i < photos.size(); i++){
                 if (i < imageViewList.length) {
                     // photoFiles 리스트에 첫 번째 사진이 있을 때
-                    imageViewList[i].setImageBitmap(BitmapFactory.decodeFile(photoFiles.get(i).getAbsolutePath()));
-                    imageViewList[1].setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageViewList[1].setClipToOutline(true);
+                    imageViewList[i].setImageBitmap(photos.get(i));
+                    imageViewList[i].setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageViewList[i].setClipToOutline(true);
                 }
             }
 
             // 네트워크로 데이터 보낸다.
-
-
-
         }else if(requestCode == 300 && resultCode == RESULT_OK && data != null &&
                 data.getData() != null){
 
             Uri albumUri = data.getData( );
             String fileName = getFileName( albumUri );
             try {
-
+                // 객체를 하나하나 로그를 찍어보고 어떤 데이터인지 확인해보고, 반복문 사용해서 넣어야 한다.
                 ParcelFileDescriptor parcelFileDescriptor = getContentResolver( ).openFileDescriptor( albumUri, "r" );
                 if ( parcelFileDescriptor == null ) return;
                 FileInputStream inputStream = new FileInputStream( parcelFileDescriptor.getFileDescriptor( ) );
@@ -328,10 +468,14 @@ public class ReviewCreateActivity extends AppCompatActivity {
                 FileOutputStream outputStream = new FileOutputStream( photoFile );
                 IOUtils.copy( inputStream, outputStream );
 
+                photoFiles.add(photoFile);
+
+                Log.i("리뷰크리에이트", String.valueOf(photoFile));
+                Log.i("리뷰크리에이트", String.valueOf(photoFiles));
+
 //                //임시파일 생성
 //                File file = createImgCacheFile( );
 //                String cacheFilePath = file.getAbsolutePath( );
-
 
                 // 압축시킨다. 해상도 낮춰서
                 Bitmap photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
@@ -345,13 +489,11 @@ public class ReviewCreateActivity extends AppCompatActivity {
                     Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
                 }
 
-
                 for (int i = 0; i < photoFiles.size(); i++){
                     if (i < imageViewList.length) {
-                        // photoFiles 리스트에 첫 번째 사진이 있을 때
                         imageViewList[i].setImageBitmap(BitmapFactory.decodeFile(photoFiles.get(i).getAbsolutePath()));
-                        imageViewList[1].setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        imageViewList[1].setClipToOutline(true);
+                        imageViewList[i].setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageViewList[i].setClipToOutline(true);
                     }
                 }
 

@@ -105,7 +105,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
     String time = "";
 
     int pay = 0;
-    PlaceSelect placeSelect;
+    PlaceSelect placeSelect = new PlaceSelect();
 
     ActivityResultLauncher<Intent> launcher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -113,13 +113,13 @@ public class MeetingCreateActivity extends AppCompatActivity {
                         @Override
                         public void onActivityResult(ActivityResult result) {
                             // 로그 무조건 찍어보자!!
-                            Log.i("MeetingCreate", ((PlaceSelect)result.getData().getSerializableExtra("placeSelect")).name);
-                            placeSelect = ((PlaceSelect)result.getData().getSerializableExtra("placeSelect"));
-                            if (result.getResultCode() == 1004){
+//                            Log.i("MeetingCreate", ((PlaceSelect)result.getData().getSerializableExtra("placeSelect")).storeName);
+                            if (result.getResultCode() == 1004) {
                                 Log.i("MeetingCreate", "MeetingCreateSuccess");
-
-                                txtPlace.setText(placeSelect.name + "\n" + placeSelect.vicinity);
+                                placeSelect = ((PlaceSelect) result.getData().getSerializableExtra("placeSelect"));
+                                txtPlace.setText(placeSelect.storeName + "\n" + placeSelect.storeAddr);
                             }
+
                         }
                     });
 
@@ -141,7 +141,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
         switchPay = findViewById(R.id.switchPay);
 
         editPerson = findViewById(R.id.editPerson);
-        imgBack = findViewById(R.id.imgMenu);
+        imgBack = findViewById(R.id.imgBack);
         txtSave = findViewById(R.id.txtSave);
 
 
@@ -337,9 +337,9 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
                 String content= editContent.getText().toString();
                 // TODO: Lat, Lng, 가게이름을 서버로 보내주자
-                String name = placeSelect.name;
-                double lat = placeSelect.geometry.location.lat;
-                double lng = placeSelect.geometry.location.lng;
+                String name = placeSelect.storeName;
+                double lat = placeSelect.storeLat;
+                double lng = placeSelect.storeLng;
 
                 String scheduel = date + " " + time;
                 int maximum = Integer.parseInt(editPerson.getText().toString().trim());
@@ -362,7 +362,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
                 RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
                 RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
                 RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-                RequestBody storeAddrBody = RequestBody.create(placeSelect.vicinity, MediaType.parse("text/plain"));
+                RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
                 RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
                 RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
 //

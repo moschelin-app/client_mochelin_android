@@ -51,4 +51,6 @@ public interface MeetingApi {
     Call<MeetingRes> cancleMeeting(@Header("Authorization") String token,
                                    @Path("meetingId") int meetingId);
 
+    // 모임 수정 API
+
 }

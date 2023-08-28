@@ -8,10 +8,8 @@ import retrofit2.http.Query;
 
 public interface PlaceSelectApi {
 
-    @GET("/maps/api/place/nearbysearch/json")
-    Call<PlaceSelectList> getPlaceSelectList(@Query("language") String language,
-                                       @Query("location") String location,
-                                       @Query("radius") int radius,
-                                       @Query("key") String key,
-                                       @Query("keyword") String keyword);
+    @GET("/search/place")
+    Call<PlaceSelectList> getPlaceSelectList(@Query("lat") double lat,
+                                             @Query("lng") double lng,
+                                             @Query("search") String keyword);
 }

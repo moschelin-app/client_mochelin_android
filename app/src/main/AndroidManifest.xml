@@ -27,6 +27,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".review.ReviewPlaceSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".meeting.MeetingUpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".review.ReviewCreateActivity"
             android:exported="false" />
         <activity
@@ -48,7 +54,7 @@
             android:name=".review.ReviewDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".FilterActivity"
+            android:name=".review.FilterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

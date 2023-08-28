@@ -5,7 +5,7 @@
         android:id="@+id/menuEdit"
         android:title="수정" />
     <item
-        android:id="@+id/menuDelete"
+        android:id="@+id/menuUpdate"
         android:title="삭제" />
     <item
         android:id="@+id/menuShare"
