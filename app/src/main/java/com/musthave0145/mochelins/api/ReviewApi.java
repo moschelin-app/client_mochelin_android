@@ -2,6 +2,8 @@ package com.musthave0145.mochelins.api;
 
 import com.musthave0145.mochelins.model.ReviewRes;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;

@@ -22,6 +22,8 @@ public class Meeting implements Serializable {
     public ArrayList<Profile> profiles;
 
     public class Profile implements Serializable {
-        public String profile;
+        public class user{
+
+        }
     }
 }

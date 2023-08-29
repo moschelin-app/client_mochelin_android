@@ -65,6 +65,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -213,8 +214,11 @@ public class ReviewCreateActivity extends AppCompatActivity {
 
                 // TODO: 필터에서 셋팅한 값을 불러와야 한다.
                 // 사진의 갯수만큼 꺼내서 주쟈!
-                RequestBody fileBody = RequestBody.create(photoFiles.get(0), MediaType.parse("image/jpg"));
-                MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFiles.get(0).getName(), fileBody );
+                List<MultipartBody.Part> parts = new ArrayList<>();
+
+                RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
+                MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
+
                 RequestBody contentBody = RequestBody.create(strContent, MediaType.parse("text/plain"));
                 RequestBody ratingBody = RequestBody.create(String.valueOf(currentRating), MediaType.parse("text/plain"));
 
@@ -417,7 +421,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 100 && resultCode == RESULT_OK){
-
+            // 카메라로 바로 찍었을 때의 영역
             Bitmap photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
             ExifInterface exif = null;
@@ -456,7 +460,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
             // 네트워크로 데이터 보낸다.
         }else if(requestCode == 300 && resultCode == RESULT_OK && data != null &&
                 data.getData() != null){
-
+            // 앨범에서 선택할때의 부분
             Uri albumUri = data.getData( );
             String fileName = getFileName( albumUri );
             try {
