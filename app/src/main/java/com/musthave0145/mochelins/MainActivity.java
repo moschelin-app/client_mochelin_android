@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Fragment reviewFragment;
     Fragment meetingFragment;
-    Fragment mapFragment;
+    Fragment mapsFragment;
     Fragment plannerFragment;
 //    Toolbar toolbar;
     String token;
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         // 프레그먼트 객체 생성
         reviewFragment = new ReviewFragment();
         meetingFragment = new MeetingFragment();
-        mapFragment = new MapFragment();
+        mapsFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
         // 탭바가 눌렸을 때 프레그먼트 이동
@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
                     fragment = reviewFragment;
                 } else if (itemId == R.id.meetingFragment ) {
                     fragment = meetingFragment;
-                } else if (itemId == R.id.mapFragment) {
-                    fragment = mapFragment;
+                } else if (itemId == R.id.mapsFragment) {
+                    fragment = mapsFragment;
                 } else if (itemId == R.id.plannerFragment) {
                     fragment = plannerFragment;
                 }

@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,18 +22,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.musthave0145.mochelins.MapFragment;
+import com.musthave0145.mochelins.MapsFragment;
 import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
-import com.musthave0145.mochelins.adapter.MeetingAdapter;
 import com.musthave0145.mochelins.adapter.ReviewAdapter;
-import com.musthave0145.mochelins.api.MeetingApi;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.ReviewApi;
 import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.meeting.MeetingFragment;
-import com.musthave0145.mochelins.model.MeetingListRes;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.ReviewRes;
 import com.musthave0145.mochelins.model.UserRes;
@@ -175,7 +171,7 @@ public class ReviewFragment extends Fragment {
 
         reviewFragment = new ReviewFragment();
         meetingFragment = new MeetingFragment();
-        mapFragment = new MapFragment();
+        mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
         cardViewList[2].setOnClickListener(new View.OnClickListener() {
@@ -197,7 +193,7 @@ public class ReviewFragment extends Fragment {
         cardViewList[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectBottomNavigationItem(R.id.mapFragment);
+                selectBottomNavigationItem(R.id.mapsFragment);
                 loadFragment(mapFragment);
                 reviewDrawer.closeDrawer(GravityCompat.END);
             }

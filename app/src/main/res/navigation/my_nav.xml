@@ -16,7 +16,7 @@
         android:label="fragment_meeting"
         tools:layout="@layout/fragment_meeting" />
     <fragment
-        android:id="@+id/mapFragment"
+        android:id="@+id/mapsFragment"
         android:name="com.musthave0145.mochelins.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />

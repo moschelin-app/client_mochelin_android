@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.musthave0145.mochelins.MapFragment;
+import com.musthave0145.mochelins.MapsFragment;
 import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.MeetingAdapter;
@@ -165,7 +165,7 @@ public class MeetingFragment extends Fragment {
 
         reviewFragment = new ReviewFragment();
         meetingFragment = new MeetingFragment();
-        mapFragment = new MapFragment();
+        mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
         cardViewList[2].setOnClickListener(new View.OnClickListener() {
@@ -187,7 +187,7 @@ public class MeetingFragment extends Fragment {
         cardViewList[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectBottomNavigationItem(R.id.mapFragment);
+                selectBottomNavigationItem(R.id.mapsFragment);
                 loadFragment(mapFragment);
                 meetingDrawer.closeDrawer(GravityCompat.END);
             }

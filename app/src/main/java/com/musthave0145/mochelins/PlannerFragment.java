@@ -122,7 +122,7 @@ public class PlannerFragment extends Fragment {
 
         reviewFragment = new ReviewFragment();
         meetingFragment = new MeetingFragment();
-        mapFragment = new MapFragment();
+        mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
         cardViewList[2].setOnClickListener(new View.OnClickListener() {
@@ -144,7 +144,7 @@ public class PlannerFragment extends Fragment {
         cardViewList[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectBottomNavigationItem(R.id.mapFragment);
+                selectBottomNavigationItem(R.id.mapsFragment);
                 loadFragment(mapFragment);
                 plannerDrawer.closeDrawer(GravityCompat.END);
             }
