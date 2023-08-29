@@ -80,7 +80,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         // 가게가 위치하는 동네 이름과 내 기준 거리를 보여주자! (ex, 숭의동 (10.9km))
         try {
-            List<Address> cityList = geocoder.getFromLocation(review.storeLat, review.storeLng, 10);
+            List<Address> cityList = geocoder.getFromLocation(37.5463644, 126.96483110000001, 10);
             String strTown = cityList.get(0).getThoroughfare();
             Log.i("동네이름", cityList.get(0).toString());
             holder.txtTown.setText(strTown);
