@@ -12,6 +12,8 @@ import com.google.android.gms.maps.MapView;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.ItemAdapter;
 
+import java.util.ArrayList;
+
 public class ReviewDetailActivity extends AppCompatActivity {
 
 
@@ -20,9 +22,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
     // 사진 여러장 넘기면서 보여주는 라이브러리
     ViewPager2 viewPager2;
-    String[] imgUrls = new String[] {
-
-    };
+    ArrayList<String> imgUrl = new ArrayList<>();
     ItemAdapter adapter;
 
 
@@ -43,8 +43,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_detail);
-//        viewPager2 = findViewById(R.id.viewPager2);
-        mapView = findViewById(R.id.viewPager2);
+        viewPager2 = findViewById(R.id.viewPager2);
+        mapView = findViewById(R.id.mapView);
 
         for(int i = 0; i < imgViews.length; i++) {
             imgViewList[i] = findViewById(imgViews[i]);
