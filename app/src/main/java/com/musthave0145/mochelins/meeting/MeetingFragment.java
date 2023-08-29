@@ -262,6 +262,10 @@ public class MeetingFragment extends Fragment {
         // 프로그레스바를 보이게 하자
         progressBar.setVisibility(View.VISIBLE);
 
+        // 헤더를 준비하자
+        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String token = sp.getString(Config.ACCESS_TOKEN, "");
+
         // 레트로핏 가져오기
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
 
@@ -272,7 +276,7 @@ public class MeetingFragment extends Fragment {
         // TODO: 쿼리파라미터 초기값을 어떻게 셋팅할지 고민
         // 쿼리파라미터 셋팅 //필터에서 다 받아와야 한드아~~~!!
         // Lat , Lng 값을 서구청으로...
-        Call<MeetingListRes> call = api.getMeetingList(0,10,37.5453703,126.6759947,5.0);
+        Call<MeetingListRes> call = api.getMeetingList("Bearer " + token, 0,10,37.5453703,126.6759947,5.0);
 
         call.enqueue(new Callback<MeetingListRes>() {
             @Override

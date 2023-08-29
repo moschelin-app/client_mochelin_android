@@ -9,30 +9,31 @@ public class Review implements Serializable {
     public int storeId;
     public int userId;
     public String content;
+    public int view;
+    public int rating;
+    public String createdAt;
+    public String updatedAt;
 
-    public String personUrl;
+    public String nickname;
+    public String profile;
 
-    public String person;
-    public String time;
+    public String storeName;
+    public String storeAddr;
 
+    public double storeLat;
+    public double storeLng;
+
+    public String photo;
+    public int commentCnt;
+    public int likeCnt;
     public int isLike;
-    public String town;
-    public String distance;
-
-    public String rating;
-    public String name;
+    public double distance;
 
 
-    public ArrayList<String> tags;
-//    public String tag1;
-//    public String tag2;
-//    public String tag3;
+    public ArrayList<tagName> tags;
 
-
-
-    public int views;
-    public int comments;
-    public int likes;
-
+    public class tagName{
+        public String name;
+    }
 
 }

@@ -12,23 +12,31 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.musthave0145.mochelins.MapFragment;
 import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.adapter.MeetingAdapter;
 import com.musthave0145.mochelins.adapter.ReviewAdapter;
+import com.musthave0145.mochelins.api.MeetingApi;
 import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.api.ReviewApi;
 import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.meeting.MeetingFragment;
+import com.musthave0145.mochelins.model.MeetingListRes;
 import com.musthave0145.mochelins.model.Review;
+import com.musthave0145.mochelins.model.ReviewRes;
 import com.musthave0145.mochelins.model.UserRes;
 import com.musthave0145.mochelins.user.LoginActivity;
 
@@ -98,6 +106,8 @@ public class ReviewFragment extends Fragment {
     Button btnFilter;
     RecyclerView recyclerView;
     ReviewAdapter adapter;
+    ProgressBar progressBar;
+
     ArrayList<Review> reviewArrayList = new ArrayList<>();
 
 
@@ -119,6 +129,7 @@ public class ReviewFragment extends Fragment {
         imgSearch = rootView.findViewById(R.id.imgSearch);
         imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
         reviewDrawer = rootView.findViewById(R.id.reviewDrawer);
+        progressBar = rootView.findViewById(R.id.progressBar);
 
         btnFilter = rootView.findViewById(R.id.btnFilter);
         recyclerView = rootView.findViewById(R.id.recyclerView);
@@ -273,6 +284,51 @@ public class ReviewFragment extends Fragment {
             item.setChecked(true);
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getNetworkData();
+    }
+
+    private void getNetworkData() {
+        reviewArrayList.clear();
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+        Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+        ReviewApi api = retrofit.create(ReviewApi.class);
+
+        Call<ReviewRes> call = api.getReviewList("Bearer " + token, 0,10,37.5453703,126.6759947,5.0);
+        call.enqueue(new Callback<ReviewRes>() {
+            @Override
+            public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                if (response.isSuccessful()){
+
+                    ReviewRes reviewRes = response.body();
+                    reviewArrayList.addAll(reviewRes.items);
+
+                    adapter = new ReviewAdapter(getActivity(),reviewArrayList);
+                    recyclerView.setAdapter(adapter);
+
+                } else if (response.code() == 500){
+                    Toast.makeText(getActivity(), "서버에 문제있음",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewRes> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
 
 
 }

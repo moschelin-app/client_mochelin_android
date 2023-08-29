@@ -43,7 +43,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_detail);
-        viewPager2 = findViewById(R.id.viewPager2);
+//        viewPager2 = findViewById(R.id.viewPager2);
         mapView = findViewById(R.id.viewPager2);
 
         for(int i = 0; i < imgViews.length; i++) {

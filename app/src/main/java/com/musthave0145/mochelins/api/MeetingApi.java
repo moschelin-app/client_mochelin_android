@@ -20,7 +20,8 @@ public interface MeetingApi {
 
     // 모임 리스트 가져오는 API
     @GET("/meeting/list")
-    Call<MeetingListRes> getMeetingList(@Query("offset") int offset, @Query("limit") int limit,
+    Call<MeetingListRes> getMeetingList(@Header("Authorization") String token,
+                                        @Query("offset") int offset, @Query("limit") int limit,
                                         @Query("lat") double lat, @Query("lng") double lng,
                                         @Query("dis") double dis);
 
