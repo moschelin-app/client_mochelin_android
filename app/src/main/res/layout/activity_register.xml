@@ -54,86 +54,120 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <EditText
-            android:id="@+id/editEmail"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/corner"
-            android:ems="10"
-            android:hint="  이메일"
-            android:inputType="textEmailAddress"
-            tools:ignore="TouchTargetSizeCheck" />
 
-        <EditText
-            android:id="@+id/editNickName"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/corner"
-            android:ems="10"
-            android:hint="  닉네임"
-            android:inputType="text"
-            tools:ignore="TouchTargetSizeCheck" />
-
-
-        <EditText
-            android:id="@+id/editName"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/corner"
-            android:ems="10"
-            android:hint="  이름"
-            android:inputType="text"
-            tools:ignore="TouchTargetSizeCheck" />
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="180dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/balloon" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutEmail"
+            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent">
 
-
-            <EditText
-                android:id="@+id/editPassword1"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editEmail"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/corner"
+                android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="비밀번호 입력"
-                android:inputType="textPassword"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:hint="이메일 입력"
+                android:inputType="textEmailAddress"
+                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutNickname"
+            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editNickName"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="닉네임 입력"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutName"
+            style="@style/Widget.App.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editName"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="이름 입력"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPassword1"
+            style="@style/Widget.App.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent"
             app:passwordToggleEnabled="true">
 
 
-            <EditText
-                android:id="@+id/editPassword2"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPassword1"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/corner"
+                android:layout_height="match_parent"
                 android:ems="10"
                 android:hint="비밀번호 입력"
-                android:inputType="textPassword"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPassword2"
+            style="@style/Widget.App.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:passwordToggleEnabled="true">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPassword2"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="비밀번호 확인"
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -142,9 +176,10 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="70dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/default_button"
             android:text="회원가입"
             android:textSize="20sp" />
 

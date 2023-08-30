@@ -105,16 +105,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(Config.ACCESS_TOKEN);
-        editor.apply();
-        finish();
-    }
-
 }

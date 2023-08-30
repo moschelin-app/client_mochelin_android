@@ -14,4 +14,8 @@
     <color name="selectedButtonColor">#CF100F</color>
     <color name="defaultButtonColor">#ACACAC</color>
     <color name="transparencyColor">#00FFFFFF</color>
+
+    <color name="azure">#6b9cce</color>
+    <color name="blue_grey">#96a5a9</color>
+    <color name="orange_red">#ff681f</color>
 </resources>

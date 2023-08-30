@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -177,17 +178,15 @@ public class PlannerFragment extends Fragment {
                             startActivity(intent);
 
                             SharedPreferences.Editor editor = sp.edit();
-                            editor.remove(Config.ACCESS_TOKEN);
+                            editor.putBoolean(Config.SAVE_AUTO, false);
+
                             editor.apply();
 
                             getActivity().finish();
+
                         } else {
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.remove(Config.ACCESS_TOKEN);
-                            editor.apply();
-                            getActivity().finish();
+                            
+                            // 안내 메시지 넣어야함
                         }
                     }
 

@@ -1,19 +1,27 @@
 package com.musthave0145.mochelins.user;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.musthave0145.mochelins.MainActivity;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.NetworkClient;
@@ -31,10 +39,16 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
+    TextInputLayout layoutEmail;
+    TextInputLayout layoutPassword;
+
     EditText editEmail;
     EditText editPassword;
     Button btnLogin;
     TextView txtRegister;
+
+    Switch autoLogin;
+    Boolean isAutoLogin;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -42,31 +56,67 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         editEmail = findViewById(R.id.editEmail);
-        editPassword = findViewById(R.id.editPassword1);
+        editPassword = findViewById(R.id.editPassword);
         btnLogin = findViewById(R.id.btnLogin);
         txtRegister = findViewById(R.id.txtRegister);
+
+        editEmail.setFocusableInTouchMode(true);
+        editPassword.setFocusableInTouchMode(true);
+
+        layoutEmail = findViewById(R.id.layoutEmail);
+        layoutPassword = findViewById(R.id.layoutPassword);
+
+        // 자동 로그인 활성화/비활성화
+        autoLogin = findViewById(R.id.autoLogin);
+        autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isAutoLogin = b;
+                if(isAutoLogin){
+                    autoLogin.setTextColor(Color.GREEN);
+                }else {
+                    autoLogin.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.colorUnpressed));
+                }
+            }
+        });
+
+        // 자동 로그인 후 저장된 부분 확인
+            // 있다면 불러오자.
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        isAutoLogin = sp.getBoolean(Config.SAVE_AUTO, false);
+
+        if(isAutoLogin){
+            String email = sp.getString(Config.SAVE_EMAIL, "");
+            String password = sp.getString(Config.SAVE_PASSWORD, "");
+
+            editEmail.setText(email);
+            editPassword.setText(password);
+            autoLogin.setChecked(isAutoLogin);
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = editEmail.getText().toString().trim();
+                String password = editPassword.getText().toString().trim(); // 비번 데이터 가져오기
+
+                layoutEmail.setError(null);
+                layoutPassword.setError(null);
 
                 Pattern pattern = Patterns.EMAIL_ADDRESS; // 여러 패턴 중에 하나의 패턴 꺼집어낸다.
                 if (pattern.matcher(email).matches() == false) {
-                    Snackbar.make(btnLogin,
-                            "이메일 형식을 확인하세요.",
-                            Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
-                String password = editPassword.getText().toString().trim(); // 비번 데이터 가져오기
-                if (password.length() < 6 || password.length() > 12) {
-                    Snackbar.make(btnLogin,
-                            "비밀번호 길이를 확인하세요.",
-                            Snackbar.LENGTH_SHORT).show();
+                    layoutEmail.setError("정상적인 이메일 형식을 작성해야합니다.");
+                    editEmail.requestFocus();
                     return;
                 }
 
-//                showProgress();
+                if (password.length() < 6) {
+                    layoutPassword.setError("비밀번호는 최소 6자리 이상입니다.");
+                    editPassword.requestFocus();
+                    return;
+                }
+
+                showProgress();
 
                 Retrofit retrofit = NetworkClient.getRetrofitClient(LoginActivity.this);
                 UserApi api = retrofit.create(UserApi.class);
@@ -76,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                 call.enqueue(new Callback<UserRes>() {
                     @Override
                     public void onResponse(Call<UserRes> call, Response<UserRes> response) {
-//                        dismissProgress();
+                        dismissProgress();
                         if (response.isSuccessful()) {
                             // 200 OK
                             UserRes res = response.body();
@@ -84,9 +134,16 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = sp.edit();
                             // 파싱할때 철자 똑바로 보자. 무조건 복붙!
                             editor.putString(Config.ACCESS_TOKEN, res.accessToken);
+
+                            // 자동 로그인 활성화 했을시, 저장한다.
+                            if(isAutoLogin){
+                                editor.putString(Config.SAVE_EMAIL, email);
+                                editor.putString(Config.SAVE_PASSWORD, password);
+                                editor.putBoolean(Config.SAVE_AUTO, isAutoLogin);
+                            }
+
                             editor.apply();
 
-                            Log.i("정상" ,"정상");
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -96,21 +153,28 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else if (response.code() == 400){
 
-                            Snackbar.make(btnLogin,
-                                    "이미 회원가입 되어있거나, 비밀번호가 틀렸습니다.",
-                                    Snackbar.LENGTH_SHORT).show();
-                            return;
+                            layoutEmail.setError("등록된 이메일이 아닙니다.");
+                            editEmail.requestFocus();
+
+                        } else if (response.code() == 401){
+
+                            layoutEmail.setError("등록된 이메일이 아닙니다.");
+                            editEmail.requestFocus();
 
                         } else {
-
+                            Snackbar.make(btnLogin,
+                                    "서버에 알 수 없는 오류가 발생했습니다.",
+                                    Snackbar.LENGTH_SHORT).show();
                         }
 
                     }
 
                     @Override
                     public void onFailure(Call<UserRes> call, Throwable t) {
-
-//                        dismissProgress();
+                        dismissProgress();
+                        Snackbar.make(btnLogin,
+                                "서버 통신에 문제가 발생했습니다.",
+                                Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -127,19 +191,28 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-//    Dialog dialog;
-//
-//    void showProgress(){
-//        dialog = new Dialog(this);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(new ProgressBar(this));
-//        dialog.setCancelable(false);
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.show();
-//    }
-//
-//    void dismissProgress(){
-//        dialog.dismiss();
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(isAutoLogin){
+            btnLogin.performClick();
+        }
+    }
+
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
+    }
 
 }

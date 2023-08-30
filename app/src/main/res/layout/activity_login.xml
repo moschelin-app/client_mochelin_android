@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".user.LoginActivity">
 
 
@@ -43,76 +44,146 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="413dp"
-        android:layout_height="467dp"
-        android:layout_marginTop="190dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <EditText
-            android:id="@+id/editEmail"
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="180dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/balloon" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutEmail"
+            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
-            android:hint="이메일"
-            android:inputType="textEmailAddress" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editEmail"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="이메일"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-
-        <EditText
-            android:id="@+id/editPassword1"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPassword"
+            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
-            android:hint="비밀번호 입력"
-            android:inputType="textPassword" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:passwordToggleEnabled="true">
 
-        <TextView
-            android:id="@+id/textView"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPassword"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="비밀번호 입력"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Switch
+            android:id="@+id/autoLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:text="자동 로그인 "
+            android:textColor="#9E9C9C" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:text="간편 로그인"
-            android:textSize="16sp" />
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="135dp"
+                android:layout_height="2dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:background="#9E9C9C" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:text="간편 로그인"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="135dp"
+                android:layout_height="2dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:background="#9E9C9C" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="85dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgKakao"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="50dp"
-                app:srcCompat="@drawable/kakao1" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/kakao"
+                app:civ_border_overlay="true" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgGoogle"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="50dp"
-                app:srcCompat="@drawable/google1" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/google"
+                app:civ_border_color="#000000"
+                app:civ_border_overlay="true"
+                app:civ_border_width="1dp" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgNaver"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="3dp"
-                app:srcCompat="@drawable/naver1" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/naver"
+                app:civ_border_overlay="true" />
 
         </LinearLayout>
 
@@ -120,12 +191,12 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="40dp"
-            android:background="#E42828"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/default_button"
             android:text="로그인"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/txtMailPassFind"
@@ -140,4 +211,4 @@
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

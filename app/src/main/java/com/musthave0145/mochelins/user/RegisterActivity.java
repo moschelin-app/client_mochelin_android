@@ -3,15 +3,23 @@ package com.musthave0145.mochelins.user;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.UserApi;
@@ -32,6 +40,13 @@ public class RegisterActivity extends AppCompatActivity {
     EditText editName;
     EditText editPassword1;
 
+    TextInputLayout layoutEmail;
+    TextInputLayout layoutNickname;
+    TextInputLayout layoutName;
+    TextInputLayout layoutPassword1;
+    TextInputLayout layoutPassword2;
+
+
     EditText editPassword2;
     Button btnRegister;
     TextView txtLogin;
@@ -42,11 +57,25 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
+
         editEmail = findViewById(R.id.editEmail);
         editNickName = findViewById(R.id.editNickName);
         editName = findViewById(R.id.editName);
         editPassword1 = findViewById(R.id.editPassword1);
         editPassword2 = findViewById(R.id.editPassword2);
+
+        editEmail.setFocusableInTouchMode(true);
+        editNickName.setFocusableInTouchMode(true);
+        editName.setFocusableInTouchMode(true);
+        editPassword1.setFocusableInTouchMode(true);
+        editPassword2.setFocusableInTouchMode(true);
+
+        layoutEmail = findViewById(R.id.layoutEmail);
+        layoutNickname = findViewById(R.id.layoutNickname);
+        layoutName = findViewById(R.id.layoutName);
+        layoutPassword1 = findViewById(R.id.layoutPassword1);
+        layoutPassword2 = findViewById(R.id.layoutPassword2);
 
         btnRegister = findViewById(R.id.btnRegister);
         txtLogin = findViewById(R.id.txtLogin);
@@ -60,41 +89,46 @@ public class RegisterActivity extends AppCompatActivity {
                 String password1 = editPassword1.getText().toString().trim();
                 String password2 = editPassword2.getText().toString().trim();
 
+                layoutEmail.setError(null);
+                layoutPassword1.setError(null);
+                layoutPassword2.setError(null);
+                layoutNickname.setError(null);
+                layoutName.setError(null);
 
 
-                if(email.isEmpty() || nickname.isEmpty() || name.isEmpty() || password1.isEmpty() || password2.isEmpty()){
-                    Snackbar.make(btnRegister,
-                            "필수항목을 모두 입력하세요.",
-                            Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
                 Pattern pattern = Patterns.EMAIL_ADDRESS; // 여러 패턴 중에 하나의 패턴 꺼집어낸다.
                 if (pattern.matcher(email).matches() == false) {
-                    Snackbar.make(btnRegister,
-                            "이메일 형식을 확인하세요.",
-                            Snackbar.LENGTH_SHORT).show();
+
+                    layoutEmail.setError("정상적인 이메일의 형식이 아닙니다.");
+                    editEmail.requestFocus();
                     return;
                 }
 
-                if( email.contains("@") == false ){
-                    Snackbar.make(btnRegister,
-                            "이메일 형식을 확인하세요.",
-                            Snackbar.LENGTH_SHORT).show();
+                if(nickname.isEmpty()){
+                    layoutNickname.setError("닉네임을 입력하셔야 합니다.");
+                    editNickName.requestFocus();
                     return;
                 }
-                if (password1.length() < 6 || password1.length() > 12) {
-                    Snackbar.make(btnRegister,
-                            "비밀번호 길이를 확인하세요.",
-                            Snackbar.LENGTH_SHORT).show();
+
+                if(name.isEmpty()){
+                    layoutName.setError("이름을 입력하셔야 합니다.");
+                    editName.requestFocus();
                     return;
                 }
+
+                if (password1.length() < 6) {
+                    layoutPassword1.setError("비밀번호는 최소 6자리 이상입니다.");
+                    editPassword1.requestFocus();
+                    return;
+                }
+
                 if(  !password1.equals(password2)  ){
-                    Snackbar.make(btnRegister,
-                            "비밀번호가 서로 다릅니다.",
-                            Snackbar.LENGTH_SHORT).show();
+                    layoutPassword2.setError("비밀번호가 서로 다릅니다.");
+                    editPassword2.requestFocus();
                     return;
                 }
-//                showProgress();  // 프로그래스바 실행
+
+                showProgress();  // 프로그래스바 실행
 
                 Retrofit retrofit = NetworkClient.getRetrofitClient(RegisterActivity.this);
                 UserApi api = retrofit.create(UserApi.class);
@@ -105,42 +139,40 @@ public class RegisterActivity extends AppCompatActivity {
                 call.enqueue(new Callback<UserRes>() {
                     @Override
                     public void onResponse(Call<UserRes> call, Response<UserRes> response) {
-//                        dismissProgress();
+                        dismissProgress();
                         if (response.isSuccessful()) {
-//                            SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME,MODE_PRIVATE);
-//                            SharedPreferences.Editor editor =sp.edit();
-//
-//                            UserRes res = response.body();
-//                            editor.putString(Config.ACCESS_TOKEN, res.access_token);  // public 설정해서 res.access_token 사용가능
-//                            editor.apply();
 
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
                             finish();
 
 
-                        }else if(response.code() == 400) {
-                            Snackbar.make(btnRegister,
-                                    "이미 회원가입 되어 있습니다. 로그인하세요.",
-                                    Snackbar.LENGTH_SHORT).show();
-                            return;
-
                         }else if(response.code() == 401) {
-
-                        }else if(response.code()== 404) {
-
-                        }else if (response.code() == 500) {
-
-                        }else {
-
+                            layoutEmail.setError("이메일의 형식이 잘못되었습니다.");
+                            editEmail.requestFocus();
+                        }else if(response.code()== 402) {
+                            layoutPassword1.setError("비밀번호는 최소 6자리 이상입니다.");
+                            editPassword1.requestFocus();
+                        }else if (response.code() == 403) {
+                            layoutEmail.setError("이미 사용중인 이메일입니다.");
+                            editEmail.requestFocus();
+                        }else if (response.code() == 405) {
+                            layoutNickname.setError("이미 사용중인 닉네임 입니다.");
+                            editNickName.requestFocus();
+                        }else if (response.code() == 405) {
+                            Snackbar.make(btnRegister,
+                                    "서버에 알수 없는 오류가 생겼습니다.",
+                                    Snackbar.LENGTH_SHORT).show();
                         }
 
                     }
 
                     @Override
                     public void onFailure(Call<UserRes> call, Throwable t) {
-//                        dismissProgress();
-
+                        dismissProgress();
+                        Snackbar.make(btnRegister,
+                                "서버에 접근할 수가 없습니다.",
+                                Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -159,18 +191,18 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-//    Dialog dialog;
-//
-//    void showProgress(){
-//        dialog = new Dialog(this);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(new ProgressBar(this));
-//        dialog.setCancelable(false);
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.show();
-//    }
-//
-//    void dismissProgress(){
-//        dialog.dismiss();
-//    }
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
+    }
 }
