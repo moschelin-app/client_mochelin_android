@@ -1,7 +1,10 @@
 package com.musthave0145.mochelins.model;
 
-public class User {
+import java.io.Serializable;
 
+public class User implements Serializable {
+
+    public int id;
     public String email;
     public String password;
 
@@ -10,6 +13,7 @@ public class User {
     public String profile;
 
     public String nickname;
+    public int isMine = 0;
 
     public User() {
     }

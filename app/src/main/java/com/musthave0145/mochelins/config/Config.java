@@ -11,4 +11,6 @@ public class Config {
     public static final String SAVE_PASSWORD = "SAVE_PASSWORD";
     public static final String SAVE_AUTO = "SAVE_AUTO";
 
+    public static final int RESTART_NUM = 1000;
+
 }
