@@ -161,8 +161,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else if (response.code() == 401){
 
-                            layoutEmail.setError("등록된 이메일이 아닙니다.");
-                            editEmail.requestFocus();
+                            layoutPassword.setError("비밀번호가 다릅니다.");
+                            editPassword.requestFocus();
 
                         } else {
                             Snackbar.make(btnLogin,

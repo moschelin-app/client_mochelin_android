@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -107,4 +108,59 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/buttonNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            app:elevation="0dp"
+            app:menu="@menu/info_menu">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="2dp"
+            android:layout_alignBottom="@id/buttonNavigationView"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentBottom="false"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="false"
+            android:layout_gravity="center_vertical"
+            android:background="@color/colorUnpressed" />
+
+        <View
+            android:id="@+id/lineView"
+            android:layout_width="175dp"
+            android:layout_height="2dp"
+            android:layout_alignBottom="@id/buttonNavigationView"
+            android:layout_alignParentRight="false"
+            android:layout_centerInParent="false"
+            android:layout_gravity="center_vertical"
+
+            android:background="@color/colorPressed" />
+
+    </RelativeLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/info_nav" />
 </LinearLayout>

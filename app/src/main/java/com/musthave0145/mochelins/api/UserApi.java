@@ -3,6 +3,7 @@ package com.musthave0145.mochelins.api;
 import com.musthave0145.mochelins.model.ResultRes;
 import com.musthave0145.mochelins.model.User;
 import com.musthave0145.mochelins.model.UserInfoRes;
+import com.musthave0145.mochelins.model.UserInfoReviewRes;
 import com.musthave0145.mochelins.model.UserRes;
 
 import okhttp3.MultipartBody;
@@ -17,6 +18,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UserApi {
     // 회원가입 API
@@ -68,4 +70,17 @@ public interface UserApi {
                               @Part("nickname") RequestBody nickname,
                               @Part("password") RequestBody password,
                               @Part MultipartBody.Part profile);
+
+    @GET("/user/{userId}/review")
+    Call<UserInfoReviewRes> user_review(@Header("Authorization") String token,
+                                        @Path("userId") int userId,
+                                        @Query("offset") int offset,
+                                        @Query("limit") int limit);
+
+    @GET("/user/{userId}/likes")
+    Call<UserInfoReviewRes> user_like(@Header("Authorization") String token,
+                                        @Path("userId") int userId,
+                                        @Query("offset") int offset,
+                                        @Query("limit") int limit);
+
 }
