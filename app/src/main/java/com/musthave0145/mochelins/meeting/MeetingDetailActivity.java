@@ -86,33 +86,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
 
     // TODO: 구글맵을 셋팅하자 (마커를 찍게 했지만, 완전한 것 아님)
-    // TODO: 음식점의 주소를 받아와야 한다.
     // TODO: 본인이 올린 모임글이면, 프로필 사진 오른쪽에 3점메뉴버튼을 표시하고, 수정과 삭제 메뉴를 표시해야 한다.
-
-
-    // 모임참가 취소 API
-    void cancleMeeting() {
-        Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
-        MeetingApi api = retrofit.create(MeetingApi.class);
-
-        Call<MeetingRes> call = api.cancleMeeting("Bearer "+token, meetingId);
-        call.enqueue(new Callback<MeetingRes>() {
-            @Override
-            public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
-                if (response.isSuccessful()){
-                    Snackbar.make(btnApply, "모임참가 취소가 되었습니다.", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(btnApply, "문제가 발생하였습니다.", Snackbar.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MeetingRes> call, Throwable t) {
-
-            }
-        });
-    }
 
 
 
@@ -146,39 +120,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
         getNetworkData();
 
-        btnApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: 미팅을 참가하고 또 버튼을 눌렀을 때의 처리.(중복 추가를 방지하기위해서는 어떻게 할까)
-                // TODO: 다시 누르면 모임참가 취소 API가 실행되도록 처리해보자!!!
-                // TODO: 내가 신청을 안했거나 신청했다면, 버튼의 글씨가 "모임참가"로, 신청이 되어 있다면 "모임 참가 취소"로!!
-                // TODO: 모임신청 가능인원을 넘겼을때, 신청하면 에러메시지가 한글이여서 깨진다.
-                Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
-                MeetingApi api = retrofit.create(MeetingApi.class);
 
-                Call<MeetingRes> call = api.attendMeeting("Bearer "+token, meetingId);
-                call.enqueue(new Callback<MeetingRes>() {
-                    @Override
-                    public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
-                        if (response.isSuccessful()){
-                            Snackbar.make(btnApply,"모임 참가 신청이 완료되었습니다!", Toast.LENGTH_SHORT).show();
-                            getNetworkData();
-                        } else if (response.code() == 400){
-                            Snackbar.make(btnApply,"이미 참가한 모임입니다.", Toast.LENGTH_SHORT).show();
-                        } else if (response.code() == 402){
-                            Snackbar.make(btnApply,"모집 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MeetingRes> call, Throwable t) {
-
-                    }
-                });
-//                cancleMeeting();
-
-            }
-        });
 
         //
         imgMyMenu.setOnClickListener(new View.OnClickListener() {
@@ -193,11 +135,11 @@ public class MeetingDetailActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.menuUpdate){
                             Intent intent = new Intent(MeetingDetailActivity.this, MeetingUpdateActivity.class);
+                            intent.putExtra("meeting", meeting);
                             startActivity(intent);
 
                         } else if (menuItem.getItemId() == R.id.menuDelete) {
-
-
+                            deleteMeeting();
                         }
 
                         return false;
@@ -251,6 +193,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     Glide.with(MeetingDetailActivity.this).load(meeting.profile).into(imgProfileList[0]);
 
+                    // 내가 작성한 모임글이면, 수정삭제 버튼을 보여주자!
                     if(meeting.isMine == 1){
                         imgMyMenu.setVisibility(View.VISIBLE);
                     }
@@ -307,7 +250,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
                             break;
                         }
                         imgProfileList[i+1].setVisibility(View.VISIBLE);
-                        Glide.with(MeetingDetailActivity.this).load(meeting.profiles.get(i).profile).into(imgProfileList[i+1]);
+                        Glide.with(MeetingDetailActivity.this).load(meeting.profiles.get(i).profile)
+                                .fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(imgProfileList[i+1]);
                     }
 
                     // 각자계산인지 회비인지 알려주기 ( 0 = 각자 계산, 1 이상부터는 회비)
@@ -320,11 +264,110 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     textViewsList[5].setText(strPay);
 
+                    // 모임참가 버튼 셋팅 (내가 참가하지 않았을때는 "모임 참가 신청 & 모임참가 API", 아니면 그 반대)
+                    if (meeting.isAttend == 0) {
+                        attendMeeting();
+                    } else if (meeting.isAttend == 1) {
+                        cancleMeeting();
+                    }
+
 
 
 
                 } else {
 
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MeetingRes> call, Throwable t) {
+
+            }
+        });
+    }
+
+    // 모임 참가 신청 API 실행 메서드
+    void attendMeeting() {
+        btnApply.setText("모임 참가 신청");
+        btnApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
+                MeetingApi api = retrofit.create(MeetingApi.class);
+
+                Call<MeetingRes> call = api.attendMeeting("Bearer "+token, meetingId);
+                call.enqueue(new Callback<MeetingRes>() {
+                    @Override
+                    public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
+                        if (response.isSuccessful()){
+                            Snackbar.make(btnApply,"모임 참가 신청이 완료되었습니다!", Toast.LENGTH_SHORT).show();
+                            getNetworkData();
+                        } else if (response.code() == 400){
+                            Snackbar.make(btnApply,"이미 참가한 모임입니다.", Toast.LENGTH_SHORT).show();
+                        } else if (response.code() == 402){
+                            Snackbar.make(btnApply,"모집 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+
+                    @Override
+                    public void onFailure(Call<MeetingRes> call, Throwable t) {
+
+                    }
+                });
+
+            }
+        });
+    }
+
+    // 모임참가 취소 API 실행 메서드
+    void cancleMeeting() {
+        btnApply.setText("모임 참가 취소");
+        btnApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
+                MeetingApi api = retrofit.create(MeetingApi.class);
+
+                Call<MeetingRes> call = api.cancleMeeting("Bearer "+token, meetingId);
+                call.enqueue(new Callback<MeetingRes>() {
+                    @Override
+                    public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
+                        if (response.isSuccessful()){
+                            Snackbar.make(btnApply, "모임참가 취소가 되었습니다.", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(btnApply, "문제가 발생하였습니다.", Snackbar.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MeetingRes> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+    }
+
+    void deleteMeeting() {
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        token = sp.getString(Config.ACCESS_TOKEN,"");
+
+        Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
+        MeetingApi api = retrofit.create(MeetingApi.class);
+
+        Call<MeetingRes> call = api.deleteMeeting("Bearer " + token, meetingId);
+        call.enqueue(new Callback<MeetingRes>() {
+            @Override
+            public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(MeetingDetailActivity.this, "삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(MeetingDetailActivity.this, "삭제하지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 

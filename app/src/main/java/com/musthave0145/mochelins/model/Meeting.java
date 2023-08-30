@@ -17,6 +17,7 @@ public class Meeting implements Serializable {
     public double storeLng;
     public int pay;
     public int isMine;
+    public int isAttend;
     public double distance;
     public int attend;
     public int maximum;

@@ -41,7 +41,48 @@ public interface MeetingApi {
                                     @Part("storeLng") RequestBody storeLng,
                                     @Part("storeAddr") RequestBody storeAddr,
                                     @Part("date") RequestBody date,
-                                    @Part("maximum") RequestBody maximum); // MultiPartBody.Part --> 파일보낼때 이렇게 사용!!
+                                    @Part("maximum") RequestBody maximum,
+                                    @Part("pay") RequestBody pay);
+    // 모임 생성 - 사진 X
+    @Multipart
+    @POST("/meeting")
+    Call<MeetingListRes> addMeeting(@Header("Authorization") String token,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum,
+                                    @Part("pay") RequestBody pay);
+
+    // 모임 생성 - 페이 X
+    @Multipart
+    @POST("/meeting")
+    Call<MeetingListRes> addMeeting(@Header("Authorization") String token,
+                                    @Part MultipartBody.Part photo,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum);
+
+    // 모임 생성 - 사진과 페이 둘 다 X
+    @Multipart
+    @POST("/meeting")
+    Call<MeetingListRes> addMeeting(@Header("Authorization") String token,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum);
+
+
+
 
     // 모임 참가 API
     @POST("/meeting/{meetingId}/attend")
@@ -54,5 +95,10 @@ public interface MeetingApi {
                                    @Path("meetingId") int meetingId);
 
     // 모임 수정 API
+
+    // 모임 삭제 API
+    @DELETE("/meeting/{meetingId}")
+    Call<MeetingRes> deleteMeeting(@Header("Authorization") String token,
+                                   @Path("meetingId") int meetingId);
 
 }
