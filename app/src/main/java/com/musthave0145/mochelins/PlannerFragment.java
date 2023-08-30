@@ -24,6 +24,7 @@ import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.UserRes;
 import com.musthave0145.mochelins.review.ReviewFragment;
+import com.musthave0145.mochelins.user.InfoActivity;
 import com.musthave0145.mochelins.user.LoginActivity;
 
 import retrofit2.Call;
@@ -125,6 +126,16 @@ public class PlannerFragment extends Fragment {
         meetingFragment = new MeetingFragment();
         mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
+
+        cardViewList[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                plannerDrawer.closeDrawer(GravityCompat.END);
+
+                Intent intent = new Intent(getActivity(), InfoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         cardViewList[2].setOnClickListener(new View.OnClickListener() {
             @Override

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Switch autoLogin;
     Boolean isAutoLogin;
+    ImageView btnClose;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -59,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         editPassword = findViewById(R.id.editPassword);
         btnLogin = findViewById(R.id.btnLogin);
         txtRegister = findViewById(R.id.txtRegister);
+        btnClose = findViewById(R.id.btnClose);
 
         editEmail.setFocusableInTouchMode(true);
         editPassword.setFocusableInTouchMode(true);
@@ -189,6 +192,14 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     @Override

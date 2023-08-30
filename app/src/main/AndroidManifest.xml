@@ -27,6 +27,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".user.EditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.InfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".review.ReviewPlaceSelectActivity"
             android:exported="false" />
         <activity

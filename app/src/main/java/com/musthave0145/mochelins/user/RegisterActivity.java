@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -51,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnRegister;
     TextView txtLogin;
 
+    ImageView btnClose;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         editName = findViewById(R.id.editName);
         editPassword1 = findViewById(R.id.editPassword1);
         editPassword2 = findViewById(R.id.editPassword2);
+        btnClose = findViewById(R.id.btnClose);
 
         editEmail.setFocusableInTouchMode(true);
         editNickName.setFocusableInTouchMode(true);
@@ -186,6 +190,13 @@ public class RegisterActivity extends AppCompatActivity {
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
 
+                finish();
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });
