@@ -107,6 +107,8 @@ public class MeetingCreateActivity extends AppCompatActivity {
     int pay = 0;
     PlaceSelect placeSelect = new PlaceSelect();
 
+    Boolean isPay;
+
     ActivityResultLauncher<Intent> launcher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     new ActivityResultCallback<ActivityResult>() {
@@ -314,11 +316,10 @@ public class MeetingCreateActivity extends AppCompatActivity {
         switchPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isPay = b;
                 if (switchPay.isChecked()) {
-                    // switch가 체크되어 있는 경우
                     moneyLayout.setVisibility(View.VISIBLE);
                     txtPay.setText("사용자 지정");
-//                    pay = Integer.parseInt(editMoney.getText().toString());
                 } else {
                     // switch가 체크되어 있지 않은 경우
                     moneyLayout.setVisibility(View.GONE);
@@ -330,19 +331,21 @@ public class MeetingCreateActivity extends AppCompatActivity {
         });
 
 
-        // TODO: 입력받은 정보를 서버에 보내주자!! 보내줄 것 : 사진과 글(+), 장소이름과 위도경도, 주소, 일정, 모집인원, 각자계산 아님 금액
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String content= editContent.getText().toString();
-                // TODO: Lat, Lng, 가게이름을 서버로 보내주자
                 String name = placeSelect.storeName;
                 double lat = placeSelect.storeLat;
                 double lng = placeSelect.storeLng;
 
                 String scheduel = date + " " + time;
                 int maximum = Integer.parseInt(editPerson.getText().toString().trim());
+
+                if (isPay = true){
+                    pay = Integer.parseInt(editMoney.getText().toString());
+                }
 
                 showProgress();
 
@@ -353,43 +356,107 @@ public class MeetingCreateActivity extends AppCompatActivity {
                 SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
                 String token = sp.getString(Config.ACCESS_TOKEN, "");
 
-//                // 보낼 파일
-                RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
-                MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
+//
+
+                // 다 있을 때
+                if (photoFile != null && pay != 0) {
+                    // 보낼 파일
+                    RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
+                    MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
 
 //                // 보낼 미팅의 사진, 내용, 장소 등...
-                RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
-                RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
-                RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
-                RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-                RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
-                RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
-                RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
-//
-                Call<MeetingListRes> call = api.addMeeting("Bearer "+token,  photo, contentBody, storeNameBody, storeLatBody, storeLngBody
-                                                                    , storeAddrBody, dateBody, maximumBody);
+                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
+                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+                    RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
 
-                call.enqueue(new Callback<MeetingListRes>() {
-                    @Override
-                    public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
-                        dismissProgress();
+                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, photo, contentBody, storeNameBody, storeLatBody, storeLngBody
+                                                                , storeAddrBody, dateBody, maximumBody, payBody);
 
-                        if(response.isSuccessful()){
-
-                            finish();
-
-                        }else{
-
+                    call.enqueue(new Callback<MeetingListRes>() {
+                        @Override
+                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                            dismissProgress();
+                            if(response.isSuccessful()){finish();}else{}
                         }
+                        @Override
+                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
+                    });
+                } else if (photoFile == null) {
+                    // 보낼 미팅의 사진, 내용, 장소 등...
+                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
+                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+                    RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
 
-                    }
+                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                            , storeAddrBody, dateBody, maximumBody, payBody);
+                    call.enqueue(new Callback<MeetingListRes>() {
+                        @Override
+                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                            dismissProgress();
+                            if(response.isSuccessful()){finish();}else{}
+                        }
+                        @Override
+                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
+                    });
 
-                    @Override
-                    public void onFailure(Call<MeetingListRes> call, Throwable t) {
+                } else if (pay == 0) {
+                    RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
+                    MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
 
-                        dismissProgress();
-                    }
-                });
+                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
+                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+
+                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, photo, contentBody, storeNameBody, storeLatBody, storeLngBody
+                            , storeAddrBody, dateBody, maximumBody);
+
+                    call.enqueue(new Callback<MeetingListRes>() {
+                        @Override
+                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                            dismissProgress();
+                            if(response.isSuccessful()){finish();}else{}
+                        }
+                        @Override
+                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
+                    });
+
+                } else if (photoFile == null && pay == 0) {
+                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
+                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+
+                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                            , storeAddrBody, dateBody, maximumBody);
+
+                    call.enqueue(new Callback<MeetingListRes>() {
+                        @Override
+                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                            dismissProgress();
+                            if(response.isSuccessful()){finish();}else{}
+                        }
+                        @Override
+                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
+                    });
+
+                }
 
 
                 if(photoFile == null || content.isEmpty() ){
@@ -403,6 +470,9 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
 
     }
+
+
+
     private void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MeetingCreateActivity.this);
         builder.setTitle(R.string.alert_title);

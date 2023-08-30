@@ -73,8 +73,8 @@
 
                     <ImageView
                         android:id="@+id/imgPhoto"
-                        android:layout_width="300dp"
-                        android:layout_height="170dp"
+                        android:layout_width="290dp"
+                        android:layout_height="160dp"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/corner"
@@ -92,7 +92,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="35dp"
                             android:layout_marginTop="5dp"
-                            app:srcCompat="@drawable/outline_favorite_border_24"/>
+                            android:background="@drawable/like_background"
+                            android:padding="1dp"
+                            app:srcCompat="@drawable/outline_favorite_border_24" />
 
                         <TextView
                             android:id="@+id/txtDistance"
@@ -135,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="6dp"
                         android:text="상호명" />
                 </LinearLayout>
 
@@ -177,32 +179,44 @@
                         android:text="태그3"
                         android:visibility="invisible" />
 
-                    <TextView
-                        android:id="@+id/txtViews"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="5dp"
-                        android:text="조회수" />
 
-                    <TextView
-                        android:id="@+id/txtComments"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
-                        android:text="댓글수" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/txtLikes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
-                        android:text="좋아요" />
+                        <TextView
+                            android:id="@+id/txtViews"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/txtComments"
+                            android:text="조회수"
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/txtComments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/txtLikes"
+                            android:text="댓글수"
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/txtLikes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="10dp"
+                            android:text="좋아요"
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
+                    </RelativeLayout>
 
                 </LinearLayout>
             </LinearLayout>
