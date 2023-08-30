@@ -130,7 +130,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         }
 
         String strDis = String.format("%.2f",review.distance) + "km";
-        holder.txtDistance.setText(strDis);
+        holder.txtDistance.setText("📍 "+ strDis);
 
         // 평점과 상호명을 보여주자!!
         String strRating = review.rating + "";
@@ -139,23 +139,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         // 태그를 보여주는데, 선택된 태그가 없으면 가리고 보여주자!
 
-        if (review.tags.size() ==0 ) {
 
-        } else if (review.tags.size() == 1) {
-            holder.txtTag1.setVisibility(View.VISIBLE);
-            holder.txtTag1.setText(review.tags.get(0).toString());
-        } else if (review.tags.size() == 2) {
-            holder.txtTag1.setVisibility(View.VISIBLE);
-            holder.txtTag2.setVisibility(View.VISIBLE);
-            holder.txtTag1.setText(review.tags.get(0).toString());
-            holder.txtTag2.setText(review.tags.get(1).toString());
-        } else if (review.tags.size() >= 3) {
-            holder.txtTag1.setVisibility(View.VISIBLE);
-            holder.txtTag2.setVisibility(View.VISIBLE);
-            holder.txtTag3.setVisibility(View.VISIBLE);
-            holder.txtTag1.setText(review.tags.get(0).toString());
-            holder.txtTag2.setText(review.tags.get(1).toString());
-            holder.txtTag3.setText(review.tags.get(2).toString());
+        for(int i = 0; i < review.tags.size(); i++){
+            if(i >= holder.txtTagList.length){
+                break;
+            }
+            holder.txtTagList[i].setVisibility(View.VISIBLE);
+            holder.txtTagList[i].setText(review.tags.get(i).name);
         }
 
 
@@ -193,9 +183,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         TextView txtRating;
         TextView txtStoreName;
 
-        TextView txtTag1;
-        TextView txtTag2;
-        TextView txtTag3;
+        Integer[] txtTags = {R.id.txtTag1, R.id.txtTag2, R.id.txtTag3};
+        TextView[] txtTagList = new TextView[txtTags.length];
 
         TextView txtViews;
         TextView txtComments;
@@ -220,10 +209,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             txtRating = itemView.findViewById(R.id.txtRating);
             txtStoreName = itemView.findViewById(R.id.txtStoreName);
 
-            txtTag1 = itemView.findViewById(R.id.txtTag1);
-            txtTag2 = itemView.findViewById(R.id.txtTag2);
-            txtTag3 = itemView.findViewById(R.id.txtTag3);
-
+            for (int i = 0; i < txtTagList.length; i++){
+                txtTagList[i] = itemView.findViewById(txtTags[i]);
+            }
             txtViews = itemView.findViewById(R.id.txtViews);
             txtComments = itemView.findViewById(R.id.txtComments);
             txtLikes = itemView.findViewById(R.id.txtLikes);

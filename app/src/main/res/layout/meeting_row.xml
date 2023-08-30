@@ -31,7 +31,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     app:srcCompat="@drawable/baseline_image_24"
-                    android:background="@drawable/corner"/>
+                    android:background="@drawable/corner"
+                    android:scaleType="centerCrop"/>
 
                 <TextView
                     android:id="@+id/txtDistance"

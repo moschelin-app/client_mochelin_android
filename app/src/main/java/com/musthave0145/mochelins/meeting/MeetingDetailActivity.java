@@ -163,8 +163,10 @@ public class MeetingDetailActivity extends AppCompatActivity {
                         if (response.isSuccessful()){
                             Snackbar.make(btnApply,"모임 참가 신청이 완료되었습니다!", Toast.LENGTH_SHORT).show();
                             getNetworkData();
-                        } else {
-                            Snackbar.make(btnApply,"문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                        } else if (response.code() == 400){
+                            Snackbar.make(btnApply,"이미 참가한 모임입니다.", Toast.LENGTH_SHORT).show();
+                        } else if (response.code() == 402){
+                            Snackbar.make(btnApply,"모집 인원이 다 찼습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -178,6 +180,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
             }
         });
 
+        //
         imgMyMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,8 +194,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
                         if (menuItem.getItemId() == R.id.menuUpdate){
                             Intent intent = new Intent(MeetingDetailActivity.this, MeetingUpdateActivity.class);
                             startActivity(intent);
+
                         } else if (menuItem.getItemId() == R.id.menuDelete) {
-                            Toast.makeText(MeetingDetailActivity.this, "삭제 누름", Toast.LENGTH_SHORT).show();
+
 
                         }
 
@@ -215,6 +219,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
         }
 
+        // 처음에 진입했을 때 상세모임 가져오는 메서드
     void getNetworkData(){
 
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
@@ -223,7 +228,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
         Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
         MeetingApi api = retrofit.create(MeetingApi.class);
 
-        Call<MeetingRes> call = api.getMeetingDetail(token, meetingId);
+        Call<MeetingRes> call = api.getMeetingDetail("Bearer " + token, meetingId);
         call.enqueue(new Callback<MeetingRes>() {
             @Override
             public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
@@ -232,7 +237,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
                     Log.i("디테일액티비티", meeting.content);
 
 
-                    //Todo: 내 게시물인지 알수있는 방법이 없음.
+
+                    // TODO :구글맵 개선하가,
 
                     textViewsList[0].setText(meeting.nickname);
 
@@ -245,9 +251,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     Glide.with(MeetingDetailActivity.this).load(meeting.profile).into(imgProfileList[0]);
 
-
-
-
+                    if(meeting.isMine == 1){
+                        imgMyMenu.setVisibility(View.VISIBLE);
+                    }
 
                     textViewsList[2].setText(count);
 
@@ -255,6 +261,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     textViewsList[4].setText("최대 " + meeting.maximum + "명 참여 가능");
 
+                    // 구글맵 셋팅
                     mapView.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -267,7 +274,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                         }
                     });
-                    //         datetime형식을 우리가 보기좋게 바꾸자!!!
+                    //  약속 일정 가공해서 보여주기
                     String newDate = "";
 
                     try {
@@ -290,21 +297,29 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     }
                     textViewsList[6].setText(newDate);
+
                     // 주소 세팅
-//                    textViewsList[7].setText();
+                    textViewsList[7].setText(meeting.storeAddr);
 
-                    // 모임참가 인원 세팅
-
-//                    Glide.with(MeetingDetailActivity.this).load(meeting.profiles.get(0)).into(imgProfileList[0]);
-//                    imgProfileList[0].setVisibility(View.VISIBLE);
-                    for (int i = 0 ; i < meeting.profiles.size(); i++) {
-                        Log.i("테스트", meeting.profiles.get(i).toString());
-                    }
-
-                    for (int i = 0; i < meeting.profiles.size(); i++ ){
+                    // 모임참가 인원의 프로필사진 세팅
+                    for(int i = 0; i < meeting.profiles.size(); i++){
+                        if(i >= imgProfiles.length - 1){
+                            break;
+                        }
                         imgProfileList[i+1].setVisibility(View.VISIBLE);
-                        Glide.with(MeetingDetailActivity.this).load(meeting.profiles.get(i)).into(imgProfileList[i+1]);
+                        Glide.with(MeetingDetailActivity.this).load(meeting.profiles.get(i).profile).into(imgProfileList[i+1]);
                     }
+
+                    // 각자계산인지 회비인지 알려주기 ( 0 = 각자 계산, 1 이상부터는 회비)
+                    String strPay = "";
+                    if (meeting.pay == 0) {
+                        strPay = "각자 계산" ;
+                    } else {
+                        strPay = "1인당 " + meeting.pay + "원씩 계산";
+                    }
+
+                    textViewsList[5].setText(strPay);
+
 
 
 

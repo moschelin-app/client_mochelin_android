@@ -15,6 +15,8 @@ public class Meeting implements Serializable {
     public String storeAddr;
     public double storeLat;
     public double storeLng;
+    public int pay;
+    public int isMine;
     public double distance;
     public int attend;
     public int maximum;
