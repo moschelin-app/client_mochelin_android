@@ -30,6 +30,13 @@ public class Review implements Serializable {
     public double distance;
 
 
+    public ArrayList<Photos> photos;
+
+    public class Photos {
+        public String photo;
+    }
+
+
     public ArrayList<tagName> tags;
 
     public class tagName{

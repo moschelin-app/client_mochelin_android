@@ -27,12 +27,14 @@
                     android:id="@+id/imgPhoto"
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    app:srcCompat="@drawable/baseline_image_24" />
+                    app:srcCompat="@drawable/baseline_image_24"
+                    android:background="@drawable/corner"/>
 
                 <TextView
                     android:id="@+id/txtDistance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center"
                     android:text="거리" />
 
@@ -54,7 +56,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
                         android:background="@drawable/bubble"
+                        android:padding="1dp"
                         android:text="상호명" />
 
                 </LinearLayout>
@@ -69,11 +73,13 @@
                         android:id="@+id/txtMeetName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="여기에 모임 이름이 적힐겁니다. 사랑합니다 원준님^^"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -82,19 +88,21 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtStoreAddress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="서구 서곶로 294" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/txtMeetingDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="내일(토) 13:00" />
+                        <TextView
+                            android:id="@+id/txtMeetingDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:text="내일(토) 13:00"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <LinearLayout

@@ -27,7 +27,8 @@ public interface MeetingApi {
 
     // 특정 모임의 상세내용 가져오는 API
     @GET("/meeting/{meetingId}")
-    Call<MeetingRes> getMeetingDetail(@Path("meetingId") int meetingId);
+    Call<MeetingRes> getMeetingDetail(@Header("Authorization") String token,
+                                      @Path("meetingId") int meetingId);
 
     // 모임 생성 API
     @Multipart

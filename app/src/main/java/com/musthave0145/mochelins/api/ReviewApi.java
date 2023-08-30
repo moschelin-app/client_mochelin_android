@@ -1,5 +1,6 @@
 package com.musthave0145.mochelins.api;
 
+import com.musthave0145.mochelins.model.ReviewListRes;
 import com.musthave0145.mochelins.model.ReviewRes;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ReviewApi {
@@ -35,4 +37,9 @@ public interface ReviewApi {
                               @Part("rating") RequestBody rating,
                               @Part("tag") RequestBody tag
     );
+
+    // 특정 리뷰 가저오는 API
+    @GET("/review/{reviewId}")
+    Call<ReviewListRes> getReviewDetail(@Header("Authorization") String token,
+                                        @Path("reviewId") int reviewId);
 }

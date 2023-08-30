@@ -59,9 +59,11 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             Glide.with(context).load(meeting.profile).into(holder.imgPhoto);
         }
 
-        holder.txtDistance.setText("📍"+meeting.distance+"km");
+        String strDis = String.format("%.2f",meeting.distance) + "km";
+        holder.txtDistance.setText("📍 "+ strDis);
         holder.txtStoreName.setText("  "+meeting.storeName+"  ");
         holder.txtMeetName.setText(meeting.content);
+
 
         // TODO: 스토어ID로 주소를 가져와야 한다.
 //        holder.txtStoreAddress.setText(meeting.);

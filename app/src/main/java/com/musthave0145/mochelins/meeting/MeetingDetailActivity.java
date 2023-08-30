@@ -137,8 +137,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
         btnApply = findViewById(R.id.btnApply);
         imgMyMenu = findViewById(R.id.imgMyButton);
 
-
-
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,10 +217,13 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
     void getNetworkData(){
 
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        token = sp.getString(Config.ACCESS_TOKEN, "");
+
         Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
         MeetingApi api = retrofit.create(MeetingApi.class);
 
-        Call<MeetingRes> call = api.getMeetingDetail(meetingId);
+        Call<MeetingRes> call = api.getMeetingDetail(token, meetingId);
         call.enqueue(new Callback<MeetingRes>() {
             @Override
             public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
@@ -230,8 +231,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
                     meeting = response.body().item;
                     Log.i("디테일액티비티", meeting.content);
 
-                    SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
-                    token = sp.getString(Config.ACCESS_TOKEN, "");
+
                     //Todo: 내 게시물인지 알수있는 방법이 없음.
 
                     textViewsList[0].setText(meeting.nickname);
@@ -320,9 +320,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
         });
     }
 }
-        // 미팅 사진은 1개만,, 리뷰사진은 5개..
-//        viewPager2 = findViewById(R.id.viewPager2);
-//        itemAdapter = new ItemAdapter(images);
-//        viewPager2.setAdapter(itemAdapter);
+
 //        imgPhoto = findViewById(R.id.imgPhoto);
 //        Glide.with(MeetingDetailActivity.this).load(meeting.photo).into(imgPhoto);
