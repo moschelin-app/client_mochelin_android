@@ -94,7 +94,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
                 break;
             }
             holder.imgProfiles[i].setVisibility(View.VISIBLE);
-            Glide.with(context).load(meeting.profiles.get(i).profile).into(holder.imgProfiles[i]);
+            Glide.with(context).load(meeting.profiles.get(i).profile).
+                    fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(holder.imgProfiles[i]);
         }
 
         // 총 정원과 현재 참가한 인원수를 붙여서 출력하자

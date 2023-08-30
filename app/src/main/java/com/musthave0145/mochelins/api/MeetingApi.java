@@ -55,4 +55,9 @@ public interface MeetingApi {
 
     // 모임 수정 API
 
+    // 모임 삭제 API
+    @DELETE("/meeting/{meetingId}")
+    Call<MeetingRes> deleteMeeting(@Header("Authorization") String token,
+                                   @Path("meetingId") int meetingId);
+
 }

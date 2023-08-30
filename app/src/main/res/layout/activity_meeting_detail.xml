@@ -122,6 +122,7 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="70dp"
+                    android:layout_marginRight="2dp"
                     android:src="@drawable/baseline_account_circle_24"
                     android:visibility="invisible" />
 
@@ -129,6 +130,7 @@
                     android:id="@+id/imgProfile2"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_marginRight="2dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/baseline_account_circle_24"
                     android:visibility="invisible" />
@@ -137,6 +139,7 @@
                     android:id="@+id/imgProfile3"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_marginRight="2dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/baseline_account_circle_24"
                     android:visibility="invisible" />
@@ -145,6 +148,7 @@
                     android:id="@+id/imgProfile4"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_marginRight="2dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/baseline_account_circle_24"
                     android:visibility="invisible" />
@@ -153,6 +157,7 @@
                     android:id="@+id/imgProfile5"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_marginRight="2dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/baseline_account_circle_24"
                     android:visibility="invisible" />
@@ -161,6 +166,7 @@
                     android:id="@+id/imgProfile6"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_marginRight="2dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/baseline_account_circle_24"
                     android:visibility="invisible" />

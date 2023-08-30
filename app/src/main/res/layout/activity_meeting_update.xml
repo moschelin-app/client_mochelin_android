@@ -30,12 +30,12 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="90dp"
                     android:gravity="center_horizontal|top"
-                    android:text="모임"
+                    android:text="모임 수정"
                     android:textColor="#000000"
                     android:textSize="28sp" />
 
                 <ImageView
-                    android:id="@+id/imgMenu"
+                    android:id="@+id/imgBack"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerHorizontal="false"
@@ -45,8 +45,9 @@
 
                 <TextView
                     android:id="@+id/txtSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
@@ -211,7 +212,7 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/btnStar1"
+                            android:id="@+id/imgDown"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             app:srcCompat="@drawable/baseline_do_disturb_on_24" />
@@ -229,7 +230,7 @@
                             tools:ignore="TouchTargetSizeCheck" />
 
                         <ImageView
-                            android:id="@+id/btnStar5"
+                            android:id="@+id/imgUp"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             app:srcCompat="@drawable/baseline_add_circle_24" />
