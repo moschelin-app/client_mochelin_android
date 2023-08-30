@@ -7,6 +7,8 @@ public class User {
 
     public String name;
 
+    public String profile;
+
     public String nickname;
 
     public User() {

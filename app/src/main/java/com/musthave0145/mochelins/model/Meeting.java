@@ -20,11 +20,6 @@ public class Meeting implements Serializable {
     public int maximum;
     public String nickname;
 
-    public ArrayList<Profile> profiles;
+    public ArrayList<User> profiles;
 
-    public class Profile implements Serializable {
-        public class user{
-
-        }
-    }
 }

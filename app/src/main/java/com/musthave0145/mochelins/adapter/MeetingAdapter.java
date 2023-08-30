@@ -55,9 +55,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
         // 미팅 사진이 없으면, 기본 이미지 표시 / 있으면, 그 사진을 표시하는 로직.
         // 원래는 null !!
-        if (meeting.profile != null) {
-            Glide.with(context).load(meeting.profile).into(holder.imgPhoto);
-        }
+        holder.imgPhoto.setClipToOutline(true);
+        Glide.with(context).load(meeting.photo).into(holder.imgPhoto);
+
 
         String strDis = String.format("%.2f",meeting.distance) + "km";
         holder.txtDistance.setText("📍 "+ strDis);
@@ -65,8 +65,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         holder.txtMeetName.setText(meeting.content);
 
 
-        // TODO: 스토어ID로 주소를 가져와야 한다.
-//        holder.txtStoreAddress.setText(meeting.);
+
         String newDate = "";
 
         try {
@@ -89,10 +88,14 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
         }
         holder.txtMeetingDate.setText(newDate);
-        // TODO: imgProfile들에게 프로필 사진이 없으면 기본이미지, 있으면 해당이미지로 셋팅!
-//        if (meeting.profiles != null) {
-//            Glide.with(context).load(meeting.photo).into(holder.imgPhoto);
-//        }
+
+        for(int i = 0; i < meeting.profiles.size(); i++){
+            if(i >= holder.imgProfileInteger.length){
+                break;
+            }
+            holder.imgProfiles[i].setVisibility(View.VISIBLE);
+            Glide.with(context).load(meeting.profiles.get(i).profile).into(holder.imgProfiles[i]);
+        }
 
         // 총 정원과 현재 참가한 인원수를 붙여서 출력하자
         String strCurrentPerson = meeting.attend + " / " + meeting.maximum;
