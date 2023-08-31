@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.viewHolder> {
 
     Context context;
-    ArrayList<String> imgUrl;
+    ArrayList<String> imgUrls;
 
-    public ItemAdapter(Context context, ArrayList<String> imgUrl) {
+    public ItemAdapter(Context context, ArrayList<String> imgUrls) {
         this.context = context;
-        this.imgUrl = imgUrl;
+        this.imgUrls = imgUrls;
     }
 
 
@@ -36,25 +36,27 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.viewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.viewHolder holder, int position) {
-        for (int i = 0; i < imgUrl.size(); i++){
-            Glide.with(context).load(imgUrl).into(holder.imageView);
+        for (int i = 0; i < imgUrls.size(); i++){
+            holder.bindSliderImage(imgUrls.get(position));
         }
     }
 
     @Override
     public int getItemCount() {
-        return imgUrl.size();
+        return imgUrls.size();
     }
 
     public class viewHolder extends RecyclerView.ViewHolder{
-
         ImageView imageView;
 
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
-
             imageView = itemView.findViewById(R.id.imageView);
+        }
+
+        public void bindSliderImage(String imgUrl) {
+            Glide.with(context).load(imgUrl).into(imageView);
         }
     }
 }
