@@ -29,6 +29,9 @@ public interface UserApi {
     @POST("/user/login")
     Call<UserRes> login(@Body User user);
 
+    @POST("/user/login/kakao")
+    Call<UserRes> login_kakao(@Body User user);
+
     // 로그아웃 API
     @DELETE("/user/logout")
     Call<UserRes> logout(@Header("Authorization") String token);

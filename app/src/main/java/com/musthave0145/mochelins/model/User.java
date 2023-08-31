@@ -15,6 +15,8 @@ public class User implements Serializable {
     public String nickname;
     public int isMine = 0;
 
+    public long kakaoId;
+
     public User() {
     }
 
@@ -28,5 +30,12 @@ public class User implements Serializable {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public User(String email, String name, String profile, long kakaoId) {
+        this.email = email;
+        this.name = name;
+        this.profile = profile;
+        this.kakaoId = kakaoId;
     }
 }
