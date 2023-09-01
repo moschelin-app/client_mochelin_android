@@ -125,10 +125,21 @@
                     android:text="자동 로그인 "
                     android:textColor="#9E9C9C" />
 
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginRight="45dp"
+                    android:background="@drawable/default_button"
+                    android:text="로그인"
+                    android:textSize="20sp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="60dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
@@ -157,59 +168,16 @@
                         android:background="#9E9C9C" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgKakao"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginRight="25dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/kakao"
-                        app:civ_border_overlay="true" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgGoogle"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginRight="25dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/google"
-                        app:civ_border_color="#000000"
-                        app:civ_border_overlay="true"
-                        app:civ_border_width="1dp" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgNaver"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginRight="25dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/naver"
-                        app:civ_border_overlay="true" />
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnLogin"
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/btnKakaoLogin"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="45dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="45dp"
-                    android:background="@drawable/default_button"
-                    android:text="로그인"
-                    android:textSize="20sp" />
+                    android:background="#00FFFFFF"
+                    android:src="@drawable/kakao_login_medium_wide"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"/>
+
+
 
 
             </LinearLayout>

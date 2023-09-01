@@ -7,4 +7,5 @@ public class ReviewListRes {
     public String result;
     public ArrayList<Review> item;
 
+
 }

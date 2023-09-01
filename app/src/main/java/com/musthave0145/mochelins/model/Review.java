@@ -32,14 +32,14 @@ public class Review implements Serializable {
 
     public ArrayList<Photos> photos;
 
-    public class Photos {
+    public class Photos implements Serializable{
         public String photo;
     }
 
 
     public ArrayList<tagName> tags;
 
-    public class tagName{
+    public class tagName implements Serializable{
         public String name;
     }
 

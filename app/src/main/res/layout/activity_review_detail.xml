@@ -7,260 +7,314 @@
     android:orientation="vertical"
     tools:context=".review.ReviewCreateActivity">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager2"
-            android:layout_width="match_parent"
-            android:layout_height="270dp">
-
-        </androidx.viewpager2.widget.ViewPager2>
-
-        <ImageView
-            android:id="@+id/imgBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/baseline_arrow_back_24_3" />
-
-        <ImageView
-            android:id="@+id/imgShare"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            app:srcCompat="@drawable/outline_share_24" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtStoreName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="서구청 마약김밥"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/imgLike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="22dp"
-                app:srcCompat="@drawable/baseline_favorite_border_24_2" />
-
-            <TextView
-                android:id="@+id/txtLike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="17dp"
-                android:text="3" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imgStar1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="7dp"
-                app:srcCompat="@drawable/baseline_star_border_24" />
-
-            <ImageView
-                android:id="@+id/imgStar2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                app:srcCompat="@drawable/baseline_star_border_24" />
-
-            <ImageView
-                android:id="@+id/imgStar3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                app:srcCompat="@drawable/baseline_star_border_24" />
-
-            <ImageView
-                android:id="@+id/imgStar4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                app:srcCompat="@drawable/baseline_star_border_24" />
-
-            <ImageView
-                android:id="@+id/imgStar5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                app:srcCompat="@drawable/baseline_star_border_24" />
-
-            <TextView
-                android:id="@+id/txtStar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="7dp"
-                android:text="0"
-                android:textSize="16sp" />
+            android:orientation="vertical" >
 
             <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/txtCreatedAt"
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager2"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp">
+
+                </androidx.viewpager2.widget.ViewPager2>
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/baseline_arrow_back_24_3" />
+
+                <ImageView
+                    android:id="@+id/imgShare"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    app:srcCompat="@drawable/outline_share_24" />
+
+                <LinearLayout
+                    android:id="@+id/indicatorLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginRight="18dp"
-                    android:text="23.08.26 16:57 " />
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp">
+
+                </LinearLayout>
+
             </RelativeLayout>
-
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="18dp"
-            app:cardElevation="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="20dp"
-                android:paddingTop="20dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="15dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txtContent"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="김밥이 너무 맛있어요~"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtStoreName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="서구청 마약김밥"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/imgLike"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="19dp"
+                        app:srcCompat="@drawable/baseline_favorite_border_24_2" />
+
+                    <TextView
+                        android:id="@+id/txtLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="17dp"
+                        android:text="3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgStar1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="7dp"
+                        app:srcCompat="@drawable/baseline_star_border_24" />
+
+                    <ImageView
+                        android:id="@+id/imgStar2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        app:srcCompat="@drawable/baseline_star_border_24" />
+
+                    <ImageView
+                        android:id="@+id/imgStar3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        app:srcCompat="@drawable/baseline_star_border_24" />
+
+                    <ImageView
+                        android:id="@+id/imgStar4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        app:srcCompat="@drawable/baseline_star_border_24" />
+
+                    <ImageView
+                        android:id="@+id/imgStar5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        app:srcCompat="@drawable/baseline_star_border_24" />
+
+                    <TextView
+                        android:id="@+id/txtStar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="7dp"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="35dp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtTag1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bubble"
-                        android:text=" #서구청 "
-                        android:textColor="#4E80FF"
-                        android:textSize="11.5sp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imgProfile"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/default_profile"/>
 
                     <TextView
-                        android:id="@+id/txtTag2"
+                        android:id="@+id/txtPersonName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:background="@drawable/bubble"
-                        android:text=" #서구청 "
-                        android:textColor="#4E80FF"
-                        android:textSize="11.5sp" />
-
-                    <TextView
-                        android:id="@+id/txtTag3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:background="@drawable/bubble"
-                        android:text=" #서구청 "
-                        android:textColor="#4E80FF"
-                        android:textSize="11.5sp" />
+                        android:layout_marginTop="12dp"
+                        android:text="작성자" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/txtViews"
+                            android:id="@+id/txtCreatedAt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="조회수 45"
-                            android:textSize="11.5sp" />
+                            android:layout_marginTop="13dp"
+                            android:layout_marginRight="18dp"
+                            android:text="23.08.26 16:57 " />
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginRight="18dp"
+                    app:cardElevation="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="15dp">
+
+                        <TextView
+                            android:id="@+id/txtContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="김밥이 너무 맛있어요~"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="35dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtTag1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bubble"
+                                android:padding="2dp"
+                                android:text=" #서구청 "
+                                android:textColor="#4E80FF"
+                                android:textSize="11.5sp"
+                                android:visibility="invisible" />
+
+                            <TextView
+                                android:id="@+id/txtTag2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:background="@drawable/bubble"
+                                android:padding="2dp"
+                                android:text=" #서구청 "
+                                android:textColor="#4E80FF"
+                                android:textSize="11.5sp"
+                                android:visibility="invisible" />
+
+                            <TextView
+                                android:id="@+id/txtTag3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:background="@drawable/bubble"
+                                android:padding="2dp"
+                                android:text=" #서구청 "
+                                android:textColor="#4E80FF"
+                                android:textSize="11.5sp"
+                                android:visibility="invisible" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/txtViews"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:text="조회수 45"
+                                    android:textSize="11.5sp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="20dp"
+                    android:text="📍 인천광역시 서구 서곶로 294 (심곡동 산 7-4)"
+                    android:textSize="12sp" />
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="18dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txtDetailStore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="20dp"
+                        android:text="가게 정보 보기"
+                        android:textColor="#4E80FF"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:text="이 글을 본 사람들은 이것을 추천해요!" />
+
             </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/txtAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
-            android:text="📍 인천광역시 서구 서곶로 294 (심곡동 산 7-4)"
-            android:textSize="12sp" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="18dp"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/txtDetailStore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:text="가게 정보 보기"
-                android:textColor="#4E80FF"
-                android:textSize="12sp" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:text="이 글을 본 사람들은 이것을 추천해요!" />
-
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

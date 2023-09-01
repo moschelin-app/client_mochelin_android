@@ -59,9 +59,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         Review review = reviewArrayList.get(position);
 
 
-        // API가 완성되면 다시 수정하자!
-
-
         // 작성자의 프로필 사진 표시(없으면 기본 이미지, 있으면 올린 사진으로), 이름과 작성 시간을 표시하자!
 
         if (review.profile == null) {
@@ -145,7 +142,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 break;
             }
             holder.txtTagList[i].setVisibility(View.VISIBLE);
-            holder.txtTagList[i].setText(review.tags.get(i).name);
+            holder.txtTagList[i].setText("#"+review.tags.get(i).name);
         }
 
 
