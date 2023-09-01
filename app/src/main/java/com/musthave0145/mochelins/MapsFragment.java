@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,11 +34,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.api.MapApi;
 import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.api.StoreApi;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.MapData;
+import com.musthave0145.mochelins.model.MapDataListener;
 import com.musthave0145.mochelins.model.MapListRes;
+import com.musthave0145.mochelins.model.Store;
+import com.musthave0145.mochelins.model.StoreRes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,17 +58,22 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     boolean isLocationReady;
     double dis=1.5;
 
+    private MapDataListener mapDataListener;
 
     ArrayList<MapData> customMapArrayList = new ArrayList<>();
-
+    ArrayList<Store> storeArrayList = new ArrayList<>();
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         LocationManager locationManager;
         LocationListener locationListener;
 
+        private MapData clickMapData;
+
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap =googleMap;
-
+            TextView txtName = rootView.findViewById(R.id.txtName);
+            TextView txtVicinity = rootView.findViewById(R.id.txtVicinity);
             Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
             MapApi api = retrofit.create(MapApi.class);
             SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -68,14 +81,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             Call<MapListRes> call = api.getPlaceList("Bearer " +token,lat,lng,dis);
 
             call.enqueue(new Callback<MapListRes>() {
+
                 @Override
                 public void onResponse(Call<MapListRes> call, Response<MapListRes> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         MapListRes mapList = response.body();
-
+                        Log.d("안녕","안녕");
                         customMapArrayList.addAll(mapList.items);
 
-                        for (MapData mapData : customMapArrayList) {
+                        for (int i=0; i<customMapArrayList.size();i++) {
+                            MapData mapData = customMapArrayList.get(i);
+
                             LatLng location = new LatLng(mapData.storeLat, mapData.storeLng);
                             // 커스텀 마커 레이아웃 설정
                             View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
@@ -83,7 +99,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                             TextView textView = customMarkerView.findViewById(R.id.textView);
 
                             imageView.setImageResource(R.drawable.baseline_star_24);
-                            String strRating = mapData.rating+"";
+                            String strRating = mapData.rating + "";
                             textView.setText(strRating);
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
                             MarkerOptions markerOptions = new MarkerOptions()
@@ -92,6 +108,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                     .icon(icon);
 
                             Marker marker = googleMap.addMarker(markerOptions);
+                            marker.setTag(i);
                             marker.showInfoWindow();
 
                         }
@@ -112,6 +129,59 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                 }
             });
+
+            //cardView
+            CardView cardView = rootView.findViewById(R.id.cardView);
+            cardView.setVisibility(View.GONE);
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(@NonNull LatLng latLng) {
+                    cardView.setVisibility(View.GONE);
+                }
+            });
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    cardView.setVisibility(View.VISIBLE);
+
+                    int markerIndex = (int) marker.getTag();
+                    Log.i("숫자",markerIndex+"");
+                    if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
+                        MapData clickedMapData = customMapArrayList.get(markerIndex);
+                        Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+                        StoreApi api = retrofit.create(StoreApi.class);
+                        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                        String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+                        Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
+                        Log.d("storeName","인사");
+                        call.enqueue(new Callback<StoreRes>() {
+                            @Override
+                            public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    StoreRes storeList = response.body();
+                                          Store store = storeList.item;
+                                            txtName.setText(store.storeName);
+                                            Log.d("안녕하세요",store.storeName);
+                                            txtVicinity.setText(store.storeAddr);
+                                            // 여기서 받아온 데이터 활용
+
+                                } else {
+                                    Log.d("ApiResponse", "storeList is null");
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<StoreRes> call, Throwable t) {
+                                Log.e("API Call Error", "Error fetching store details", t);
+                            }
+                        });
+
+                    }
+                    return false;
+                }
+            });
+
 
             // 폰의 위치를 가져오기 위해서는,시스템 서버로부터 로케이션 메니저를 받아온다
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -144,6 +214,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                             marker.showInfoWindow();
 
                             googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+                            googleMap.setMinZoomPreference(17);
 
                         }
                     }
@@ -171,13 +242,34 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             // 위치기반 허용하였으므로,
             // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    3000,
+                    10000,
                     -1,
                     locationListener);
         }
     };
 
     private View rootView;
+
+
+
+    String name;
+    String address;
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapsFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapsFragment != null) {
+            mapsFragment.getMapAsync(callback);
+        }
+
+
+
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -185,21 +277,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
+        TextView txtName = rootView.findViewById(R.id.txtName);
+        TextView txtVicinity =rootView.findViewById(R.id.txtVicinity);
+
+        mapDataListener = new MapDataListener() {
+            @Override
+            public void onMapDataReceived(Store clickStore) {
+
+            }
+        };
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
-        }
-    }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
     }
+
+
 }
