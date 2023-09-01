@@ -72,7 +72,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/imgPhoto"
+                        android:id="@+id/storePhoto"
                         android:layout_width="290dp"
                         android:layout_height="160dp"
                         android:layout_centerInParent="true"

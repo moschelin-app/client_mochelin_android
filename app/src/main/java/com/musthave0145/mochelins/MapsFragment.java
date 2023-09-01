@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,6 +43,7 @@ import com.musthave0145.mochelins.model.MapDataListener;
 import com.musthave0145.mochelins.model.MapListRes;
 import com.musthave0145.mochelins.model.Store;
 import com.musthave0145.mochelins.model.StoreRes;
+import com.musthave0145.mochelins.review.ReviewDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,8 +75,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap =googleMap;
-            TextView txtName = rootView.findViewById(R.id.txtName);
-            TextView txtVicinity = rootView.findViewById(R.id.txtVicinity);
+            RatingBar ratingBar = rootView.findViewById(R.id.ratingBar);
+            TextView txtName = rootView.findViewById(R.id.txtMapStoreName);
+            TextView txtVicinity = rootView.findViewById(R.id.txtMapAddr);
+            TextView txtView = rootView.findViewById(R.id.txtMapView);
+            TextView txtLike = rootView.findViewById(R.id.txtMapLike);
+            TextView txtContent = rootView.findViewById(R.id.txtMapContent);
+            ImageView photo =rootView.findViewById(R.id.storePhoto);
             Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
             MapApi api = retrofit.create(MapApi.class);
             SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -99,6 +107,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                             TextView textView = customMarkerView.findViewById(R.id.textView);
 
                             imageView.setImageResource(R.drawable.baseline_star_24);
+
                             String strRating = mapData.rating + "";
                             textView.setText(strRating);
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
@@ -144,39 +153,61 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
                     cardView.setVisibility(View.VISIBLE);
+                    Integer markerIndexInteger = (Integer) marker.getTag();
+                    if (markerIndexInteger != null) {
+                        int markerIndex = markerIndexInteger.intValue();
 
-                    int markerIndex = (int) marker.getTag();
-                    Log.i("숫자",markerIndex+"");
-                    if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
-                        MapData clickedMapData = customMapArrayList.get(markerIndex);
-                        Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-                        StoreApi api = retrofit.create(StoreApi.class);
-                        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                        String token = sp.getString(Config.ACCESS_TOKEN, "");
+                        Log.i("숫자", markerIndex + "");
+                        if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
+                            MapData clickedMapData = customMapArrayList.get(markerIndex);
+                            Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+                            StoreApi api = retrofit.create(StoreApi.class);
+                            SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                            String token = sp.getString(Config.ACCESS_TOKEN, "");
 
-                        Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
-                        Log.d("storeName","인사");
-                        call.enqueue(new Callback<StoreRes>() {
-                            @Override
-                            public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    StoreRes storeList = response.body();
-                                          Store store = storeList.item;
-                                            txtName.setText(store.storeName);
-                                            Log.d("안녕하세요",store.storeName);
-                                            txtVicinity.setText(store.storeAddr);
-                                            // 여기서 받아온 데이터 활용
+                            Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
+                            Log.d("storeName", "인사");
+                            call.enqueue(new Callback<StoreRes>() {
+                                @Override
+                                public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        StoreRes storeList = response.body();
+                                        Store store = storeList.item;
 
-                                } else {
-                                    Log.d("ApiResponse", "storeList is null");
+                                        int isLikeValue =store.likeCnt;
+                                        String isLikeString = String.valueOf(isLikeValue);
+                                        int isviewValue =store.view;
+                                        String isViewString = String.valueOf(isviewValue);
+
+                                        double isRatingValue = store.rating;
+                                        int isStringInt = (int) isRatingValue;
+                                        //가게이름
+                                        txtName.setText(store.storeName);
+                                        //가게주소
+                                        txtVicinity.setText(store.storeAddr);
+                                        // 게시글 조회수
+                                        txtView.setText(isViewString);
+                                        // 게시글 좋아요 수
+                                        txtLike.setText(isLikeString);
+                                        // 게시글 내용
+                                        txtContent.setText(store.content);
+                                        //가게 사진
+                                        Glide.with(MapsFragment.this).load(store.photo).into(photo);
+                                        //별점
+                                        ratingBar.setRating(isStringInt);
+
+                                    } else {
+                                        Log.d("ApiResponse", "storeList is null");
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onFailure(Call<StoreRes> call, Throwable t) {
-                                Log.e("API Call Error", "Error fetching store details", t);
-                            }
-                        });
 
+                                @Override
+                                public void onFailure(Call<StoreRes> call, Throwable t) {
+                                    Log.e("API Call Error", "Error fetching store details", t);
+                                }
+                            });
+
+                        }
                     }
                     return false;
                 }
@@ -242,7 +273,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             // 위치기반 허용하였으므로,
             // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    10000,
+                    100000,
                     -1,
                     locationListener);
         }
@@ -277,8 +308,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        TextView txtName = rootView.findViewById(R.id.txtName);
-        TextView txtVicinity =rootView.findViewById(R.id.txtVicinity);
+        TextView txtName = rootView.findViewById(R.id.txtMapStoreName);
+        TextView txtVicinity =rootView.findViewById(R.id.txtMapAddr);
 
         mapDataListener = new MapDataListener() {
             @Override

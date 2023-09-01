@@ -2,9 +2,6 @@ package com.musthave0145.mochelins.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +17,13 @@ import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.review.ReviewDetailActivity;
 import com.musthave0145.mochelins.model.Review;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -193,7 +186,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             super(itemView);
 
             cardView = itemView.findViewById(R.id.cardView);
-            imgPhoto = itemView.findViewById(R.id.imgPhoto);
+            imgPhoto = itemView.findViewById(R.id.storePhoto);
 
             imgPerson = itemView.findViewById(R.id.imgPerson);
             txtPerson = itemView.findViewById(R.id.txtPerson);

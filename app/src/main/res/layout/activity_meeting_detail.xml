@@ -38,7 +38,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imgPhoto"
+                    android:id="@+id/storePhoto"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:scaleType="centerCrop"
@@ -85,7 +85,7 @@
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/txtContent"
+                                android:id="@+id/txtMapContent"
                                 android:layout_width="300dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"

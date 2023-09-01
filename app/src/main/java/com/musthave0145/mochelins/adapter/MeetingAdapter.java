@@ -2,7 +2,6 @@ package com.musthave0145.mochelins.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,10 +137,10 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imgPhoto = itemView.findViewById(R.id.imgPhoto);
+            imgPhoto = itemView.findViewById(R.id.storePhoto);
             txtDistance = itemView.findViewById(R.id.txtDistance);
             txtStoreName = itemView.findViewById(R.id.txtStoreName);
-            txtMeetName = itemView.findViewById(R.id.txtMeetName);
+            txtMeetName = itemView.findViewById(R.id.txtMapContent);
             txtStoreAddress = itemView.findViewById(R.id.txtStoreAddress);
             txtMeetingDate = itemView.findViewById(R.id.txtMeetingDate);
             cardView = itemView.findViewById(R.id.cardView);

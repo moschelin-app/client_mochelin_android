@@ -2,7 +2,6 @@ package com.musthave0145.mochelins.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,7 @@ public class InfoReviewAdapter extends RecyclerView.Adapter<InfoReviewAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgPhoto = itemView.findViewById(R.id.imgPhoto);
+            imgPhoto = itemView.findViewById(R.id.storePhoto);
 
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override

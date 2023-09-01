@@ -8,14 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,19 +26,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
-import com.musthave0145.mochelins.MainActivity;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.MeetingApi;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Meeting;
-import com.musthave0145.mochelins.model.MeetingListRes;
 import com.musthave0145.mochelins.model.MeetingRes;
 
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -50,7 +45,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.http.Header;
 
 public class MeetingDetailActivity extends AppCompatActivity {
 
@@ -69,7 +63,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
     ImageView imgMyMenu;
 
 
-    Integer[] textViews = {R.id.txtPersonName, R.id.txtContent, R.id.txtMeetCount, R.id.txtStoreName,
+    Integer[] textViews = {R.id.txtPersonName, R.id.txtMapContent, R.id.txtMeetCount, R.id.txtStoreName,
                             R.id.txtMaximum, R.id.txtDutch, R.id.txtMeetingDate, R.id.txtStoreAddress};
 
     TextView[] textViewsList = new TextView[textViews.length];
@@ -106,7 +100,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
         }
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        imgPhoto = findViewById(R.id.imgPhoto);
+        imgPhoto = findViewById(R.id.storePhoto);
         imgBack = findViewById(R.id.imgBack);
         btnApply = findViewById(R.id.btnApply);
         imgMyMenu = findViewById(R.id.imgMyButton);

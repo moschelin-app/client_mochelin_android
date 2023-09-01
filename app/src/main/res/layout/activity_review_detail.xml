@@ -204,7 +204,7 @@
                         android:paddingBottom="15dp">
 
                         <TextView
-                            android:id="@+id/txtContent"
+                            android:id="@+id/txtMapContent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="김밥이 너무 맛있어요~"

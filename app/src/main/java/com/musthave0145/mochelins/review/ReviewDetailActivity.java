@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,15 +26,12 @@ import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.ReviewApi;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Review;
-import com.musthave0145.mochelins.model.ReviewListRes;
 import com.musthave0145.mochelins.model.ReviewRes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -67,7 +63,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
     ImageView[] imgViewList = new ImageView[imgViews.length];
 
     Integer[] txtViews = {R.id.txtStoreName, R.id.txtLike, R.id.txtStar,
-                        R.id.txtPersonName, R.id.txtCreatedAt, R.id.txtContent, R.id.txtTag1,
+                        R.id.txtPersonName, R.id.txtCreatedAt, R.id.txtMapContent, R.id.txtTag1,
                         R.id.txtTag2, R.id.txtTag3, R.id.txtViews, R.id.txtAddress, R.id.txtDetailStore};
     TextView[] txtViewList = new TextView[txtViews.length];
     String token;
