@@ -145,6 +145,20 @@
                         android:text="0"
                         android:textSize="16sp" />
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imgMyButton"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_alignParentRight="true"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/baseline_more_vert_24" />
+                    </RelativeLayout>
+
 
                 </LinearLayout>
 

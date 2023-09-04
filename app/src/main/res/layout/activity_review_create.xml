@@ -70,8 +70,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/corner"
-                android:scaleType="center"
-                app:srcCompat="@drawable/outline_camera_alt_24" />
+                android:scaleType="center" />
 
             <ImageView
                 android:id="@+id/imgPhoto3"
@@ -80,8 +79,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/corner"
-                android:scaleType="center"
-                app:srcCompat="@drawable/outline_camera_alt_24" />
+                android:scaleType="center" />
 
             <ImageView
                 android:id="@+id/imgPhoto4"
@@ -90,8 +88,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/corner"
-                android:scaleType="center"
-                app:srcCompat="@drawable/outline_camera_alt_24" />
+                android:scaleType="center" />
 
             <ImageView
                 android:id="@+id/imgPhoto5"
@@ -100,8 +97,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/corner"
-                android:scaleType="center"
-                app:srcCompat="@drawable/outline_camera_alt_24" />
+                android:scaleType="center" />
 
             <ImageView
                 android:id="@+id/imgClear"

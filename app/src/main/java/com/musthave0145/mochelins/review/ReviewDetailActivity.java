@@ -62,6 +62,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
     ImageView[] imgViewList = new ImageView[imgViews.length];
 
+    ImageView imgMyButton;
+
     Integer[] txtViews = {R.id.txtStoreName, R.id.txtLike, R.id.txtStar,
                         R.id.txtPersonName, R.id.txtCreatedAt, R.id.txtMapContent, R.id.txtTag1,
                         R.id.txtTag2, R.id.txtTag3, R.id.txtViews, R.id.txtAddress, R.id.txtDetailStore};
@@ -83,6 +85,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
         imgProfile = findViewById(R.id.imgProfile);
         indicatorLayout = findViewById(R.id.indicatorLayout);
+        imgMyButton = findViewById(R.id.imgMyButton);
 
 
         for(int i = 0; i < imgViews.length; i++) {
@@ -107,6 +110,18 @@ public class ReviewDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
                 Review review1 = response.body().item;
+
+                // 내 게시물인지 알 수 있는 방법이 없음.
+                imgMyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ReviewDetailActivity.this, ReviewUpdateActivity.class);
+                        intent.putExtra("review", review1);
+                        startActivity(intent);
+
+                    }
+                });
+
                 imgViewList[0].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

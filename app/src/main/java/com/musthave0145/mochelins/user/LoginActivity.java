@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         // 카카오 로그인
         String kakaoKey = getApplicationContext().getResources().getString(R.string.KAKAO_APP_KEY);
         KakaoSdk.init(this, kakaoKey);
-//        Log.e("getKeyHash", ""+getKeyHash(LoginActivity.this));
+        Log.e("getKeyHash", ""+getKeyHash(LoginActivity.this));
 
         btnKakaoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
