@@ -149,6 +149,7 @@ public class PlannerFragment extends Fragment {
         mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
+        // 내 정보 액티비티 이동
         cardViewList[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +160,7 @@ public class PlannerFragment extends Fragment {
             }
         });
 
+        // 프래그먼트간 이동
         cardViewList[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
