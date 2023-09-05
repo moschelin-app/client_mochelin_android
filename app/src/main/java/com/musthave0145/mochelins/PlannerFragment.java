@@ -122,7 +122,7 @@ public class PlannerFragment extends Fragment {
         imgMenu = rootView.findViewById(R.id.imgMenu);
         imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
         plannerDrawer = rootView.findViewById(R.id.plannerDrawer);
-
+        monthYearText = rootView.findViewById(R.id.monthYearText);
 
 
         // 사이드 메뉴바를 열고 닫는 코드
@@ -230,10 +230,10 @@ public class PlannerFragment extends Fragment {
                 });
             }
         });
-//        monthYearText = rootView.findViewById(R.id.monthYearText);
-//        pre_btn = rootView.findViewById(R.id.pre_btn);
-//        next_btn = rootView.findViewById(R.id.next_btn);
-//        recyclerView = rootView.findViewById(R.id.recyclerView);
+        monthYearText = rootView.findViewById(R.id.monthYearText);
+        pre_btn = rootView.findViewById(R.id.pre_btn);
+        next_btn = rootView.findViewById(R.id.next_btn);
+       recyclerView = rootView.findViewById(R.id.recyclerView);
         //현재 날짜
         CalendarUtil.selectedDate =LocalDate.now();
 
