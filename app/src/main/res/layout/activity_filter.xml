@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".review.FilterActivity">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,11 +17,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/filter_menu" />
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            tools:ignore="ExtraText">
+
+            <ImageButton
+                android:id="@+id/imgSave"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="#00FFFFFF"
+                app:srcCompat="@drawable/baseline_clear_24_2" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/disLayout"

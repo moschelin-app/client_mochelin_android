@@ -34,6 +34,7 @@ import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.ReviewRes;
 import com.musthave0145.mochelins.model.UserRes;
+import com.musthave0145.mochelins.user.InfoActivity;
 import com.musthave0145.mochelins.user.LoginActivity;
 
 import java.util.ArrayList;
@@ -96,10 +97,10 @@ public class ReviewFragment extends Fragment {
     ImageView imgSearch;
     ImageView imgMenuClear;
     DrawerLayout reviewDrawer;
-    Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+    Integer[] cardViews = { R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
             R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
     CardView[] cardViewList = new CardView[cardViews.length];
-    Button btnFilter;
+
     RecyclerView recyclerView;
     ReviewAdapter adapter;
     ProgressBar progressBar;
@@ -127,7 +128,6 @@ public class ReviewFragment extends Fragment {
         reviewDrawer = rootView.findViewById(R.id.reviewDrawer);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-        btnFilter = rootView.findViewById(R.id.btnFilter);
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -152,13 +152,6 @@ public class ReviewFragment extends Fragment {
         }
 
 
-        btnFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), FilterActivity.class);
-                startActivity(intent);
-            }
-        });
 
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +167,17 @@ public class ReviewFragment extends Fragment {
         mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
-        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+        cardViewList[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewDrawer.closeDrawer(GravityCompat.END);
+
+                Intent intent = new Intent(getActivity(), InfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cardViewList[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.reviewFragment);
@@ -182,7 +185,7 @@ public class ReviewFragment extends Fragment {
                 reviewDrawer.closeDrawer(GravityCompat.END);
             }
         });
-        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+        cardViewList[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.meetingFragment);
@@ -190,7 +193,7 @@ public class ReviewFragment extends Fragment {
                 reviewDrawer.closeDrawer(GravityCompat.END);
             }
         });
-        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+        cardViewList[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.mapsFragment);
@@ -198,7 +201,7 @@ public class ReviewFragment extends Fragment {
                 reviewDrawer.closeDrawer(GravityCompat.END);
             }
         });
-        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+        cardViewList[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.plannerFragment);
@@ -208,7 +211,7 @@ public class ReviewFragment extends Fragment {
             }
         });
 
-        cardViewList[6].setOnClickListener(new View.OnClickListener() {
+        cardViewList[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
@@ -298,7 +301,7 @@ public class ReviewFragment extends Fragment {
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
         ReviewApi api = retrofit.create(ReviewApi.class);
 
-        Call<ReviewRes> call = api.getReviewList("Bearer " + token, 0,10,37.5453703,126.6759947,5.0);
+        Call<ReviewRes> call = api.getReviewList("Bearer " + token, 0,10,37.5416541,126.6778043,3.0);
         call.enqueue(new Callback<ReviewRes>() {
             @Override
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {

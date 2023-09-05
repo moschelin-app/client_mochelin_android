@@ -83,7 +83,7 @@ public class PlannerFragment extends Fragment {
     ImageView imgMenu;
     ImageView imgMenuClear;
     DrawerLayout plannerDrawer;
-    Integer[] cardViews = {R.id.cardRecommend, R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
             R.id.cardMap, R.id.cardPlanner , R.id.cardLogout};
     CardView[] cardViewList = new CardView[cardViews.length];
 
@@ -127,7 +127,7 @@ public class PlannerFragment extends Fragment {
         mapFragment = new MapsFragment();
         plannerFragment = new PlannerFragment();
 
-        cardViewList[1].setOnClickListener(new View.OnClickListener() {
+        cardViewList[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 plannerDrawer.closeDrawer(GravityCompat.END);
@@ -137,7 +137,7 @@ public class PlannerFragment extends Fragment {
             }
         });
 
-        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+        cardViewList[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.reviewFragment);
@@ -145,7 +145,7 @@ public class PlannerFragment extends Fragment {
                 plannerDrawer.closeDrawer(GravityCompat.END);
             }
         });
-        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+        cardViewList[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.meetingFragment);
@@ -153,7 +153,7 @@ public class PlannerFragment extends Fragment {
                 plannerDrawer.closeDrawer(GravityCompat.END);
             }
         });
-        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+        cardViewList[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.mapsFragment);
@@ -161,7 +161,7 @@ public class PlannerFragment extends Fragment {
                 plannerDrawer.closeDrawer(GravityCompat.END);
             }
         });
-        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+        cardViewList[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectBottomNavigationItem(R.id.plannerFragment);
@@ -171,7 +171,7 @@ public class PlannerFragment extends Fragment {
             }
         });
 
-        cardViewList[6].setOnClickListener(new View.OnClickListener() {
+        cardViewList[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());

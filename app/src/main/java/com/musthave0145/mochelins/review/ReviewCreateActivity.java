@@ -101,6 +101,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
 
     // 사진을 여러개 담아서 처리할 어레이리스트!
     ArrayList<File> photoFiles = new ArrayList<>();
+    ArrayList<Bitmap> photos = new ArrayList<>();
 
     // 파일을 여러개 담는 방법.
 
@@ -113,11 +114,11 @@ public class ReviewCreateActivity extends AppCompatActivity {
                     new ActivityResultCallback<ActivityResult>() {
                         @Override
                         public void onActivityResult(ActivityResult result) {
-                            // 로그 무조건 찍어보자!!
-//                            Log.i("MeetingCreate", ((PlaceSelect)result.getData().getSerializableExtra("placeSelect")).storeName);
-                            Log.i("reviewcreate", "reviewsuccess");
-                            placeSelect = ((PlaceSelect)result.getData().getSerializableExtra("placeSelect"));
-                            txtPlace.setText(placeSelect.storeName + "\n" + placeSelect.storeAddr);
+                            if (result.getResultCode() == 1004) {
+                                Log.i("ReviewCreateSuccess", "ReviewCreateSuccess");
+                                placeSelect = ((PlaceSelect) result.getData().getSerializableExtra("placeSelect"));
+                                txtPlace.setText(placeSelect.storeName + "\n" + placeSelect.storeAddr);
+                            }
                         }
                     });
 
@@ -201,16 +202,12 @@ public class ReviewCreateActivity extends AppCompatActivity {
 
                 // 해시태그 처리하기.
                 String text = editTag.getText().toString();
-                Pattern pattern = Pattern.compile("#\\w+"); // 해시태그 패턴
-                Matcher matcher = pattern.matcher(text);
 
-                ArrayList<String> hashtags = new ArrayList<>();
-                while (matcher.find()) {
-                    String hashtag = matcher.group().substring(1); // '#' 제외
-                    hashtags.add(hashtag);
-                }
 
                 // TODO: 사진을 여러개 선택해서 보내줘야한다.
+                // 현재는 사진을 하나만 보낼 수 있다.
+
+
 
                 // TODO: 필터에서 셋팅한 값을 불러와야 한다.
                 // 사진의 갯수만큼 꺼내서 주쟈!
@@ -225,10 +222,11 @@ public class ReviewCreateActivity extends AppCompatActivity {
                 RequestBody storeNameBody = RequestBody.create(placeSelect.storeName, MediaType.parse("text/plain"));
                 RequestBody storeLatBody = RequestBody.create(String.valueOf(placeSelect.storeLat),MediaType.parse("text/plain"));
                 RequestBody storeLngBody = RequestBody.create(String.valueOf(placeSelect.storeLng),MediaType.parse("text/plain"));
+                RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
 
-                RequestBody tagBody = RequestBody.create(hashtags.get(0), MediaType.parse("text/plain"));
+                RequestBody tagBody = RequestBody.create(text, MediaType.parse("text/plain"));
 
-                Call<ReviewRes> call = api.addReview("Bearer " + token, photo, contentBody,storeNameBody,storeLatBody,storeLngBody, ratingBody, tagBody);
+                Call<ReviewRes> call = api.addReview("Bearer " + token, photo, contentBody,storeNameBody,storeLatBody,storeLngBody,storeAddrBody, ratingBody, tagBody);
 
                 call.enqueue(new Callback<ReviewRes>() {
                     @Override
@@ -296,6 +294,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
         builder.show();
     }
 
+
     private void camera() {
         int permissionCheck = ContextCompat.checkSelfPermission(
                 ReviewCreateActivity.this, android.Manifest.permission.CAMERA);
@@ -321,9 +320,6 @@ public class ReviewCreateActivity extends AppCompatActivity {
                     i.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
                     startActivityForResult(i, 100);
 
-                    // TODO: 사진을 찍어도 똑같이 선택이 되어야한다@!!@##$#@$%ㅆ$#%^^ㅕ%$#%^&*ㅒ
-//                    photoFiles.add(photoFile);
-//                    Log.i("리뷰크리에이트", String.valueOf(photoFiles));
 
 
                 } else {
@@ -445,7 +441,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
                 Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
             }
             photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-            ArrayList<Bitmap> photos = new ArrayList<>();
+
             photos.add(photo);
 
             for (int i = 0; i < photos.size(); i++){

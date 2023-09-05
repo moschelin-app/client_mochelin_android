@@ -35,6 +35,7 @@ public interface ReviewApi {
                               @Part("storeName") RequestBody storeName,
                               @Part("storeLat") RequestBody storeLat,
                               @Part("storeLng") RequestBody storeLng,
+                              @Part("storeAddr") RequestBody storeAddr,
                               @Part("rating") RequestBody rating,
                               @Part("tag") RequestBody tag
     );

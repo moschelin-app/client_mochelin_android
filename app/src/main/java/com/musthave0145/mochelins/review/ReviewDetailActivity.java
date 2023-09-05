@@ -2,6 +2,7 @@ package com.musthave0145.mochelins.review;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -9,8 +10,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -43,7 +46,6 @@ import retrofit2.Retrofit;
 public class ReviewDetailActivity extends AppCompatActivity {
 
 
-    // TODO: 화면 연결은 했음, retrofit으로 네트웍에 있는 데이터를 가져와 셋팅하자.
     // TODO: 댓글 기능은 물어보거나 더 찾아봐야 할 것 같음.
 
     // 사진 여러장 넘기면서 보여주는 라이브러리
@@ -74,6 +76,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
 
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.imgProfile);
         indicatorLayout = findViewById(R.id.indicatorLayout);
         imgMyButton = findViewById(R.id.imgMyButton);
+
 
 
         for(int i = 0; i < imgViews.length; i++) {

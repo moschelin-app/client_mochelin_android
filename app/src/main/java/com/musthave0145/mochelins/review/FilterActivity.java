@@ -159,8 +159,7 @@ public class FilterActivity extends AppCompatActivity {
             R.id.txtAsian, R.id.txtGogi, R.id.txtSalad, R.id.txtDosirak, R.id.txtYasik
     };
     TextView[] txtFoodSelectArray = new TextView[txtFoodInteger.length];
-    Toolbar toolbar;
-
+    ImageView imgSave;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -168,16 +167,11 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-
-
-
         btnMinus = findViewById(R.id.btnStar1);
         btnPlus = findViewById(R.id.btnStar5);
         editDistance = findViewById(R.id.editPerson);
+        imgSave = findViewById(R.id.imgSave);
+
 
         for (int i = 0; i < btnStarInteger.length ; i++){
             btnStarSelectArray[i] = findViewById(btnStarInteger[i]);
@@ -472,28 +466,5 @@ public class FilterActivity extends AppCompatActivity {
 //        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 액션 바(ActionBar)의 메뉴가 나오도록 설정한다!!
-        getMenuInflater().inflate(R.menu.filter_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // 유저가 선택 한 것이 + 아이콘인 경우, AddActivity를 실행
-        // 누른 아이콘의 아이디를 가져온다.(안드로이드에서 res안에 있는 것들의 item은 정수형으로 관리한다.)
-        int itemId = item.getItemId();
-
-        if(itemId == R.id.filterSet) {
-
-            finish();
-
-        }
-
-        return super.onOptionsItemSelected(item);
-
-
-    }
 }
 

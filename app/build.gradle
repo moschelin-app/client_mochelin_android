@@ -31,6 +31,7 @@ android {
 
     }
 
+
     buildTypes {
 
 
@@ -56,12 +57,12 @@ dependencies {
 
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    implementation ("commons-io:commons-io:2.4")
-    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("commons-io:commons-io:2.4")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
     //  이미지 뷰 동그랗게 하는 라이브러리
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     // 구글맵 SDK
@@ -75,5 +76,7 @@ dependencies {
     implementation "com.kakao.sdk:v2-share:2.15.0" // 메시지(카카오톡 공유)
     implementation "com.kakao.sdk:v2-navi:2.15.0" // 카카오내비
     implementation "com.kakao.sdk:v2-friend:2.15.0" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
+
+    implementation 'com.github.hannesa2:AndroidSlidingUpPanel:4.2.1'
 
 }
