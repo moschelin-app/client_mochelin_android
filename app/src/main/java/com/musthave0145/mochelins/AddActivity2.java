@@ -54,11 +54,12 @@ public class AddActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_add2);
     txtday = findViewById(R.id.txtday);
     txtMoney = findViewById(R.id.txtMoney);
-    btnCash = findViewById(R.id.btnCard);
+    btnCash = findViewById(R.id.btnCash);
     btnCard = findViewById(R.id.btnCard);
     txtStore1 = findViewById(R.id.txtStore1);
     txtMenu1 = findViewById(R.id.txtMenu1);
     btnInput = findViewById(R.id.btnInput);
+
 
 
 
