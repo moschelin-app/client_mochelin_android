@@ -19,7 +19,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="165dp"
+        android:layout_height="180dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="4dp"
         android:orientation="vertical">
@@ -28,14 +28,14 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="390dp"
-            android:layout_height="150dp"
+            android:layout_height="161dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="156dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -58,12 +58,12 @@
                     <RatingBar
                         android:id="@+id/ratingBar"
                         style="?android:attr/ratingBarStyleSmall"
-                        android:progressTint="#EA9E2D"
-                         android:layout_width="wrap_content"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:numStars="5"
                         android:layout_gravity="center"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:numStars="5"
+                        android:progressTint="#EA9E2D" />
 
                 </LinearLayout>
 

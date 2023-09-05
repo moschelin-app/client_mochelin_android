@@ -79,4 +79,5 @@ dependencies {
 
     implementation 'com.github.hannesa2:AndroidSlidingUpPanel:4.2.1'
 
+    implementation 'com.github.hannesa2:AndroidSlidingUpPanel:4.2.1'
 }

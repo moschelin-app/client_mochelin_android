@@ -3,12 +3,16 @@ package com.musthave0145.mochelins;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,16 +20,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.musthave0145.mochelins.adapter.CalendarAdapter;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.meeting.MeetingFragment;
+import com.musthave0145.mochelins.model.CalendarUtil;
 import com.musthave0145.mochelins.model.UserRes;
 import com.musthave0145.mochelins.review.ReviewFragment;
 import com.musthave0145.mochelins.user.InfoActivity;
 import com.musthave0145.mochelins.user.LoginActivity;
+
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,7 +106,13 @@ public class PlannerFragment extends Fragment {
     Fragment mapFragment;
     Fragment plannerFragment;
 
+    TextView monthYearText;
+    LocalDate selectedDate;
+    ImageView pre_btn;
+    ImageView next_btn;
+    RecyclerView recyclerView;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,6 +122,8 @@ public class PlannerFragment extends Fragment {
         imgMenu = rootView.findViewById(R.id.imgMenu);
         imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
         plannerDrawer = rootView.findViewById(R.id.plannerDrawer);
+
+
 
         // 사이드 메뉴바를 열고 닫는 코드
         imgMenu.setOnClickListener(new View.OnClickListener() {
@@ -208,8 +230,106 @@ public class PlannerFragment extends Fragment {
                 });
             }
         });
+        monthYearText = rootView.findViewById(R.id.monthYearText);
+        pre_btn = rootView.findViewById(R.id.pre_btn);
+        next_btn = rootView.findViewById(R.id.next_btn);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        //현재 날짜
+        CalendarUtil.selectedDate =LocalDate.now();
 
+        //화면 설정
+        setMonthView();
+        pre_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //현재 월-1 변수에 담기
+                CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
+                setMonthView();
+            }
+        });
+
+        //다음달 버튼 이벤트
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //현재 월+1 변수에 담기
+                CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
+                setMonthView();
+            }
+        });
+
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //FAB 클릭 시 AddActivity 시작
+                Intent intent = new Intent(getActivity(),AddActivity2.class);
+                startActivity(intent);
+            }
+        });
         return rootView;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O) //이것 역시 코드가 api 버전이 안맞아서 맞춤
+
+    private String monthYearFromDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
+        return date.format(formatter);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private String yearMonthFromDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
+
+        return date.format(formatter);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setMonthView() {
+
+        //년월 텍스트뷰 셋팅
+        monthYearText.setText(monthYearFromDate(CalendarUtil.selectedDate));
+        //해당 월 날짜 가져오기
+        ArrayList<LocalDate> dayList = daysInMonthArray(CalendarUtil.selectedDate);
+
+        CalendarAdapter adapter = new CalendarAdapter(dayList);
+
+        //레이아웃 설정(열 7개)
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getActivity(),7);
+
+        //레이아웃 적용
+        recyclerView.setLayoutManager(manager);
+
+        //어뎁터 적용
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private ArrayList<LocalDate> daysInMonthArray(LocalDate date){
+
+        ArrayList<LocalDate> dayList = new ArrayList<>();
+
+        YearMonth yearMonth = YearMonth.from(date);
+
+        //해당 월 마지막 날짜 가져오기
+        int lastDay = yearMonth.lengthOfMonth();
+
+        // 해당 월의 첫번째 날 가져오기
+        LocalDate firstDay = CalendarUtil.selectedDate.withDayOfMonth(1);
+
+        //첫번째 날 요일 가져오기 (월:1,일:7)
+        int dayOfWeek = firstDay.getDayOfWeek().getValue();
+
+        for(int i=1;i<42;i++){
+            if(i<=dayOfWeek || i>lastDay+dayOfWeek){
+                dayList.add(null);
+            }else{
+                dayList.add(LocalDate.of(CalendarUtil.selectedDate.getYear(),CalendarUtil.selectedDate.getMonth(),i-dayOfWeek));
+            }
+        }
+        return dayList;
+
     }
 
     boolean loadFragment(Fragment fragment){

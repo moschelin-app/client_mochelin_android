@@ -108,7 +108,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                             imageView.setImageResource(R.drawable.baseline_star_24);
 
-                            String strRating = mapData.rating + "";
+                            int intMapData = (int) mapData.rating;
+                            String strRating = intMapData + "";
                             textView.setText(strRating);
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
                             MarkerOptions markerOptions = new MarkerOptions()
@@ -173,13 +174,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                     if (response.isSuccessful() && response.body() != null) {
                                         StoreRes storeList = response.body();
                                         Store store = storeList.item;
-
+                                        Log.d("storeName", "성공했어");
                                         int isLikeValue =store.likeCnt;
                                         String isLikeString = String.valueOf(isLikeValue);
-                                        int isviewValue =store.view;
+                                        int isviewValue =(int) store.view;
                                         String isViewString = String.valueOf(isviewValue);
 
-                                        double isRatingValue = store.rating;
+                                        int isRatingValue = store.rating;
                                         int isStringInt = (int) isRatingValue;
                                         //가게이름
                                         txtName.setText(store.storeName);
@@ -194,7 +195,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                         //가게 사진
                                         Glide.with(MapsFragment.this).load(store.photo).into(photo);
                                         //별점
-                                        ratingBar.setRating(isStringInt);
+                                        ratingBar.setRating(isRatingValue);
 
                                     } else {
                                         Log.d("ApiResponse", "storeList is null");
