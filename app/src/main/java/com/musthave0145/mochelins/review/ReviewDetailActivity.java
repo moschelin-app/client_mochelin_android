@@ -2,6 +2,8 @@ package com.musthave0145.mochelins.review;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -74,6 +76,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
     int reviewId = 0;
 
+    RecyclerView recyclerView;
+
 
 
 
@@ -89,6 +93,10 @@ public class ReviewDetailActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.imgProfile);
         indicatorLayout = findViewById(R.id.indicatorLayout);
         imgMyButton = findViewById(R.id.imgMyButton);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ReviewDetailActivity.this));
 
 
 

@@ -234,12 +234,7 @@ public class ReviewFragment extends Fragment {
 
                             getActivity().finish();
                         } else {
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.remove(Config.ACCESS_TOKEN);
-                            editor.apply();
-                            getActivity().finish();
+
                         }
                     }
 

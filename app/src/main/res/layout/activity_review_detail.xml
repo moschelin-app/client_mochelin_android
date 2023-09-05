@@ -342,14 +342,18 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/slide_layout"
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="450dp"
+        android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/btnLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/commentLayout"
+            >
 
             <View
                 android:layout_width="50dp"
@@ -376,7 +380,39 @@
 
 
         </RelativeLayout>
-    </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/commentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="340dp">
+            </androidx.recyclerview.widget.RecyclerView>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPressed">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/corner2"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:hint="댓글 추가..."/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
