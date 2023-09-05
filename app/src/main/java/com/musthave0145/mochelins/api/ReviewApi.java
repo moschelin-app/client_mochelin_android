@@ -1,5 +1,6 @@
 package com.musthave0145.mochelins.api;
 
+import com.musthave0145.mochelins.model.CommentRes;
 import com.musthave0145.mochelins.model.ReviewListRes;
 import com.musthave0145.mochelins.model.ReviewRes;
 
@@ -55,4 +56,10 @@ public interface ReviewApi {
     @DELETE("/review/{reviewId}/like")
     Call<ReviewRes> likeDeleteReview(@Header("Authorization") String token,
                                @Path("reviewId") int reviewId);
+
+    // 특정 게시물의 댓글 가져오는 API
+    @GET("review/{reviewId}/comment")
+    Call<CommentRes> reviewCommentList(@Header("Authorization") String token,
+                                       @Path("reviewId") int reviewId,
+                                       @Query("offset") int offset, @Query("limit") int limit);
 }

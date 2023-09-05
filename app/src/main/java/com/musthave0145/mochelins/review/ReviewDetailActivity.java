@@ -27,9 +27,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.ItemAdapter;
+import com.musthave0145.mochelins.adapter.ReviewCommentAdapter;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.ReviewApi;
 import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.model.Comment;
+import com.musthave0145.mochelins.model.CommentRes;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.ReviewRes;
 
@@ -77,6 +80,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
     int reviewId = 0;
 
     RecyclerView recyclerView;
+    ReviewCommentAdapter commentAdapter;
+    ArrayList<Comment> commentArrayList = new ArrayList<>();
 
 
 
@@ -113,6 +118,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
         token = sp.getString(Config.ACCESS_TOKEN, "");
+
+        getReviewComment();
 
         Retrofit retrofit = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
         ReviewApi api = retrofit.create(ReviewApi.class);
@@ -251,6 +258,10 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
 
 
+
+
+
+
     }
     // 인디케이터 업데이트 메서드
     private void updateIndicator(int position) {
@@ -329,6 +340,34 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ReviewRes> call, Throwable t) {
+
+            }
+        });
+    }
+
+    void getReviewComment() {
+        Retrofit retrofit = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
+        ReviewApi api = retrofit.create(ReviewApi.class);
+
+        Call<CommentRes> call = api.reviewCommentList("Bearer " + token, reviewId, 0, 10);
+        call.enqueue(new Callback<CommentRes>() {
+            @Override
+            public void onResponse(Call<CommentRes> call, Response<CommentRes> response) {
+                if (response.isSuccessful()){
+                    CommentRes commentRes = response.body();
+                    commentArrayList.addAll(commentRes.items);
+
+                    commentAdapter = new ReviewCommentAdapter(ReviewDetailActivity.this, commentArrayList);
+                    recyclerView.setAdapter(commentAdapter);
+
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentRes> call, Throwable t) {
 
             }
         });
