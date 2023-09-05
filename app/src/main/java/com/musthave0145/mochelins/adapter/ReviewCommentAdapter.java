@@ -1,33 +1,58 @@
 package com.musthave0145.mochelins.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ReviewCommentAdapter  {
+import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.model.Comment;
 
-//    @NonNull
-//    @Override
-//    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return 0;
-//    }
+import java.util.ArrayList;
 
-//    public class ViewHolder extends ReviewAdapter.ViewHolder {
-//
-//        public ViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//        }
-//    }
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class ReviewCommentAdapter extends RecyclerView.Adapter<ReviewCommentAdapter.ViewHolder>  {
+
+    Context context;
+    ArrayList<Comment> commentArrayList;
+
+    public ReviewCommentAdapter(Context context, ArrayList<Comment> commentArrayList) {
+        this.context = context;
+        this.commentArrayList = commentArrayList;
+    }
+
+    @NonNull
+    @Override
+    public ReviewCommentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.review_comment_row, parent, false);
+
+        return new ReviewCommentAdapter.ViewHolder(view) ;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Comment comment = commentArrayList.get(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return commentArrayList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        CircleImageView imgProfile;
+        
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+
 }
