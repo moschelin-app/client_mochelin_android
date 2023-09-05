@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -77,13 +78,14 @@ public class AddActivity2 extends AppCompatActivity {
         btnCash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payment = "현금";
+
                 if (isRedBackgroundCash) {
                     // 현재 빨간색 배경인 경우, 원래 색으로 변경
                     btnCash.setBackgroundColor(GRAY); // 투명한 배경으로 설정
                 } else {
                     // 현재 원래 색인 경우, 빨간색으로 변경
                     btnCash.setBackgroundColor(RED); // 빨간색 배경으로 설정
+                    payment = "현금";
                 }
                 isRedBackgroundCash = !isRedBackgroundCash; // 클릭 상태를 토
 
@@ -92,13 +94,14 @@ public class AddActivity2 extends AppCompatActivity {
         btnCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payment = "카드";
+
                 if (isRedBackgroundCard) {
                     // 현재 빨간색 배경인 경우, 원래 색으로 변경
                     btnCash.setBackgroundColor(GRAY);// 투명한 배경으로 설정
                 } else {
                     // 현재 원래 색인 경우, 빨간색으로 변경
                     btnCash.setBackgroundColor(RED); // 빨간색 배경으로 설정
+                    payment = "카드";
                 }
                 isRedBackgroundCard = !isRedBackgroundCard; // 클릭 상태를 토
             }
