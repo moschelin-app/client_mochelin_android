@@ -12,4 +12,8 @@ public class Comment implements Serializable {
     public String nickname;
     public String profile;
     public int isMine;
+
+    public Comment(String content) {
+        this.content = content;
+    }
 }

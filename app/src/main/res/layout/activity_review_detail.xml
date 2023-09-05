@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_frame"
+    android:id="@+id/slidingUpPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
@@ -385,20 +385,22 @@
             android:id="@+id/commentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:paddingTop="20dp"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="340dp">
+                android:layout_height="330dp">
             </androidx.recyclerview.widget.RecyclerView>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPressed">
 
                 <EditText
+                    android:id="@+id/editContent"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="3dp"
@@ -408,6 +410,8 @@
                     android:background="@drawable/corner2"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
+                    android:singleLine="true"
+                    android:imeOptions="actionGo"
                     android:hint="댓글 추가..."/>
             </RelativeLayout>
 

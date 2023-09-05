@@ -52,13 +52,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         Review review = reviewArrayList.get(position);
 
 
+
         // 작성자의 프로필 사진 표시(없으면 기본 이미지, 있으면 올린 사진으로), 이름과 작성 시간을 표시하자!
 
-        if (review.profile == null) {
+        Glide.with(context).load(review.profile).fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(holder.imgPerson);
 
-        } else {
-            Glide.with(context).load(review.profile).into(holder.imgPerson);
-        }
 
         holder.txtPerson.setText(review.nickname);
 

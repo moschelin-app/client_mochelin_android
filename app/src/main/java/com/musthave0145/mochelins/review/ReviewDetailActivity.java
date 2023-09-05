@@ -11,12 +11,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,6 +39,7 @@ import com.musthave0145.mochelins.model.Comment;
 import com.musthave0145.mochelins.model.CommentRes;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.ReviewRes;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,6 +87,10 @@ public class ReviewDetailActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ReviewCommentAdapter commentAdapter;
     ArrayList<Comment> commentArrayList = new ArrayList<>();
+    Button btnComment;
+    SlidingUpPanelLayout slidingUpPanel;
+    EditText editContent;
+    String comment ="";
 
 
 
@@ -98,6 +107,10 @@ public class ReviewDetailActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.imgProfile);
         indicatorLayout = findViewById(R.id.indicatorLayout);
         imgMyButton = findViewById(R.id.imgMyButton);
+        btnComment = findViewById(R.id.btnComment);
+        slidingUpPanel = findViewById(R.id.slidingUpPanel);
+        editContent = findViewById(R.id.editContent);
+
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -121,6 +134,23 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
         getReviewComment();
 
+        // 댓글 버튼으로 댓글창 열고닫기
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (slidingUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED){
+
+                    slidingUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+
+                } else if (slidingUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+
+                    slidingUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                }
+            }
+        });
+
+
+
         Retrofit retrofit = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
         ReviewApi api = retrofit.create(ReviewApi.class);
 
@@ -130,7 +160,6 @@ public class ReviewDetailActivity extends AppCompatActivity {
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
                 Review review1 = response.body().item;
 
-                // 내 게시물인지 알 수 있는 방법이 없음.
                 imgMyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -184,7 +213,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 txtViewList[2].setText(review1.rating+"");
 
                 // 작성자
-                Glide.with(ReviewDetailActivity.this).load(review1.profile).into(imgProfile);
+                Glide.with(ReviewDetailActivity.this).load(review1.profile)
+                        .fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(imgProfile);
                 txtViewList[3].setText(review1.nickname);
 
                 //  작성시간 가공해서 보여주기
@@ -256,7 +286,44 @@ public class ReviewDetailActivity extends AppCompatActivity {
             }
         });
 
+        // 댓글을 입력받고 작성까지~~!!
+        editContent.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)){
+                    //키패드 내리기
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editContent.getWindowToken(), 0);
 
+                    comment = editContent.getText().toString();
+                    Comment comment1 = new Comment(comment);
+
+                    Retrofit retrofit1 = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
+                    ReviewApi api1 = retrofit1.create(ReviewApi.class);
+
+                    Call<CommentRes> call = api1.reviewCommentAdd("Bearer " + token, reviewId, comment1);
+                    call.enqueue(new Callback<CommentRes>() {
+                        @Override
+                        public void onResponse(Call<CommentRes> call, Response<CommentRes> response) {
+                            if (response.isSuccessful()) {
+                                getReviewComment();
+                                editContent.setText("");
+                            } else {
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CommentRes> call, Throwable t) {
+
+                        }
+                    });
+
+                    return true;
+                }
+                return false;
+            }
+        });
 
 
 
@@ -346,6 +413,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
     }
 
     void getReviewComment() {
+        commentArrayList.clear();
+
         Retrofit retrofit = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
         ReviewApi api = retrofit.create(ReviewApi.class);
 
@@ -356,6 +425,11 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     CommentRes commentRes = response.body();
                     commentArrayList.addAll(commentRes.items);
+                    if(commentRes.count == 0){
+                        btnComment.setText("댓글 (0)");
+                    } else {
+                        btnComment.setText("댓글 (" + commentRes.count + ")");
+                    }
 
                     commentAdapter = new ReviewCommentAdapter(ReviewDetailActivity.this, commentArrayList);
                     recyclerView.setAdapter(commentAdapter);
@@ -372,5 +446,6 @@ public class ReviewDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
