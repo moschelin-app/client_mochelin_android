@@ -10,6 +10,8 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -74,6 +76,8 @@ public class AddActivity2 extends AppCompatActivity {
         }else{
             int money1 = 0;
         }
+        final GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(this, R.drawable.bubble);
+
 
         btnCash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,13 +85,19 @@ public class AddActivity2 extends AppCompatActivity {
 
                 if (isRedBackgroundCash) {
                     // 현재 빨간색 배경인 경우, 원래 색으로 변경
-                    btnCash.setBackgroundColor(GRAY); // 투명한 배경으로 설정
-                } else {
+                    // 투명한 배경으로 설정
+                    btnCard.setBackgroundResource(R.drawable.bubble); // Card 버튼도 투명한 배경으로 설정
+                } else  {
                     // 현재 원래 색인 경우, 빨간색으로 변경
-                    btnCash.setBackgroundColor(RED); // 빨간색 배경으로 설정
+                    btnCash.setBackgroundResource(R.drawable.bubble1);
+                    btnCard.setBackgroundResource(R.drawable.bubble);// 빨간색 배경으로 설정
                     payment = "현금";
+
+
                 }
-                isRedBackgroundCash = !isRedBackgroundCash; // 클릭 상태를 토
+                isRedBackgroundCash = !isRedBackgroundCash;
+                 // 클릭 상태를 토
+                // Card 버튼의 배경 색상을 원래 색으로 설정
 
             }
         });
@@ -97,13 +107,18 @@ public class AddActivity2 extends AppCompatActivity {
 
                 if (isRedBackgroundCard) {
                     // 현재 빨간색 배경인 경우, 원래 색으로 변경
-                    btnCash.setBackgroundColor(GRAY);// 투명한 배경으로 설정
+                    // 투명한 배경으로 설정
+                    btnCash.setBackgroundResource(R.drawable.bubble); // Cash 버튼도 투명한 배경으로 설정
                 } else {
                     // 현재 원래 색인 경우, 빨간색으로 변경
-                    btnCash.setBackgroundColor(RED); // 빨간색 배경으로 설정
+                    btnCard.setBackgroundResource(R.drawable.bubble1); // 빨간색 배경으로 설정
+                    btnCash.setBackgroundResource(R.drawable.bubble);
                     payment = "카드";
                 }
+
                 isRedBackgroundCard = !isRedBackgroundCard; // 클릭 상태를 토
+                // Cash 버튼의 배경 색상을 원래 색으로 설정
+
             }
         });
 

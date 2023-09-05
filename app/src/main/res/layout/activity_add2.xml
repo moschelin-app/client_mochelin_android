@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:layout_height="52dp">
 
     </RelativeLayout>
 
@@ -26,7 +26,7 @@
             android:text="2023.08.12"
             android:textAlignment="center"
             android:textColor="#1B1A1A"
-            android:textSize="26sp" />
+            android:textSize="23sp" />
     </RelativeLayout>
 
     <RelativeLayout
