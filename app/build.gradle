@@ -62,7 +62,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation("commons-io:commons-io:2.4")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
     //  이미지 뷰 동그랗게 하는 라이브러리
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     // 구글맵 SDK

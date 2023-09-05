@@ -51,6 +51,7 @@ public class AddActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add2);
     txtday = findViewById(R.id.txtday);
     txtMoney = findViewById(R.id.txtMoney);
