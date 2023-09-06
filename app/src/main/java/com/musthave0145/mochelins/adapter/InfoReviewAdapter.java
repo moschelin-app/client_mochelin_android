@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -38,7 +39,8 @@ public class InfoReviewAdapter extends RecyclerView.Adapter<InfoReviewAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Review review = reviewArrayList.get(position);
 
-        Glide.with(context).load(review.photo).into(holder.imgPhoto);
+        Glide.with(context).load(review.photo)
+                .error(R.drawable.not_image).into(holder.imgPhoto);
     }
 
     @Override
@@ -49,12 +51,14 @@ public class InfoReviewAdapter extends RecyclerView.Adapter<InfoReviewAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgPhoto;
+        CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgPhoto = itemView.findViewById(R.id.storePhoto);
+            imgPhoto = itemView.findViewById(R.id.imgPhoto);
+            cardView = itemView.findViewById(R.id.cardView);
 
-            imgPhoto.setOnClickListener(new View.OnClickListener() {
+            cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int index = getAdapterPosition();

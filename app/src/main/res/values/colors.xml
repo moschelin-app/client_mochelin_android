@@ -18,4 +18,8 @@
     <color name="azure">#6b9cce</color>
     <color name="blue_grey">#96a5a9</color>
     <color name="orange_red">#ff681f</color>
+
+    <color name="maximum">#FE2E2E</color>
+    <color name="attend">#5882FA</color>
+
 </resources>

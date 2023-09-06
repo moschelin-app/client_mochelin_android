@@ -121,7 +121,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/buttonNavigationView"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="wrap_content"
             app:elevation="0dp"
             app:menu="@menu/info_menu">
 
@@ -141,7 +141,7 @@
 
         <View
             android:id="@+id/lineView"
-            android:layout_width="175dp"
+            android:layout_width="116dp"
             android:layout_height="2dp"
             android:layout_alignBottom="@id/buttonNavigationView"
             android:layout_alignParentRight="false"

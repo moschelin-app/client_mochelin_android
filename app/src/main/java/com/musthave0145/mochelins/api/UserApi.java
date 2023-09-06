@@ -2,6 +2,7 @@ package com.musthave0145.mochelins.api;
 
 import com.musthave0145.mochelins.model.ResultRes;
 import com.musthave0145.mochelins.model.User;
+import com.musthave0145.mochelins.model.UserInfoMeetingRes;
 import com.musthave0145.mochelins.model.UserInfoRes;
 import com.musthave0145.mochelins.model.UserInfoReviewRes;
 import com.musthave0145.mochelins.model.UserRes;
@@ -82,8 +83,14 @@ public interface UserApi {
 
     @GET("/user/{userId}/likes")
     Call<UserInfoReviewRes> user_like(@Header("Authorization") String token,
-                                        @Path("userId") int userId,
-                                        @Query("offset") int offset,
-                                        @Query("limit") int limit);
+                                      @Path("userId") int userId,
+                                      @Query("offset") int offset,
+                                      @Query("limit") int limit);
+
+    @GET("/user/{userId}/meeting")
+    Call<UserInfoMeetingRes> user_meeting(@Header("Authorization") String token,
+                                       @Path("userId") int userId,
+                                       @Query("offset") int offset,
+                                       @Query("limit") int limit);
 
 }

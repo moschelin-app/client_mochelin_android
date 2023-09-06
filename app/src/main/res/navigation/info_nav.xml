@@ -15,4 +15,9 @@
         android:name="com.musthave0145.mochelins.user.fragment.InfoLikesFragment"
         android:label="fragment_info_likes"
         tools:layout="@layout/fragment_info_likes" />
+    <fragment
+        android:id="@+id/infoMeetingFragment"
+        android:name="com.musthave0145.mochelins.user.fragment.InfoMeetingFragment"
+        android:label="fragment_info_meeting"
+        tools:layout="@layout/fragment_info_meeting" />
 </navigation>
