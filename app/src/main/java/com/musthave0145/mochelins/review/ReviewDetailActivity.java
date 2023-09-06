@@ -11,6 +11,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +94,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
     SlidingUpPanelLayout slidingUpPanel;
     EditText editContent;
     String comment ="";
+    RelativeLayout btnLayout;
 
 
 
@@ -108,8 +112,9 @@ public class ReviewDetailActivity extends AppCompatActivity {
         indicatorLayout = findViewById(R.id.indicatorLayout);
         imgMyButton = findViewById(R.id.imgMyButton);
         btnComment = findViewById(R.id.btnComment);
-        slidingUpPanel = findViewById(R.id.slidingUpPanel);
+        slidingUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
         editContent = findViewById(R.id.editContent);
+        btnLayout = findViewById(R.id.btnLayout);
 
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -135,19 +140,48 @@ public class ReviewDetailActivity extends AppCompatActivity {
         getReviewComment();
 
         // 댓글 버튼으로 댓글창 열고닫기
+            // 버튼 클릭시 버튼이 사라짐
         btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (slidingUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                btnComment.setVisibility(View.INVISIBLE);
+                slidingUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+            }
+        });
 
-                    slidingUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-
-                } else if (slidingUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
-
+        // 위로 레이아웃이 나타났을때 버튼을 누를 수 있음
+            // 버튼이 다시 나타남
+        btnLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (slidingUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    btnComment.setVisibility(View.VISIBLE);
                     slidingUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
             }
         });
+
+        
+        // 해당 레이아웃의 위치가 변경되었을때 발동시킴
+        slidingUpPanel.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                    btnComment.setVisibility(View.VISIBLE);
+
+                } else if (newState == SlidingUpPanelLayout.PanelState.EXPANDED){
+
+                    btnComment.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
 
 
 
