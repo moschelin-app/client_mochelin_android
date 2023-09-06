@@ -183,9 +183,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
                     String count = meeting.attend + "/" + meeting.maximum;
 
-                    Glide.with(MeetingDetailActivity.this).load(meeting.photo).into(imgPhoto);
+                    Glide.with(MeetingDetailActivity.this).load(meeting.photo).error(R.drawable.not_image).into(imgPhoto);
 
-                    Glide.with(MeetingDetailActivity.this).load(meeting.profile).into(imgProfileList[0]);
+                    Glide.with(MeetingDetailActivity.this).load(meeting.profile).error(R.drawable.default_profile).into(imgProfileList[0]);
 
                     // 내가 작성한 모임글이면, 수정삭제 버튼을 보여주자!
                     if(meeting.isMine == 1){
@@ -295,7 +295,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
                         if (response.isSuccessful()){
-                            Snackbar.make(btnApply,"모임 참가 신청이 완료되었습니다!", Toast.LENGTH_SHORT).show();
                             refreshdata();
                         } else if (response.code() == 400){
                             Snackbar.make(btnApply,"이미 참가한 모임입니다.", Toast.LENGTH_SHORT).show();
@@ -330,10 +329,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
                         if (response.isSuccessful()){
-                            Toast.makeText(MeetingDetailActivity.this, "모임 참가 취소가 되었습니다.", Toast.LENGTH_SHORT).show();
                             refreshdata();
                         } else {
-                            Toast.makeText(MeetingDetailActivity.this, "문제가 발생하였습니다.", Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -359,10 +356,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(MeetingDetailActivity.this, "삭제하였습니다.", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(MeetingDetailActivity.this, "삭제하지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 

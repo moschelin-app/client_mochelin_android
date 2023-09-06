@@ -80,35 +80,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             // 시간 차이 계산 (밀리초 단위)
             long timeDifferenceMillis = currentCal.getTimeInMillis() - calendar.getTimeInMillis();
 
-            // 24시간 이내인 경우
-            if (timeDifferenceMillis < (24 * 60 * 60 * 1000)) {
-                if (timeDifferenceMillis < (60 * 60 * 1000)) {
-                    // 1시간 이내
-                    long minutesDifference = timeDifferenceMillis / (60 * 1000);
-                    holder.txtTime.setText(minutesDifference + "분 전");
-                } else {
-                    // 1시간 이상 24시간 이내
-                    long hoursDifference = timeDifferenceMillis / (60 * 60 * 1000);
-                    holder.txtTime.setText(hoursDifference + "시간 전");
-                }
-            } else {
-                // 24시간 이후
-                SimpleDateFormat outputSdf = new SimpleDateFormat("M월 d일 HH:mm", Locale.US);
-                String formattedDate = outputSdf.format(calendar.getTime());
-                holder.txtTime.setText(formattedDate);
+            //
+            SimpleDateFormat outputSdf = new SimpleDateFormat("M월 d일 HH:mm", Locale.US);
+            String formattedDate = outputSdf.format(calendar.getTime());
+            holder.txtTime.setText(formattedDate);
 
-            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        Glide.with(context).load(review.photo).error(R.drawable.not_image).into(holder.imgPhoto);
+        holder.imgPhoto.setClipToOutline(true);
 
-        if (review.photo == null) {
-
-        } else {
-            Glide.with(context).load(review.photo).into(holder.imgPhoto);
-            holder.imgPhoto.setClipToOutline(true);
-        }
 
         // 좋아요 표시 (내가 좋아요를 눌렀을 때는 빨간 하트로, 내가 좋아요를 누르지 않았을 때는 빈하트 반영)
         if( review.isLike == 1){

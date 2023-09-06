@@ -4,15 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,9 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SlidingDrawer;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.store.StoreDetailActivity;
 import com.musthave0145.mochelins.adapter.ItemAdapter;
 import com.musthave0145.mochelins.adapter.ReviewCommentAdapter;
 import com.musthave0145.mochelins.api.NetworkClient;
@@ -95,6 +91,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
     EditText editContent;
     String comment ="";
     RelativeLayout btnLayout;
+    TextView txtDetailStore;
+    int storeId =0;
 
 
 
@@ -115,6 +113,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
         slidingUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
         editContent = findViewById(R.id.editContent);
         btnLayout = findViewById(R.id.btnLayout);
+        txtDetailStore = findViewById(R.id.txtDetailStore);
 
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -133,6 +132,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
         Review review = (Review) getIntent().getSerializableExtra("review");
         reviewId = review.id;
+        storeId = review.storeId;
 
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
         token = sp.getString(Config.ACCESS_TOKEN, "");
@@ -246,7 +246,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 // 별점 처리
                 txtViewList[2].setText(review1.rating+"");
 
-                // 작성자
+                // 작성자 프로필 사진
                 Glide.with(ReviewDetailActivity.this).load(review1.profile)
                         .fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(imgProfile);
                 txtViewList[3].setText(review1.nickname);
@@ -356,6 +356,27 @@ public class ReviewDetailActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+
+        // 가게 정보 보기를 누르면, 가게의 상세페이지로 이동한다.
+        txtDetailStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReviewDetailActivity.this, StoreDetailActivity.class);
+                intent.putExtra("storeId", storeId);
+                startActivity(intent);
+            }
+        });
+
+        // 가게 이름을 눌러도 가게의 상세페이지로 이동한다.
+        txtViewList[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReviewDetailActivity.this, StoreDetailActivity.class);
+                intent.putExtra("storeId", storeId);
+                startActivity(intent);
             }
         });
 

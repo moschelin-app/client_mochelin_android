@@ -1,8 +1,9 @@
 package com.musthave0145.mochelins.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Store {
+public class Store implements Serializable {
     public int id;
     public int storeId;
     public int userId;
@@ -10,7 +11,7 @@ public class Store {
     public String storeName;
     public String storeAddr;
     public int view;
-    public int rating;
+    public double rating;
     public String photo;
     public String createdAt;
     public String updatedAt;
@@ -18,5 +19,7 @@ public class Store {
     public double storeLng;
     public int likeCnt;
     public int isLike;
+    public String summary;
+
 
 }

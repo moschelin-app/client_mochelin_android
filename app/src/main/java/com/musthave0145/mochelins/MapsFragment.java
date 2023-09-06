@@ -180,7 +180,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                         int isviewValue =(int) store.view;
                                         String isViewString = String.valueOf(isviewValue);
 
-                                        int isRatingValue = store.rating;
+                                        double isRatingValue = store.rating;
                                         int isStringInt = (int) isRatingValue;
                                         //가게이름
                                         txtName.setText(store.storeName);
@@ -195,7 +195,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                         //가게 사진
                                         Glide.with(MapsFragment.this).load(store.photo).into(photo);
                                         //별점
-                                        ratingBar.setRating(isRatingValue);
+                                        ratingBar.setRating((float) isRatingValue);
 
                                     } else {
                                         Log.d("ApiResponse", "storeList is null");
