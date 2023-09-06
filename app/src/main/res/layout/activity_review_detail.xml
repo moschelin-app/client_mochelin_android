@@ -11,12 +11,19 @@
     tools:context=".review.ReviewCreateActivity"
     app:umanoDragView="@id/slide_layout">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:translationZ="50dp"
+            app:srcCompat="@drawable/baseline_arrow_back_24_3" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -39,22 +46,6 @@
 
                     </androidx.viewpager2.widget.ViewPager2>
 
-                    <ImageView
-                        android:id="@+id/imgBack"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        app:srcCompat="@drawable/baseline_arrow_back_24_3" />
-
-                    <ImageView
-                        android:id="@+id/imgShare"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:srcCompat="@drawable/outline_share_24" />
 
                     <LinearLayout
                         android:id="@+id/indicatorLayout"

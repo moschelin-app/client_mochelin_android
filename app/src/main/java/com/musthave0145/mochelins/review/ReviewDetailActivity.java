@@ -68,7 +68,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
     CircleImageView imgProfile;
 
-    Integer[] imgViews = {R.id.imgBack, R.id.imgShare, R.id.imgLike,
+    Integer[] imgViews = {R.id.imgBack, R.id.imgLike,
             R.id.imgStar1, R.id.imgStar2, R.id.imgStar3, R.id.imgStar4, R.id.imgStar5};
 
     ImageView[] imgViewList = new ImageView[imgViews.length];
@@ -229,9 +229,9 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
                 // 내가 좋아요 한 것 처리
                 if (review1.isLike == 1) {
-                    imgViewList[2].setImageResource(R.drawable.baseline_favorite_24);
+                    imgViewList[1].setImageResource(R.drawable.baseline_favorite_24);
                 } else {
-                    imgViewList[2].setImageResource(R.drawable.baseline_favorite_border_24_2);
+                    imgViewList[1].setImageResource(R.drawable.baseline_favorite_border_24_2);
                 }
 
                 // 좋아요 수
@@ -240,7 +240,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 // 별점 수 대로 별 보여주기
                 for (int i = 0; i < 5; i++) {
                     if (i < review1.rating) {
-                        imgViewList[i+3].setImageResource(R.drawable.baseline_star_24);
+                        imgViewList[i+2].setImageResource(R.drawable.baseline_star_24);
                     }
                 }
                 // 별점 처리
@@ -301,7 +301,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 // 가게 주소
                 txtViewList[10].setText(review1.storeAddr);
 
-                imgViewList[2].setOnClickListener(new View.OnClickListener() {
+                imgViewList[1].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(review1.isLike == 0 ){
