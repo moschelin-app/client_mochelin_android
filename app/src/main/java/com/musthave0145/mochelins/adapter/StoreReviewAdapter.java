@@ -172,7 +172,7 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
                     Review review = reviewArrayList.get(index);
 
                     Intent intent = new Intent(context, ReviewDetailActivity.class);
-                    intent.putExtra("reviewId", review.id);
+                    intent.putExtra("review", review);
 
                     context.startActivity(intent);
                 }

@@ -72,7 +72,7 @@ public class StoreDetailActivity extends AppCompatActivity {
         txtStar = findViewById(R.id.txtStar);
         lineView = findViewById(R.id.lineView);
 
-
+        //
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         // 프래그먼트 객체 생성
@@ -87,6 +87,13 @@ public class StoreDetailActivity extends AppCompatActivity {
 
         storeId = getIntent().getIntExtra("storeId", 0);
         Log.i("테스트", storeId + "");
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);

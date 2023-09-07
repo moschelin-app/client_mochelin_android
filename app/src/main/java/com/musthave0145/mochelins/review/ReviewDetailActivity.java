@@ -11,12 +11,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +31,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.meeting.MeetingDetailActivity;
+import com.musthave0145.mochelins.meeting.MeetingUpdateActivity;
+import com.musthave0145.mochelins.model.ReviewListRes;
 import com.musthave0145.mochelins.store.StoreDetailActivity;
 import com.musthave0145.mochelins.adapter.ItemAdapter;
 import com.musthave0145.mochelins.adapter.ReviewCommentAdapter;
@@ -126,6 +132,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
             txtViewList[i] = findViewById(txtViews[i]);
         }
 
+
         // 가게상세정보에서 리뷰리스트를 눌렀을 때, 넘어오는 거랑 메인화면 리뷰리스트에서 넘어오는거랑 구분지어야 ₩
         Review review = (Review) getIntent().getSerializableExtra("review");
         reviewId = review.id;
@@ -157,6 +164,9 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
 
         
         // 해당 레이아웃의 위치가 변경되었을때 발동시킴
@@ -190,13 +200,56 @@ public class ReviewDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
                 Review review1 = response.body().item;
+                // 메뉴를 내가 쓴 리뷰면 보여주자!!
+                imgMyButton.setVisibility(View.VISIBLE);
+
 
                 imgMyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(ReviewDetailActivity.this, ReviewUpdateActivity.class);
-                        intent.putExtra("review", review1);
-                        startActivity(intent);
+                        PopupMenu popupMenu = new PopupMenu(ReviewDetailActivity.this, imgMyButton);
+                        MenuInflater inf = popupMenu.getMenuInflater();
+                        inf.inflate(R.menu.update_delete_menu, popupMenu.getMenu());
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                if (menuItem.getItemId() == R.id.menuUpdate){
+                                    Intent intent = new Intent(ReviewDetailActivity.this, ReviewUpdateActivity.class);
+                                    intent.putExtra("review", review1);
+                                    startActivity(intent);
+
+                                } else if (menuItem.getItemId() == R.id.menuDelete) {
+                                    Retrofit retrofit1 = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
+                                    ReviewApi api1 = retrofit1.create(ReviewApi.class);
+
+                                    Call<ReviewListRes> call1 = api1.deleteReview("Bearer " + token, review1.id);
+                                    call1.enqueue(new Callback<ReviewListRes>() {
+                                        @Override
+                                        public void onResponse(Call<ReviewListRes> call, Response<ReviewListRes> response) {
+                                            if (response.isSuccessful()){
+                                                finish();
+                                            } else {
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ReviewListRes> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                }
+
+                                return false;
+                            }
+
+                        });
+
+
+                        popupMenu.show();
+
 
                     }
                 });
@@ -255,7 +308,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
                 // 시간대를 한국 시간대로 변경
                 TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-                inputFormat.setTimeZone(timeZone);
+
                 outputFormat.setTimeZone(timeZone);
 
                 String createdAt = "";
@@ -498,6 +551,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.google.gms.google-services'
 }
 
 // local.properties 사용을 위함
@@ -76,6 +77,10 @@ dependencies {
     implementation "com.kakao.sdk:v2-navi:2.15.0" // 카카오내비
     implementation "com.kakao.sdk:v2-friend:2.15.0" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
 
+    // 댓글창 슬라이드 패널
     implementation 'com.github.hannesa2:AndroidSlidingUpPanel:4.2.1'
 
+    // 파이어베이스
+    implementation platform('com.google.firebase:firebase-bom:32.2.3')
+    implementation 'com.google.firebase:firebase-analytics'
 }

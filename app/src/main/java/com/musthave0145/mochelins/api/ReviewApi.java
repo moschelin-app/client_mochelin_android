@@ -49,6 +49,11 @@ public interface ReviewApi {
     Call<ReviewRes> getReviewDetail(@Header("Authorization") String token,
                                         @Path("reviewId") int reviewId);
 
+    // 특정 리뷰 삭제하는 API
+    @DELETE("/review/{reviewId}")
+    Call<ReviewListRes> deleteReview(@Header("Authorization") String token,
+                                     @Path("reviewId") int reviewId);
+
 
     // 좋아요 API
     @POST("/review/{reviewId}/like")
