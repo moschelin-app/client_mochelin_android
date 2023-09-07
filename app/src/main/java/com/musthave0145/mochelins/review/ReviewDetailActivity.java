@@ -54,9 +54,6 @@ import retrofit2.Retrofit;
 
 public class ReviewDetailActivity extends AppCompatActivity {
 
-
-    // TODO: 댓글 기능은 물어보거나 더 찾아봐야 할 것 같음.
-
     // 사진 여러장 넘기면서 보여주는 라이브러리
     ViewPager2 viewPager2;
     ArrayList<String> imgUrls = new ArrayList<>();
@@ -76,7 +73,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
     ImageView imgMyButton;
 
     Integer[] txtViews = {R.id.txtStoreName, R.id.txtLike, R.id.txtStar,
-                        R.id.txtPersonName, R.id.txtCreatedAt, R.id.txtMapContent, R.id.txtTag1,
+                        R.id.txtPersonName, R.id.txtCreatedAt, R.id.txtContent, R.id.txtTag1,
                         R.id.txtTag2, R.id.txtTag3, R.id.txtViews, R.id.txtAddress, R.id.txtDetailStore};
     TextView[] txtViewList = new TextView[txtViews.length];
     String token;
@@ -125,11 +122,11 @@ public class ReviewDetailActivity extends AppCompatActivity {
         for(int i = 0; i < imgViews.length; i++) {
             imgViewList[i] = findViewById(imgViews[i]);
         }
-
         for(int i = 0; i < txtViews.length; i++) {
             txtViewList[i] = findViewById(txtViews[i]);
         }
 
+        // 가게상세정보에서 리뷰리스트를 눌렀을 때, 넘어오는 거랑 메인화면 리뷰리스트에서 넘어오는거랑 구분지어야 ₩
         Review review = (Review) getIntent().getSerializableExtra("review");
         reviewId = review.id;
         storeId = review.storeId;

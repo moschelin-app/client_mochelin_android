@@ -28,6 +28,9 @@ public class Review implements Serializable {
     public int likeCnt;
     public int isLike;
     public double distance;
+    public int likesCnt;
+    public int isMine;
+    public int reviewCnt;
 
 
     public ArrayList<Photos> photos;

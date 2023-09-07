@@ -63,7 +63,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
     ImageView imgMyMenu;
 
 
-    Integer[] textViews = {R.id.txtPersonName, R.id.txtMapContent, R.id.txtMeetCount, R.id.txtStoreName,
+    Integer[] textViews = {R.id.txtPersonName, R.id.txtContent, R.id.txtMeetCount, R.id.txtStoreName,
                             R.id.txtMaximum, R.id.txtDutch, R.id.txtMeetingDate, R.id.txtStoreAddress};
 
     TextView[] textViewsList = new TextView[textViews.length];

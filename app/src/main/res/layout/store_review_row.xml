@@ -64,6 +64,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
+                            android:visibility="invisible"
                             app:srcCompat="@drawable/baseline_more_vert_24" />
                     </RelativeLayout>
 
@@ -149,7 +150,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtMapContent"
+                        android:id="@+id/txtContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -212,7 +213,7 @@
                             android:id="@+id/imgLike"
                             android:layout_width="12dp"
                             android:layout_height="12dp"
-                            android:layout_marginTop="3dp"
+                            android:layout_marginTop="5dp"
                             app:srcCompat="@drawable/baseline_favorite_border_24_2" />
 
                         <TextView
@@ -220,7 +221,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginTop="1dp"
+                            android:layout_marginTop="3dp"
                             android:text="3"
                             android:textSize="11sp" />
 

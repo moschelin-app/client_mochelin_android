@@ -3,6 +3,7 @@ package com.musthave0145.mochelins.api;
 import com.musthave0145.mochelins.model.MeetingListRes;
 import com.musthave0145.mochelins.model.MeetingRes;
 import com.musthave0145.mochelins.model.ReviewListRes;
+import com.musthave0145.mochelins.model.ReviewRes;
 import com.musthave0145.mochelins.model.Store;
 import com.musthave0145.mochelins.model.StoreRes;
 
@@ -32,4 +33,10 @@ public interface StoreApi {
     Call<MeetingListRes> getStoreMeetingList(@Header("Authorization") String token,
                                              @Path("storeId") int storeId,
                                              @Query("offset") int offset, @Query("limit") int limit);
+
+    // 특정 가게의 리뷰 리스트를 가져오는 API
+    @GET("/store/{storeId}/review")
+    Call<ReviewRes> getStoreReviewList(@Header("Authorization") String token,
+                                       @Path("storeId") int storeId,
+                                       @Query("offset") int offset, @Query("limit") int limit);
 }

@@ -22,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,10 +42,8 @@ import com.musthave0145.mochelins.model.MapDataListener;
 import com.musthave0145.mochelins.model.MapListRes;
 import com.musthave0145.mochelins.model.Store;
 import com.musthave0145.mochelins.model.StoreRes;
-import com.musthave0145.mochelins.review.ReviewDetailActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,7 +77,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             TextView txtVicinity = rootView.findViewById(R.id.txtMapAddr);
             TextView txtView = rootView.findViewById(R.id.txtMapView);
             TextView txtLike = rootView.findViewById(R.id.txtMapLike);
-            TextView txtContent = rootView.findViewById(R.id.txtMapContent);
+            TextView txtContent = rootView.findViewById(R.id.txtContent);
             ImageView photo =rootView.findViewById(R.id.storePhoto);
             Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
             MapApi api = retrofit.create(MapApi.class);

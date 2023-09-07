@@ -95,7 +95,7 @@
                                 android:text="유교보이" />
 
                             <TextView
-                                android:id="@+id/txtMapContent"
+                                android:id="@+id/txtContent"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="1dp"

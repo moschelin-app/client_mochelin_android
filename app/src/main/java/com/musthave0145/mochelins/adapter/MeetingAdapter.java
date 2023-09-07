@@ -140,7 +140,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             imgPhoto = itemView.findViewById(R.id.storePhoto);
             txtDistance = itemView.findViewById(R.id.txtDistance);
             txtStoreName = itemView.findViewById(R.id.txtStoreName);
-            txtMeetName = itemView.findViewById(R.id.txtMapContent);
+            txtMeetName = itemView.findViewById(R.id.txtContent);
             txtStoreAddress = itemView.findViewById(R.id.txtStoreAddress);
             txtMeetingDate = itemView.findViewById(R.id.txtMeetingDate);
             cardView = itemView.findViewById(R.id.cardView);

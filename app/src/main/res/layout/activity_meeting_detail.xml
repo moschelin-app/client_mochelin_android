@@ -77,7 +77,7 @@
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/txtMapContent"
+                                android:id="@+id/txtContent"
                                 android:layout_width="300dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
