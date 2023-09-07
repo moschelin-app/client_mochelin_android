@@ -2,6 +2,7 @@ package com.musthave0145.mochelins.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -52,8 +54,10 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
         Glide.with(context).load(review.profile).error(R.drawable.default_profile).into(holder.imgProfile);
         holder.txtName.setText(review.nickname);
 //        holder.txtReview.setText(review.);
-        // 작성자가 글을 몇개 올렸는지 알 수 없다.
-        holder.txtReview.setText(review.reviewCnt+"");
+
+//        Log.i("테스트", review.view+" "+review.reviewCnt);
+
+        holder.txtReview.setText("리뷰 "+review.reviewCnt);
         // 내 글인지도 알 수 없다.
         if (review.isMine == 1) {
             holder.imgMyMenu.setVisibility(View.VISIBLE);
@@ -109,7 +113,7 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
         holder.txtLike.setText(review.likesCnt+"");
 
         // 조회수를 보여주자!
-        holder.txtView.setText(review.likeCnt+"");
+        holder.txtView.setText("조회수 "+review.view);
 
 
 
