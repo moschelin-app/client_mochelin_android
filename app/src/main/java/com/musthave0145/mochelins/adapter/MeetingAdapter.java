@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.musthave0145.mochelins.meeting.MeetingDetailActivity;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.model.Meeting;
@@ -55,7 +56,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         // 미팅 사진이 없으면, 기본 이미지 표시 / 있으면, 그 사진을 표시하는 로직.
         // 원래는 null !!
         holder.imgPhoto.setClipToOutline(true);
-        Glide.with(context).load(meeting.photo).into(holder.imgPhoto);
+        Glide.with(context).load(meeting.photo)
+                        .error(R.drawable.not_image).into(holder.imgPhoto);
 
 
         String strDis = String.format("%.2f",meeting.distance) + "km";
@@ -86,15 +88,19 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             e.printStackTrace();
 
         }
+
         holder.txtMeetingDate.setText(newDate);
 
-        for(int i = 0; i < meeting.profiles.size(); i++){
-            if(i >= holder.imgProfileInteger.length){
-                break;
+        for(int i = 0; i < holder.imgProfileInteger.length; i++){
+            if(i < meeting.profiles.size()){
+                holder.imgProfiles[i].setVisibility(View.VISIBLE);
+                Glide.with(context).load(meeting.profiles.get(i).profile)
+                        .error(R.drawable.default_profile)
+                        .diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.imgProfiles[i]);
+            }else{
+                holder.imgProfiles[i].setVisibility(View.INVISIBLE);
             }
-            holder.imgProfiles[i].setVisibility(View.VISIBLE);
-            Glide.with(context).load(meeting.profiles.get(i).profile).
-                    fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(holder.imgProfiles[i]);
+
         }
 
         // 총 정원과 현재 참가한 인원수를 붙여서 출력하자

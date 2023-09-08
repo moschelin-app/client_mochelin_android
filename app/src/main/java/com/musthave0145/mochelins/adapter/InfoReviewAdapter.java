@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.review.ReviewDetailActivity;
@@ -40,7 +41,8 @@ public class InfoReviewAdapter extends RecyclerView.Adapter<InfoReviewAdapter.Vi
         Review review = reviewArrayList.get(position);
 
         Glide.with(context).load(review.photo)
-                .error(R.drawable.not_image).into(holder.imgPhoto);
+                .error(R.drawable.not_image)
+                .diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.imgPhoto);
     }
 
     @Override

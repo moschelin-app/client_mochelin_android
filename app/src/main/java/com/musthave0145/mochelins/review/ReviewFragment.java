@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -114,6 +115,8 @@ public class ReviewFragment extends Fragment {
     Fragment plannerFragment;
 
 
+    int offset = 0;
+    int limit = 10;
 
 
     @Override
@@ -131,6 +134,26 @@ public class ReviewFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition(); //맨 마지막 위치
+                int totalCount = recyclerView.getAdapter().getItemCount(); //arrayList값의 크기를 가져온다.
+
+                if(lastPosition + 1 == totalCount){ //스크롤을 데이터 맨 끝까지 한 상태이므로
+                    //네트워크를 통해서 데이터를 추가로 받아오면 된다.
+                    getNetworkData();
+                }
+            }
+        });
 
         // 사이드 메뉴바를 열고 닫는 코드
         imgMenu.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +270,8 @@ public class ReviewFragment extends Fragment {
         });
 
 
-
+        adapter = new ReviewAdapter(getActivity(),reviewArrayList);
+        recyclerView.setAdapter(adapter);
 
         // Inflate the layout for this fragment
         return rootView;
@@ -282,11 +306,14 @@ public class ReviewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        reviewArrayList.clear();
+        offset = 0;
+
         getNetworkData();
     }
 
     private void getNetworkData() {
-        reviewArrayList.clear();
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -296,7 +323,7 @@ public class ReviewFragment extends Fragment {
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
         ReviewApi api = retrofit.create(ReviewApi.class);
 
-        Call<ReviewRes> call = api.getReviewList("Bearer " + token, 0,10,37.5416541,126.6778043,3.0);
+        Call<ReviewRes> call = api.getReviewList("Bearer " + token, offset,limit,37.5416541,126.6778043,3.0);
         call.enqueue(new Callback<ReviewRes>() {
             @Override
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
@@ -306,8 +333,9 @@ public class ReviewFragment extends Fragment {
                     ReviewRes reviewRes = response.body();
                     reviewArrayList.addAll(reviewRes.items);
 
-                    adapter = new ReviewAdapter(getActivity(),reviewArrayList);
-                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    offset += limit;
 
                 } else if (response.code() == 500){
                     Toast.makeText(getActivity(), "서버에 문제있음",Toast.LENGTH_SHORT).show();

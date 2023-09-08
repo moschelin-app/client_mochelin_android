@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.meeting.MeetingDetailActivity;
 import com.musthave0145.mochelins.model.Meeting;
@@ -50,7 +51,8 @@ public class InfoMeetingAdapter extends RecyclerView.Adapter<InfoMeetingAdapter.
         Meeting meeting = meetingArrayList.get(position);
 
         Glide.with(context).load(meeting.photo)
-                .error(R.drawable.not_image).into(holder.imgPhoto);
+                .error(R.drawable.not_image)
+                .diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.imgPhoto);
 
         String[] date = meeting.date.split("T");
         String month_day = date[0].replace("-", "/").substring(date[0].length()-5);

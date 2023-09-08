@@ -398,7 +398,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/corner2"
+                    android:background="@drawable/dis_background"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:singleLine="true"

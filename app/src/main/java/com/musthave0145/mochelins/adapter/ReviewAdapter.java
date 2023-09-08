@@ -2,6 +2,7 @@ package com.musthave0145.mochelins.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.review.ReviewDetailActivity;
 import com.musthave0145.mochelins.model.Review;
+import com.musthave0145.mochelins.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +29,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.internal.Util;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder>{
 
@@ -55,39 +59,19 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         // 작성자의 프로필 사진 표시(없으면 기본 이미지, 있으면 올린 사진으로), 이름과 작성 시간을 표시하자!
 
-        Glide.with(context).load(review.profile).fallback(R.drawable.default_profile).error(R.drawable.default_profile).into(holder.imgPerson);
+        Glide.with(context).load(review.profile).error(R.drawable.default_profile)
+                .diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.imgPerson);
 
 
         holder.txtPerson.setText(review.nickname);
 
-
-        // UTC를 한국 시간으로 변환
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        Calendar calendar = Calendar.getInstance();
-        Date date = null;
         try {
-            date = sdf.parse(review.createdAt);
-            calendar.setTime(date);
-
-            // 한국 시간으로 변환 (9시간 추가)
-            calendar.add(Calendar.HOUR_OF_DAY, 9);
-
-            // 현재 시간 가져오기
-            Calendar currentCal = Calendar.getInstance();
-
-            // 시간 차이 계산 (밀리초 단위)
-            long timeDifferenceMillis = currentCal.getTimeInMillis() - calendar.getTimeInMillis();
-
-            //
-            SimpleDateFormat outputSdf = new SimpleDateFormat("M월 d일 HH:mm", Locale.US);
-            String formattedDate = outputSdf.format(calendar.getTime());
-            holder.txtTime.setText(formattedDate);
-
+            String getTimes = new Utils().getDateCalculate(review.createdAt);
+            holder.txtTime.setText(getTimes);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
 
         Glide.with(context).load(review.photo).error(R.drawable.not_image).into(holder.imgPhoto);
         holder.imgPhoto.setClipToOutline(true);
@@ -100,8 +84,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             holder.imgLike.setImageResource(R.drawable.outline_favorite_border_24);
         }
 
-        String strDis = String.format("%.2f",review.distance) + "km";
-        holder.txtDistance.setText("📍 "+ strDis);
+        String strDis = String.format("%.2f",review.distance) + " km";
+        holder.txtDistance.setText( strDis);
 
         // 평점과 상호명을 보여주자!!
         String strRating = review.rating + "";

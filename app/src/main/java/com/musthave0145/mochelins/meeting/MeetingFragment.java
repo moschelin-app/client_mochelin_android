@@ -109,6 +109,10 @@ public class MeetingFragment extends Fragment {
     Fragment meetingFragment;
     Fragment mapFragment;
     Fragment plannerFragment;
+
+    int offset = 0;
+    int limit = 10;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -160,7 +164,14 @@ public class MeetingFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                getNetworkData();
+
+                int lastPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition(); //맨 마지막 위치
+                int totalCount = recyclerView.getAdapter().getItemCount(); //arrayList값의 크기를 가져온다.
+
+                if(lastPosition + 1 == totalCount){ //스크롤을 데이터 맨 끝까지 한 상태이므로
+                    //네트워크를 통해서 데이터를 추가로 받아오면 된다.
+                    getNetworkData();
+                }
             }
         });
 
@@ -252,7 +263,8 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-
+        adapter = new MeetingAdapter(getActivity(), meetingArrayList);
+        recyclerView.setAdapter(adapter);
 
 
         return rootView;
@@ -261,13 +273,15 @@ public class MeetingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        // 중복으로 겹치지 않게 비워주쟈!
+        meetingArrayList.clear();
+        offset = 0;
+
         getNetworkData();
     }
 
 
     private void getNetworkData() {
-        // 중복으로 겹치지 않게 비워주쟈!
-        meetingArrayList.clear();
 
         // 프로그레스바를 보이게 하자
         progressBar.setVisibility(View.VISIBLE);
@@ -286,7 +300,7 @@ public class MeetingFragment extends Fragment {
         // TODO: 쿼리파라미터 초기값을 어떻게 셋팅할지 고민
         // 쿼리파라미터 셋팅 //필터에서 다 받아와야 한드아~~~!!
         // Lat , Lng 값을 서구청으로...
-        Call<MeetingListRes> call = api.getMeetingList("Bearer " + token, 0,10,37.5453703,126.6759947,5.0);
+        Call<MeetingListRes> call = api.getMeetingList("Bearer " + token, offset,limit,37.5453703,126.6759947,5.0);
 
         call.enqueue(new Callback<MeetingListRes>() {
             @Override
@@ -300,8 +314,9 @@ public class MeetingFragment extends Fragment {
                     MeetingListRes meetingListRes = response.body();
                     meetingArrayList.addAll(meetingListRes.items);
 
-                    adapter = new MeetingAdapter(getActivity(), meetingArrayList);
-                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    offset += limit;
 
                 } else {
                     // 서버에 문제있는겨
