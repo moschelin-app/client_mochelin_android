@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -30,7 +32,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.api.MapApi;
@@ -44,6 +48,8 @@ import com.musthave0145.mochelins.model.Store;
 import com.musthave0145.mochelins.model.StoreRes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,269 +59,205 @@ import retrofit2.Retrofit;
 public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private GoogleMap mMap;
 
-    double lat = 37.542127;
-    double lng = 126.680545;
+    double lat = 37.5518911;
+    double lng = 126.9917937;
     boolean isLocationReady;
-    double dis=1.5;
+    double setDis = 1000/2.0;
+    HashMap<Integer, Double> mapZoomDis = new HashMap<Integer, Double>(){{
+        put(14, 3000/setDis);
+        put(15, 1500/setDis);
+        put(16, 750/setDis);
+        put(17, 375/setDis);
+        put(18, 188/setDis);
+        put(19, 94/setDis);
+        put(20, 47/setDis);
+        put(21, 23/setDis);
+    }};
+    int zoom = 16;
+    double dis;
 
     private MapDataListener mapDataListener;
+    Marker choiceMarker;
 
     ArrayList<MapData> customMapArrayList = new ArrayList<>();
     ArrayList<Store> storeArrayList = new ArrayList<>();
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
-        LocationManager locationManager;
-        LocationListener locationListener;
+
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
+
 
         private MapData clickMapData;
 
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            mMap =googleMap;
-            RatingBar ratingBar = rootView.findViewById(R.id.ratingBar);
-            TextView txtName = rootView.findViewById(R.id.txtMapStoreName);
-            TextView txtVicinity = rootView.findViewById(R.id.txtMapAddr);
-            TextView txtView = rootView.findViewById(R.id.txtMapView);
-            TextView txtLike = rootView.findViewById(R.id.txtMapLike);
-            TextView txtContent = rootView.findViewById(R.id.txtContent);
-            ImageView photo =rootView.findViewById(R.id.storePhoto);
-            Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-            MapApi api = retrofit.create(MapApi.class);
-            SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-            String token = sp.getString(Config.ACCESS_TOKEN, "");
-            Call<MapListRes> call = api.getPlaceList("Bearer " +token,lat,lng,dis);
-
-            call.enqueue(new Callback<MapListRes>() {
-
-                @Override
-                public void onResponse(Call<MapListRes> call, Response<MapListRes> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        MapListRes mapList = response.body();
-                        Log.d("안녕","안녕");
-                        customMapArrayList.addAll(mapList.items);
-
-                        for (int i=0; i<customMapArrayList.size();i++) {
-                            MapData mapData = customMapArrayList.get(i);
-
-                            LatLng location = new LatLng(mapData.storeLat, mapData.storeLng);
-                            // 커스텀 마커 레이아웃 설정
-                            View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
-                            ImageView imageView = customMarkerView.findViewById(R.id.imageView);
-                            TextView textView = customMarkerView.findViewById(R.id.textView);
-
-                            imageView.setImageResource(R.drawable.baseline_star_24);
-
-                            int intMapData = (int) mapData.rating;
-                            String strRating = intMapData + "";
-                            textView.setText(strRating);
-                            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
-                            MarkerOptions markerOptions = new MarkerOptions()
-                                    .position(location)
-                                    .title(mapData.storeName)
-                                    .icon(icon);
-
-                            Marker marker = googleMap.addMarker(markerOptions);
-                            marker.setTag(i);
-                            marker.showInfoWindow();
-
-                        }
-                    }
-                }
-
-                private Bitmap viewToBitmap(View view) {
-                    view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                    Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
-                    view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-                    view.draw(canvas);
-                    return bitmap;
-                }
-
-                @Override
-                public void onFailure(Call<MapListRes> call, Throwable t) {
-
-                }
-            });
-
-            //cardView
-            CardView cardView = rootView.findViewById(R.id.cardView);
-            cardView.setVisibility(View.GONE);
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(@NonNull LatLng latLng) {
-                    cardView.setVisibility(View.GONE);
-                }
-            });
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-                    cardView.setVisibility(View.VISIBLE);
-                    Integer markerIndexInteger = (Integer) marker.getTag();
-                    if (markerIndexInteger != null) {
-                        int markerIndex = markerIndexInteger.intValue();
-
-                        Log.i("숫자", markerIndex + "");
-                        if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
-                            MapData clickedMapData = customMapArrayList.get(markerIndex);
-                            Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-                            StoreApi api = retrofit.create(StoreApi.class);
-                            SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                            String token = sp.getString(Config.ACCESS_TOKEN, "");
-
-                            Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
-                            Log.d("storeName", "인사");
-                            call.enqueue(new Callback<StoreRes>() {
-                                @Override
-                                public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
-                                    if (response.isSuccessful() && response.body() != null) {
-                                        StoreRes storeList = response.body();
-                                        Store store = storeList.item;
-                                        Log.d("storeName", "성공했어");
-                                        int isLikeValue =store.likeCnt;
-                                        String isLikeString = String.valueOf(isLikeValue);
-                                        int isviewValue =(int) store.view;
-                                        String isViewString = String.valueOf(isviewValue);
-
-                                        double isRatingValue = store.rating;
-                                        int isStringInt = (int) isRatingValue;
-                                        //가게이름
-                                        txtName.setText(store.storeName);
-                                        //가게주소
-                                        txtVicinity.setText(store.storeAddr);
-                                        // 게시글 조회수
-                                        txtView.setText(isViewString);
-                                        // 게시글 좋아요 수
-                                        txtLike.setText(isLikeString);
-                                        // 게시글 내용
-                                        txtContent.setText(store.content);
-                                        //가게 사진
-                                        Glide.with(MapsFragment.this).load(store.photo).into(photo);
-                                        //별점
-                                        ratingBar.setRating((float) isRatingValue);
-
-                                    } else {
-                                        Log.d("ApiResponse", "storeList is null");
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<StoreRes> call, Throwable t) {
-                                    Log.e("API Call Error", "Error fetching store details", t);
-                                }
-                            });
-
-                        }
-                    }
-                    return false;
-                }
-            });
+            mMap = googleMap;
 
 
-            // 폰의 위치를 가져오기 위해서는,시스템 서버로부터 로케이션 메니저를 받아온다
-            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                    lat = location.getLatitude();
-                    lng = location.getLongitude();
-
-                    isLocationReady = true;
-                    if(isLocationReady){
-                        if(getActivity() != null){
-                            LatLng currentLocation = new LatLng(37.542127,126.680545);
-                            View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
-                            ImageView imageView = customMarkerView.findViewById(R.id.imageView);
-                            TextView textView = customMarkerView.findViewById(R.id.textView);
-
-                            imageView.setImageResource(R.drawable.baseline_star_24);
-                            textView.setText("3");
-                            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewTomBitmap(customMarkerView));
+            // 확대 최대 비율 설정
+            mMap.setMinZoomPreference(14.f);
 
 
-                            //커스텀 마커 레이아웃을 사용한 MarkerOption 생성
-                            MarkerOptions markerOptions = new MarkerOptions()
-                                    .position(currentLocation)
-                                    .title("Cureent Location")
-                                    .icon(icon);
-                            //GoogleMap에 마커 추가
-                            Marker marker = googleMap.addMarker(markerOptions);
-                            marker.showInfoWindow();
 
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-                            googleMap.setMinZoomPreference(17);
 
-                        }
-                    }
-                }
+            setMapCenter();
 
-                private Bitmap viewTomBitmap(View view) {
-                    view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                    Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
-                    view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-                    view.draw(canvas);
-                    return bitmap;
-                }
-            };
-            if( ActivityCompat.checkSelfPermission(getActivity(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED ){
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
-                                android.Manifest.permission.ACCESS_COARSE_LOCATION} ,
-                        100);
-                return;
-            }
-            // 위치기반 허용하였으므로,
-            // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    100000,
-                    -1,
-                    locationListener);
         }
     };
 
-    private View rootView;
-
-
-
-    String name;
-    String address;
-
-
+    
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapsFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if (mapsFragment != null) {
-            mapsFragment.getMapAsync(callback);
-        }
-
-
-
     }
 
+    RatingBar ratingBar;
+    TextView txtName;
+    TextView txtVicinity;
+    TextView txtView;
+    TextView txtLike;
+    TextView txtContent;
+    ImageView photo;
+    CardView cardView;
+    CardView researchCardView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_maps, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        TextView txtName = rootView.findViewById(R.id.txtMapStoreName);
-        TextView txtVicinity =rootView.findViewById(R.id.txtMapAddr);
+        ratingBar = rootView.findViewById(R.id.ratingBar);
+        txtName = rootView.findViewById(R.id.txtMapStoreName);
+        txtVicinity = rootView.findViewById(R.id.txtMapAddr);
+        txtView = rootView.findViewById(R.id.txtMapView);
+        txtLike = rootView.findViewById(R.id.txtMapLike);
+        txtContent = rootView.findViewById(R.id.txtContent);
+        photo = rootView.findViewById(R.id.storePhoto);
+        cardView = rootView.findViewById(R.id.cardView);
+        researchCardView  = rootView.findViewById(R.id.researchCardView);
 
-        mapDataListener = new MapDataListener() {
+        cardView.setVisibility(View.GONE);
+        researchCardView.setVisibility(View.GONE);
+
+
+        //
+        researchCardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onMapDataReceived(Store clickStore) {
+            public void onClick(View view) {
+                researchCardView.setVisibility(View.GONE);
+                cardView.setVisibility(View.GONE);
+
+                choiceMarker=null;
+
+                getStoreList();
+            }
+        });
+
+        // 폰의 위치를 가져오기 위해서는,시스템 서버로부터 로케이션 메니저를 받아온다
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+
+                // 내 위치를 가져올때 딱 한번만 카메라를 이동함
+                if(isLocationReady==false){
+                    lat = location.getLatitude();
+                    lng = location.getLongitude();
+
+                    setMapCenter();
+
+                    getStoreList();
+
+
+
+                    // 카메라 이동이 끝났을때 사용
+                    mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                        @Override
+                        public void onCameraIdle() {
+                            // 위도, 경도, 줌 배율을 가져옴
+                            LatLng latLng = mMap.getCameraPosition().target;
+//                    Log.i("확인", latLng.toString());
+
+                            lat = latLng.latitude;
+                            lng = latLng.longitude;
+
+                            zoom = ((int) mMap.getCameraPosition().zoom ) -1;
+
+                            if(isLocationReady == true){
+                                researchCardView.setVisibility(View.VISIBLE);
+                            }
+                            isLocationReady = true;
+                        }
+                    });
+
+
+                }
+
 
             }
         };
+
+        if( ActivityCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED ){
+
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION} ,
+                    100);
+        }
+        // 위치기반 허용하였으므로,
+        // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                3000,
+                3,
+                locationListener);
+
+        SupportMapFragment mapsFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapsFragment != null) {
+            mapsFragment.getMapAsync(callback);
+        }
+
+
         return rootView;
+    }
+
+
+    private Bitmap viewToBitmap(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    private void setDefaultMarker(){
+        View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
+        LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
+        TextView textView = customMarkerView.findViewById(R.id.textView);
+        textView.setTextColor(Color.BLACK);
+        linearLayout.setBackgroundResource(R.drawable.corner1);
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
+
+        choiceMarker.setIcon(icon);
+
+        choiceMarker=null;
+    }
+
+    private void setMapCenter(){
+        LatLng latLng = new LatLng(lat, lng);
+        CameraPosition.Builder builder = new CameraPosition.Builder();
+        builder.target(latLng);
+        builder.zoom(zoom);
+        CameraPosition position = builder.build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
 
@@ -324,5 +266,158 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
+    private void getStoreList(){
+        // 위치를 이동할때마다 가게를 불러오니, 마커와 배열의 값을 초기화 시킴
+        customMapArrayList.clear();
+        mMap.clear();
 
+        Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+        MapApi api = retrofit.create(MapApi.class);
+        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String token = sp.getString(Config.ACCESS_TOKEN, "");
+        Call<MapListRes> call = api.getPlaceList("Bearer " + token, lat, lng, mapZoomDis.get(zoom));
+        call.enqueue(new Callback<MapListRes>() {
+
+            @Override
+            public void onResponse(Call<MapListRes> call, Response<MapListRes> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    MapListRes mapList = response.body();
+                    Log.d("안녕", "안녕");
+                    customMapArrayList.addAll(mapList.items);
+
+                    for (int i = 0; i < customMapArrayList.size(); i++) {
+                        MapData mapData = customMapArrayList.get(i);
+
+                        LatLng location = new LatLng(mapData.storeLat, mapData.storeLng);
+                        // 커스텀 마커 레이아웃 설정
+                        View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
+                        ImageView imageView = customMarkerView.findViewById(R.id.imageView);
+                        TextView textView = customMarkerView.findViewById(R.id.textView);
+
+                        imageView.setImageResource(R.drawable.baseline_star_24);
+
+                        double rating = Math.floor(mapData.rating * 10) / 10.0;
+
+                        String strRating = rating + "";
+                        textView.setText(strRating);
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
+                        MarkerOptions markerOptions = new MarkerOptions()
+                                .position(location)
+                                .title(mapData.storeName)
+                                .icon(icon);
+
+                        Marker marker = mMap.addMarker(markerOptions);
+                        marker.setTag(i);
+                        marker.showInfoWindow();
+                    }
+
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(@NonNull Marker marker) {
+                            cardView.setVisibility(View.VISIBLE);
+                            Integer markerIndexInteger = (Integer) marker.getTag();
+
+                            if (markerIndexInteger != null) {
+                                int markerIndex = markerIndexInteger.intValue();
+
+                                // 선택되었던 마커가 존재하면 원래대로 돌림
+                                if (choiceMarker != null) {
+                                    setDefaultMarker();
+                                }
+
+                                Log.i("숫자", markerIndex + "");
+                                if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
+                                    // 커스텀 마커 레이아웃 설정
+                                    // 마커가 선택되었을때 이미지를 변경
+                                    View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
+                                    LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
+                                    TextView textView = customMarkerView.findViewById(R.id.textView);
+                                    textView.setTextColor(Color.WHITE);
+                                    linearLayout.setBackgroundResource(R.drawable.corner_select);
+
+                                    BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
+
+                                    marker.setIcon(icon);
+
+                                    choiceMarker = marker;
+
+
+                                    // 해당 마커를 누를시 리뷰 1개를 가져옴
+                                    MapData clickedMapData = customMapArrayList.get(markerIndex);
+
+                                    Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+                                    StoreApi api = retrofit.create(StoreApi.class);
+                                    SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                                    String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+                                    Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
+                                    Log.d("storeName", "인사");
+                                    call.enqueue(new Callback<StoreRes>() {
+                                        @Override
+                                        public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                StoreRes storeList = response.body();
+                                                Store store = storeList.item;
+                                                Log.d("storeName", "성공했어");
+                                                int isLikeValue = store.likeCnt;
+                                                String isLikeString = String.valueOf(isLikeValue);
+                                                int isviewValue = (int) store.view;
+                                                String isViewString = String.valueOf(isviewValue);
+
+                                                double isRatingValue = store.rating;
+                                                int isStringInt = (int) isRatingValue;
+                                                //가게이름
+                                                txtName.setText(store.storeName);
+                                                //가게주소
+                                                txtVicinity.setText(store.storeAddr);
+                                                // 게시글 조회수
+                                                txtView.setText(isViewString);
+                                                // 게시글 좋아요 수
+                                                txtLike.setText(isLikeString);
+                                                // 게시글 내용
+                                                txtContent.setText(store.content);
+                                                //가게 사진
+                                                Glide.with(MapsFragment.this).load(store.photo).into(photo);
+                                                //별점
+                                                ratingBar.setRating((float) isRatingValue);
+
+                                            } else {
+                                                Log.d("ApiResponse", "storeList is null");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<StoreRes> call, Throwable t) {
+                                            Log.e("API Call Error", "Error fetching store details", t);
+                                        }
+                                    });
+
+                                }
+                            }
+                            return false;
+                        }
+                    });
+
+                    mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(@NonNull LatLng latLng) {
+                            cardView.setVisibility(View.GONE);
+
+                            // 선택되었던 마커가 존재할 경우 이미지 설정을 원래대로 돌림
+                            if (choiceMarker != null) {
+                                setDefaultMarker();
+                            }
+
+                        }
+                    });
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<MapListRes> call, Throwable t) {
+
+            }
+        });
+    }
 }

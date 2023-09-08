@@ -228,6 +228,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
                                         @Override
                                         public void onResponse(Call<ReviewListRes> call, Response<ReviewListRes> response) {
                                             if (response.isSuccessful()){
+                                                setResult(Config.RESTART_NUM);
+
                                                 finish();
                                             } else {
 

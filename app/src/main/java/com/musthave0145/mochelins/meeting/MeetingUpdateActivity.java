@@ -311,7 +311,12 @@ public class MeetingUpdateActivity extends AppCompatActivity {
             }
         });
 
+        txtSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
 
     }
 

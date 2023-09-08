@@ -47,12 +47,12 @@
                     android:id="@+id/txtSave"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:gravity="center"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
+                    android:gravity="center"
                     android:text="완료"
-                    android:textColor="#000000"
+                    android:textColor="@color/maximum"
                     android:textSize="24sp" />
 
             </RelativeLayout>

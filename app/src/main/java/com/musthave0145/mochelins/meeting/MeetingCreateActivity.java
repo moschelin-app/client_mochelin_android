@@ -374,8 +374,8 @@ public class MeetingCreateActivity extends AppCompatActivity {
                     RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
                     RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
 
-                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, photo, contentBody, storeNameBody, storeLatBody, storeLngBody
-                                                                , storeAddrBody, dateBody, maximumBody, payBody);
+                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                                                                , storeAddrBody, dateBody, maximumBody, payBody, photo);
 
                     call.enqueue(new Callback<MeetingListRes>() {
                         @Override
@@ -421,8 +421,8 @@ public class MeetingCreateActivity extends AppCompatActivity {
                     RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
                     RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
 
-                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, photo, contentBody, storeNameBody, storeLatBody, storeLngBody
-                            , storeAddrBody, dateBody, maximumBody);
+                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                            , storeAddrBody, dateBody, maximumBody, photo);
 
                     call.enqueue(new Callback<MeetingListRes>() {
                         @Override

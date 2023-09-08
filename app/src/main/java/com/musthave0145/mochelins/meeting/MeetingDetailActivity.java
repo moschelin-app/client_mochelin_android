@@ -356,6 +356,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MeetingRes> call, Response<MeetingRes> response) {
                 if(response.isSuccessful()){
+                    setResult(Config.RESTART_NUM);
+
                     finish();
                 } else {
                 }

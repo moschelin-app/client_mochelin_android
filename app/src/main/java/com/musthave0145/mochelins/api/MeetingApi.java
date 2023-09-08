@@ -34,7 +34,6 @@ public interface MeetingApi {
     @Multipart
     @POST("/meeting")
     Call<MeetingListRes> addMeeting(@Header("Authorization") String token,
-                                    @Part MultipartBody.Part photo,
                                     @Part("content") RequestBody content,
                                     @Part("storeName") RequestBody storeName,
                                     @Part("storeLat") RequestBody storeLat,
@@ -42,7 +41,8 @@ public interface MeetingApi {
                                     @Part("storeAddr") RequestBody storeAddr,
                                     @Part("date") RequestBody date,
                                     @Part("maximum") RequestBody maximum,
-                                    @Part("pay") RequestBody pay);
+                                    @Part("pay") RequestBody pay,
+                                    @Part MultipartBody.Part photo);
     // 모임 생성 - 사진 X
     @Multipart
     @POST("/meeting")
@@ -60,14 +60,14 @@ public interface MeetingApi {
     @Multipart
     @POST("/meeting")
     Call<MeetingListRes> addMeeting(@Header("Authorization") String token,
-                                    @Part MultipartBody.Part photo,
                                     @Part("content") RequestBody content,
                                     @Part("storeName") RequestBody storeName,
                                     @Part("storeLat") RequestBody storeLat,
                                     @Part("storeLng") RequestBody storeLng,
                                     @Part("storeAddr") RequestBody storeAddr,
                                     @Part("date") RequestBody date,
-                                    @Part("maximum") RequestBody maximum);
+                                    @Part("maximum") RequestBody maximum,
+                                    @Part MultipartBody.Part photo);
 
     // 모임 생성 - 사진과 페이 둘 다 X
     @Multipart
