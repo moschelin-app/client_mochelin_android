@@ -1,21 +1,26 @@
-package com.musthave0145.mochelins;
+package com.musthave0145.mochelins.maps;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -23,33 +28,41 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.musthave0145.mochelins.PlannerFragment;
+import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.MapApi;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.StoreApi;
 import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.MapData;
-import com.musthave0145.mochelins.model.MapDataListener;
 import com.musthave0145.mochelins.model.MapListRes;
+import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.Store;
 import com.musthave0145.mochelins.model.StoreRes;
+import com.musthave0145.mochelins.review.ReviewDetailActivity;
+import com.musthave0145.mochelins.review.ReviewFragment;
+import com.musthave0145.mochelins.user.InfoActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +70,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback{
-    private GoogleMap mMap;
+    GoogleMap mMap;
+    MapView mapView;
+
+    ImageView imgMenu;
 
     double lat = 37.5518911;
     double lng = 126.9917937;
@@ -74,37 +90,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         put(21, 23/setDis);
     }};
     int zoom = 16;
-    double dis;
 
-    private MapDataListener mapDataListener;
     Marker choiceMarker;
 
     ArrayList<MapData> customMapArrayList = new ArrayList<>();
-    ArrayList<Store> storeArrayList = new ArrayList<>();
 
     LocationManager locationManager;
     LocationListener locationListener;
-
-    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
-
-
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            mMap = googleMap;
-
-
-            // 확대 최대 비율 설정
-            mMap.setMinZoomPreference(14.f);
-
-
-
-
-            setMapCenter();
-
-        }
-    };
-
-    
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -120,6 +112,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     ImageView photo;
     CardView cardView;
     CardView researchCardView;
+    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
 
     String token;
 
@@ -140,91 +134,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         cardView = rootView.findViewById(R.id.cardView);
         researchCardView  = rootView.findViewById(R.id.researchCardView);
 
+        mapView = rootView.findViewById(R.id.mapView);
+        mapView.getMapAsync(this);
+        mapView.onCreate(savedInstanceState);
+
         cardView.setVisibility(View.GONE);
         researchCardView.setVisibility(View.GONE);
 
         SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
         token = sp.getString(Config.ACCESS_TOKEN, "");
-
-
-        //
-        researchCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                researchCardView.setVisibility(View.GONE);
-                cardView.setVisibility(View.GONE);
-
-                choiceMarker=null;
-
-                getStoreList();
-            }
-        });
-
-        // 폰의 위치를 가져오기 위해서는,시스템 서버로부터 로케이션 메니저를 받아온다
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-
-                // 내 위치를 가져올때 딱 한번만 카메라를 이동함
-                if(isLocationReady==false){
-                    lat = location.getLatitude();
-                    lng = location.getLongitude();
-
-                    setMapCenter();
-
-                    getStoreList();
-
-
-
-                    // 카메라 이동이 끝났을때 사용
-                    mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                        @Override
-                        public void onCameraIdle() {
-                            // 위도, 경도, 줌 배율을 가져옴
-                            LatLng latLng = mMap.getCameraPosition().target;
-//                    Log.i("확인", latLng.toString());
-
-                            lat = latLng.latitude;
-                            lng = latLng.longitude;
-
-                            zoom = ((int) mMap.getCameraPosition().zoom ) -1;
-
-                            if(isLocationReady == true){
-                                researchCardView.setVisibility(View.VISIBLE);
-                            }
-                            isLocationReady = true;
-                        }
-                    });
-
-
-                }
-
-
-            }
-        };
-
-        if( ActivityCompat.checkSelfPermission(getActivity(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED ){
-
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION} ,
-                    100);
-        }
-        // 위치기반 허용하였으므로,
-        // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                3000,
-                3,
-                locationListener);
-
-        SupportMapFragment mapsFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if (mapsFragment != null) {
-            mapsFragment.getMapAsync(callback);
-        }
-
 
         return rootView;
     }
@@ -268,12 +186,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     }
 
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-
-    }
 
     private void getStoreList(){
+
         // 위치를 이동할때마다 가게를 불러오니, 마커와 배열의 값을 초기화 시킴
         customMapArrayList.clear();
         mMap.clear();
@@ -287,6 +202,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onResponse(Call<MapListRes> call, Response<MapListRes> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    dismissProgress();
                     MapListRes mapList = response.body();
                     Log.d("안녕", "안녕");
                     customMapArrayList.addAll(mapList.items);
@@ -386,6 +302,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                                 //별점
                                                 ratingBar.setRating((float) isRatingValue);
 
+                                                // 선택된 가게의 리뷰 클릭 시
+                                                cardView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        Intent intent = new Intent(getActivity(), ReviewDetailActivity.class);
+                                                        Review review = new Review(store.id, store.storeId);
+                                                        intent.putExtra("review", review);
+                                                        startActivity(intent);
+
+                                                    }
+                                                });
+
                                             } else {
                                                 Log.d("ApiResponse", "storeList is null");
                                             }
@@ -421,8 +349,123 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
             @Override
             public void onFailure(Call<MapListRes> call, Throwable t) {
-
+                dismissProgress();
             }
         });
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        showProgress();
+
+        MapsFragment.this.mMap = googleMap;
+
+        // 확대 최대 비율 설정
+        mMap.setMinZoomPreference(14.f);
+
+        setMapCenter();
+        researchCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                researchCardView.setVisibility(View.GONE);
+                cardView.setVisibility(View.GONE);
+
+                choiceMarker=null;
+
+                getStoreList();
+            }
+        });
+
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+
+                // 내 위치를 가져올때 딱 한번만 카메라를 이동함
+                if(isLocationReady==false){
+
+                    lat = location.getLatitude();
+                    lng = location.getLongitude();
+
+                    setMapCenter();
+
+                    getStoreList();
+
+
+
+                    // 카메라 이동이 끝났을때 사용
+                    mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                        @Override
+                        public void onCameraIdle() {
+                            // 위도, 경도, 줌 배율을 가져옴
+                            LatLng latLng = mMap.getCameraPosition().target;
+//                    Log.i("확인", latLng.toString());
+
+                            lat = latLng.latitude;
+                            lng = latLng.longitude;
+
+                            zoom = ((int) mMap.getCameraPosition().zoom ) -1;
+
+                            if(isLocationReady == true){
+                                researchCardView.setVisibility(View.VISIBLE);
+                            }
+                            isLocationReady = true;
+                        }
+                    });
+
+
+                }
+
+
+            }
+        };
+
+        if( ActivityCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED ){
+
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION} ,
+                    100);
+        }
+        // 위치기반 허용하였으므로,
+        // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                3000,
+                3,
+                locationListener);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+        zoom=16;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+        isLocationReady=false;
+    }
+
+
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(getActivity());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(getActivity()));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
     }
 }

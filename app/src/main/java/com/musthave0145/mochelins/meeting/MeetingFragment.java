@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.musthave0145.mochelins.MapsFragment;
+import com.musthave0145.mochelins.maps.MapsFragment;
 import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.MeetingAdapter;
@@ -93,63 +93,59 @@ public class MeetingFragment extends Fragment {
     }
 
 
-    ImageView imgMenu;
-    ImageView imgAdd;
-    DrawerLayout meetingDrawer;
+//    ImageView imgMenu;
+//    ImageView imgAdd;
+//    DrawerLayout meetingDrawer;
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    ImageView imgMenuClear;
-    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-                            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
-    CardView[] cardViewList = new CardView[cardViews.length];
+//    ImageView imgMenuClear;
+//    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+//                            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
+//    CardView[] cardViewList = new CardView[cardViews.length];
     MeetingAdapter adapter;
     ArrayList<Meeting> meetingArrayList = new ArrayList<>();
 
-    Fragment reviewFragment;
-    Fragment meetingFragment;
-    Fragment mapFragment;
-    Fragment plannerFragment;
 
     int offset = 0;
-    int limit = 10;
+    int limit = 5;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_meeting, container, false);
-        imgMenu = rootView.findViewById(R.id.imgMenu);
-        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
-        meetingDrawer = rootView.findViewById(R.id.meetingDrawer);
+//        imgMenu = rootView.findViewById(R.id.imgMenu);
+//        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
+//        meetingDrawer = rootView.findViewById(R.id.meetingDrawer);
         progressBar = rootView.findViewById(R.id.progressBar);
-        imgAdd = rootView.findViewById(R.id.imgAdd);
+//        imgAdd = rootView.findViewById(R.id.imgAdd);
 
 
-        // 사이드 메뉴바를 열고 닫는 코드
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                meetingDrawer.openDrawer(GravityCompat.END);
-            }
-        });
-
-        imgMenuClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                meetingDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-
-        for(int i = 0; i < cardViews.length; i++) {
-            cardViewList[i] = rootView.findViewById(cardViews[i]);
-        }
-        imgAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MeetingCreateActivity.class);
-                startActivity(intent);
-            }
-        });
+//        // 사이드 메뉴바를 열고 닫는 코드
+//        imgMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                meetingDrawer.openDrawer(GravityCompat.END);
+//            }
+//        });
+//
+//        imgMenuClear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                meetingDrawer.closeDrawer(GravityCompat.END);
+//            }
+//        });
+//
+//        for(int i = 0; i < cardViews.length; i++) {
+//            cardViewList[i] = rootView.findViewById(cardViews[i]);
+//        }
+//        imgAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), MeetingCreateActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -175,93 +171,84 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-        reviewFragment = new ReviewFragment();
-        meetingFragment = new MeetingFragment();
-        mapFragment = new MapsFragment();
-        plannerFragment = new PlannerFragment();
-        cardViewList[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                meetingDrawer.closeDrawer(GravityCompat.END);
-
-                Intent intent = new Intent(getActivity(), InfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        cardViewList[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.reviewFragment);
-                loadFragment(reviewFragment);
-                meetingDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.meetingFragment);
-                loadFragment(meetingFragment);
-                meetingDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.mapsFragment);
-                loadFragment(mapFragment);
-                meetingDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.plannerFragment);
-                loadFragment(plannerFragment);
-                meetingDrawer.closeDrawer(GravityCompat.END);
-
-            }
-        });
-
-        cardViewList[5].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-                UserApi api = retrofit.create(UserApi.class);
-
-                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                String token = sp.getString(Config.ACCESS_TOKEN, "");
-
-                Call<UserRes> call = api.logout("Bearer " + token);
-                call.enqueue(new Callback<UserRes>() {
-                    @Override
-                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
-                        if (response.isSuccessful()){
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.remove(Config.ACCESS_TOKEN);
-                            editor.apply();
-
-                            getActivity().finish();
-                        } else {
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.remove(Config.ACCESS_TOKEN);
-                            editor.apply();
-                            getActivity().finish();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UserRes> call, Throwable t) {
-
-                    }
-                });
-            }
-        });
+//        reviewFragment = new ReviewFragment();
+//        meetingFragment = new MeetingFragment();
+//        mapFragment = new MapsFragment();
+//        plannerFragment = new PlannerFragment();
+//        cardViewList[0].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                meetingDrawer.closeDrawer(GravityCompat.END);
+//
+//                Intent intent = new Intent(getActivity(), InfoActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        cardViewList[1].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectBottomNavigationItem(R.id.reviewFragment);
+//                loadFragment(reviewFragment);
+//                meetingDrawer.closeDrawer(GravityCompat.END);
+//            }
+//        });
+//        cardViewList[2].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectBottomNavigationItem(R.id.meetingFragment);
+//                loadFragment(meetingFragment);
+//                meetingDrawer.closeDrawer(GravityCompat.END);
+//            }
+//        });
+//        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectBottomNavigationItem(R.id.mapsFragment);
+//                loadFragment(mapFragment);
+//                meetingDrawer.closeDrawer(GravityCompat.END);
+//            }
+//        });
+//        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectBottomNavigationItem(R.id.plannerFragment);
+//                loadFragment(plannerFragment);
+//                meetingDrawer.closeDrawer(GravityCompat.END);
+//
+//            }
+//        });
+//
+//        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+//                UserApi api = retrofit.create(UserApi.class);
+//
+//                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+//                String token = sp.getString(Config.ACCESS_TOKEN, "");
+//
+//                Call<UserRes> call = api.logout("Bearer " + token);
+//                call.enqueue(new Callback<UserRes>() {
+//                    @Override
+//                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
+//                        if (response.isSuccessful()){
+//                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                            startActivity(intent);
+//
+//                            getActivity().finish();
+//                        } else {
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<UserRes> call, Throwable t) {
+//
+//                    }
+//                });
+//            }
+//        });
 
         adapter = new MeetingAdapter(getActivity(), meetingArrayList);
         recyclerView.setAdapter(adapter);
@@ -318,9 +305,13 @@ public class MeetingFragment extends Fragment {
 
                     offset += limit;
 
-                } else {
-                    // 서버에 문제있는겨
-                    Toast.makeText(getActivity(), "서버에 문제있음",Toast.LENGTH_SHORT).show();
+                } else if(response.code() == 401){
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+
+                    getActivity().finish();
+                }else {
+
                 }
             }
 
@@ -328,7 +319,8 @@ public class MeetingFragment extends Fragment {
             public void onFailure(Call<MeetingListRes> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 Log.i("에러", t.getMessage());
-
+                // 서버에 문제있는겨
+                Toast.makeText(getActivity(), "서버에 문제있음",Toast.LENGTH_SHORT).show();
 
             }
         });

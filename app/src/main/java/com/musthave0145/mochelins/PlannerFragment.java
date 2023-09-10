@@ -14,14 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,6 +27,7 @@ import com.musthave0145.mochelins.adapter.CalendarAdapter;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
+import com.musthave0145.mochelins.maps.MapsFragment;
 import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.CalendarUtil;
 import com.musthave0145.mochelins.model.UserRes;

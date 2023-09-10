@@ -44,6 +44,59 @@ public interface ReviewApi {
                               @Part("tag") RequestBody tag
     );
 
+    // 리뷰 수정 API
+    @Multipart
+    @PUT("/review/{reviewId}")
+    Call<ReviewRes> editReview(@Header("Authorization") String token,
+                               @Path("reviewId") int reviewId,
+                               @Part("content") RequestBody content,
+                               @Part("storeName") RequestBody storeName,
+                               @Part("storeLat") RequestBody storeLat,
+                               @Part("storeLng") RequestBody storeLng,
+                               @Part("storeAddr") RequestBody storeAddr,
+                               @Part("rating") RequestBody rating
+    );
+    // 리뷰 수정 API
+    @Multipart
+    @PUT("/review/{reviewId}")
+    Call<ReviewRes> editReview(@Header("Authorization") String token,
+                               @Path("reviewId") int reviewId,
+                               @Part("content") RequestBody content,
+                               @Part("storeName") RequestBody storeName,
+                               @Part("storeLat") RequestBody storeLat,
+                               @Part("storeLng") RequestBody storeLng,
+                               @Part("storeAddr") RequestBody storeAddr,
+                               @Part("rating") RequestBody rating,
+                               @Part MultipartBody.Part photo
+    );
+    // 리뷰 수정 API
+    @Multipart
+    @PUT("/review/{reviewId}")
+    Call<ReviewRes> editReview(@Header("Authorization") String token,
+                               @Path("reviewId") int reviewId,
+                               @Part("content") RequestBody content,
+                               @Part("storeName") RequestBody storeName,
+                               @Part("storeLat") RequestBody storeLat,
+                               @Part("storeLng") RequestBody storeLng,
+                               @Part("storeAddr") RequestBody storeAddr,
+                               @Part("rating") RequestBody rating,
+                               @Part("tag") RequestBody tag
+    );
+    // 리뷰 수정 API
+    @Multipart
+    @PUT("/review/{reviewId}")
+    Call<ReviewRes> editReview(@Header("Authorization") String token,
+                               @Path("reviewId") int reviewId,
+                               @Part("content") RequestBody content,
+                               @Part("storeName") RequestBody storeName,
+                               @Part("storeLat") RequestBody storeLat,
+                               @Part("storeLng") RequestBody storeLng,
+                               @Part("storeAddr") RequestBody storeAddr,
+                               @Part("rating") RequestBody rating,
+                               @Part("tag") RequestBody tag,
+                               @Part MultipartBody.Part photo
+    );
+
     // 특정 리뷰 가저오는 API
     @GET("/review/{reviewId}")
     Call<ReviewRes> getReviewDetail(@Header("Authorization") String token,

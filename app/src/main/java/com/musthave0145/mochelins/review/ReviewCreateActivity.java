@@ -88,7 +88,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
     ImageView imgClear;
     ImageView imgBack;
 
-    Integer[] imageViews = {R.id.imgPhoto1, R.id.imgPhoto2, R.id.imgPhoto3, R.id.imgPhoto4, R.id.imgPhoto5};
+    Integer[] imageViews = {R.id.imgPhoto1, R.id.imgPhoto2};
 
     ImageView[] imageViewList = new ImageView[imageViews.length];
 
@@ -208,7 +208,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
                 // 현재는 사진을 하나만 보낼 수 있다.
 
 
-
+                showProgress();
                 // TODO: 필터에서 셋팅한 값을 불러와야 한다.
                 // 사진의 갯수만큼 꺼내서 주쟈!
                 List<MultipartBody.Part> parts = new ArrayList<>();
@@ -231,6 +231,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
                 call.enqueue(new Callback<ReviewRes>() {
                     @Override
                     public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
+                        dismissProgress();
                         if (response.isSuccessful()){
                             Toast.makeText(ReviewCreateActivity.this, "정상적으로 저장되었습니다.", Toast.LENGTH_SHORT).show();
                             finish();
@@ -241,7 +242,7 @@ public class ReviewCreateActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ReviewRes> call, Throwable t) {
-
+                        dismissProgress();
                     }
                 });
             }

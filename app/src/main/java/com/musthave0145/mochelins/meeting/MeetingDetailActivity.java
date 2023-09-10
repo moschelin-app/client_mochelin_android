@@ -110,6 +110,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        token = sp.getString(Config.ACCESS_TOKEN, "");
+
 
         meetingId = getIntent().getIntExtra("meetingId",0);
 //        meeting = (Meeting) getIntent().getSerializableExtra("meeting");
@@ -132,8 +135,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        getNetworkData();
 
         //
         imgMyMenu.setOnClickListener(new View.OnClickListener() {
@@ -177,9 +178,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
         // 처음에 진입했을 때 상세모임 가져오는 메서드
     void getNetworkData(){
-
-        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
-        token = sp.getString(Config.ACCESS_TOKEN, "");
 
         Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
         MeetingApi api = retrofit.create(MeetingApi.class);
@@ -367,9 +365,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
     }
     // 모임 삭제하는 메서드
     void deleteMeeting() {
-        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
-        token = sp.getString(Config.ACCESS_TOKEN,"");
-
         Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingDetailActivity.this);
         MeetingApi api = retrofit.create(MeetingApi.class);
 
@@ -401,5 +396,10 @@ public class MeetingDetailActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getNetworkData();
+    }
 }
 

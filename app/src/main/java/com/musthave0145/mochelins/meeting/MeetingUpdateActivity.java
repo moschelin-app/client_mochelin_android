@@ -1,5 +1,9 @@
 package com.musthave0145.mochelins.meeting;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +18,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -46,7 +51,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.api.MeetingApi;
+import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Meeting;
+import com.musthave0145.mochelins.model.MeetingListRes;
+import com.musthave0145.mochelins.model.PlaceSelect;
 
 import org.apache.commons.io.IOUtils;
 
@@ -58,6 +68,14 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MeetingUpdateActivity extends AppCompatActivity {
 
@@ -79,11 +97,30 @@ public class MeetingUpdateActivity extends AppCompatActivity {
     RelativeLayout moneyLayout;
     EditText editMoney;
     Meeting meeting;
-    Boolean isPay;
+    Boolean isPay = false;
     File photoFile;
     String date = "";
     String time = "";
     int pay = 0;
+
+    PlaceSelect placeSelect;
+
+    ActivityResultLauncher<Intent> launcher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            // 로그 무조건 찍어보자!!
+//                            Log.i("MeetingCreate", ((PlaceSelect)result.getData().getSerializableExtra("placeSelect")).storeName);
+                            if (result.getResultCode() == 1004) {
+                                Log.i("MeetingCreate", "MeetingCreateSuccess");
+                                placeSelect = ((PlaceSelect) result.getData().getSerializableExtra("placeSelect"));
+                                txtPlace.setText(placeSelect.storeName + "\n" + placeSelect.storeAddr);
+                            }
+
+                        }
+                    });
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +171,7 @@ public class MeetingUpdateActivity extends AppCompatActivity {
         // 원래 글을 넣어주자!!
         editContent.setText(meeting.content);
 
+        placeSelect = new PlaceSelect(meeting.storeLat, meeting.storeLng, meeting.storeName, meeting.storeAddr);
         // 장소가 선택되어 있으면, 장소를 보여주자.
         txtPlace.setText(meeting.storeName + "\n" + meeting.storeAddr);
 
@@ -143,6 +181,9 @@ public class MeetingUpdateActivity extends AppCompatActivity {
         String strDate = dateTimeParts[0];
         String strTime = dateTimeParts[1].substring(0,5);
 
+
+        date = strDate;
+        time = strTime;
         btnDate.setText(strDate);
         btnTime.setText(strTime);
 
@@ -161,7 +202,7 @@ public class MeetingUpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MeetingUpdateActivity.this, MeetingPlaceSelectActivity.class);
-                startActivity(intent);
+                launcher.launch(intent);
             }
         });
 
@@ -296,25 +337,105 @@ public class MeetingUpdateActivity extends AppCompatActivity {
         switchPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isPay = b;
                 if (switchPay.isChecked()) {
                     // switch가 체크되어 있는 경우
                     moneyLayout.setVisibility(View.VISIBLE);
                     txtPay.setText("사용자 지정");
-                    pay = Integer.parseInt(editMoney.getText().toString());
                 } else {
                     // switch가 체크되어 있지 않은 경우
                     moneyLayout.setVisibility(View.GONE);
                     txtPay.setText("각자 계산");
                     pay = 0;
-
                 }
             }
         });
 
+        if(meeting.pay != 0){
+            switchPay.setChecked(true);
+            editMoney.setText(meeting.pay + "");
+        }
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String content= editContent.getText().toString();
+                String name = placeSelect.storeName;
+                double lat = placeSelect.storeLat;
+                double lng = placeSelect.storeLng;
 
+                String scheduel = date + " " + time;
+                int maximum = Integer.parseInt(editPerson.getText().toString().trim());
+
+                if (isPay){
+                    pay = Integer.parseInt(editMoney.getText().toString());
+                }else {
+                    pay = 0;
+                }
+
+                showProgress();
+
+                Retrofit retrofit = NetworkClient.getRetrofitClient(MeetingUpdateActivity.this);
+                MeetingApi api = retrofit.create(MeetingApi.class);
+
+//                // 헤더에 셋팅할 토큰
+                SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+                String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+//
+
+                // 보낼 미팅의 사진, 내용, 장소 등...
+                RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
+                RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+                RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
+
+                Call<MeetingListRes> call = api.editMeeting("Bearer " + token, meeting.id, contentBody, storeNameBody, storeLatBody, storeLngBody
+                        , storeAddrBody, dateBody, maximumBody);
+
+                // 다 있을 때
+                if (photoFile != null) {
+                    // 보낼 파일
+                    RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
+                    MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
+
+
+                    call = api.editMeeting("Bearer " + token, meeting.id, contentBody, storeNameBody, storeLatBody, storeLngBody
+                            , storeAddrBody, dateBody, maximumBody, photo);
+
+                    if(pay != 0){
+                        call = api.editMeeting("Bearer " + token, meeting.id, contentBody, storeNameBody, storeLatBody, storeLngBody
+                                , storeAddrBody, dateBody, maximumBody, payBody, photo);
+                    }
+
+                } else if (pay != 0) {
+
+                    call = api.editMeeting("Bearer " + token, meeting.id, contentBody, storeNameBody, storeLatBody, storeLngBody
+                            , storeAddrBody, dateBody, maximumBody, payBody);
+
+                }
+
+                call.enqueue(new Callback<MeetingListRes>() {
+                    @Override
+                    public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                        dismissProgress();
+                        if(response.isSuccessful()){finish();}else{}
+                    }
+                    @Override
+                    public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
+                });
             }
         });
 

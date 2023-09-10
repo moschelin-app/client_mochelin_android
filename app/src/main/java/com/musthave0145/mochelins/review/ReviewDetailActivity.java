@@ -198,8 +198,68 @@ public class ReviewDetailActivity extends AppCompatActivity {
         });
 
 
+        // 댓글을 입력받고 작성까지~~!!
+        editContent.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)){
+                    //키패드 내리기
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editContent.getWindowToken(), 0);
+
+                    comment = editContent.getText().toString();
+                    Comment comment1 = new Comment(comment);
+
+                    Retrofit retrofit1 = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
+                    ReviewApi api1 = retrofit1.create(ReviewApi.class);
+
+                    Call<CommentRes> call = api1.reviewCommentAdd("Bearer " + token, reviewId, comment1);
+                    call.enqueue(new Callback<CommentRes>() {
+                        @Override
+                        public void onResponse(Call<CommentRes> call, Response<CommentRes> response) {
+                            if (response.isSuccessful()) {
+                                getReviewComment();
+                                editContent.setText("");
+                            } else {
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CommentRes> call, Throwable t) {
+
+                        }
+                    });
+
+                    return true;
+                }
+                return false;
+            }
+        });
 
 
+        // 가게 정보 보기를 누르면, 가게의 상세페이지로 이동한다.
+        txtDetailStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReviewDetailActivity.this, StoreDetailActivity.class);
+                intent.putExtra("storeId", storeId);
+                startActivity(intent);
+            }
+        });
+
+        // 가게 이름을 눌러도 가게의 상세페이지로 이동한다.
+        txtViewList[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReviewDetailActivity.this, StoreDetailActivity.class);
+                intent.putExtra("storeId", storeId);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void getReviewDetail(){
         Retrofit retrofit = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
         ReviewApi api = retrofit.create(ReviewApi.class);
 
@@ -208,61 +268,65 @@ public class ReviewDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
                 Review review1 = response.body().item;
-                // 메뉴를 내가 쓴 리뷰면 보여주자!!
-                imgMyButton.setVisibility(View.VISIBLE);
+
+                if(review1.isMine == 0){
+                    // 메뉴를 내가 쓴 리뷰면 보여주자!!
+                    imgMyButton.setVisibility(View.VISIBLE);
 
 
-                imgMyButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PopupMenu popupMenu = new PopupMenu(ReviewDetailActivity.this, imgMyButton);
-                        MenuInflater inf = popupMenu.getMenuInflater();
-                        inf.inflate(R.menu.update_delete_menu, popupMenu.getMenu());
+                    imgMyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PopupMenu popupMenu = new PopupMenu(ReviewDetailActivity.this, imgMyButton);
+                            MenuInflater inf = popupMenu.getMenuInflater();
+                            inf.inflate(R.menu.update_delete_menu, popupMenu.getMenu());
 
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem) {
-                                if (menuItem.getItemId() == R.id.menuUpdate){
-                                    Intent intent = new Intent(ReviewDetailActivity.this, ReviewUpdateActivity.class);
-                                    intent.putExtra("review", review1);
-                                    startActivity(intent);
+                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem menuItem) {
+                                    if (menuItem.getItemId() == R.id.menuUpdate){
+                                        Intent intent = new Intent(ReviewDetailActivity.this, ReviewUpdateActivity.class);
+                                        intent.putExtra("review", review1);
+                                        startActivity(intent);
 
-                                } else if (menuItem.getItemId() == R.id.menuDelete) {
-                                    Retrofit retrofit1 = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
-                                    ReviewApi api1 = retrofit1.create(ReviewApi.class);
+                                    } else if (menuItem.getItemId() == R.id.menuDelete) {
+                                        Retrofit retrofit1 = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
+                                        ReviewApi api1 = retrofit1.create(ReviewApi.class);
 
-                                    Call<ReviewListRes> call1 = api1.deleteReview("Bearer " + token, review1.id);
-                                    call1.enqueue(new Callback<ReviewListRes>() {
-                                        @Override
-                                        public void onResponse(Call<ReviewListRes> call, Response<ReviewListRes> response) {
-                                            if (response.isSuccessful()){
-                                                setResult(Config.RESTART_NUM);
+                                        Call<ReviewListRes> call1 = api1.deleteReview("Bearer " + token, review1.id);
+                                        call1.enqueue(new Callback<ReviewListRes>() {
+                                            @Override
+                                            public void onResponse(Call<ReviewListRes> call, Response<ReviewListRes> response) {
+                                                if (response.isSuccessful()){
+                                                    setResult(Config.RESTART_NUM);
 
-                                                finish();
-                                            } else {
+                                                    finish();
+                                                } else {
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ReviewListRes> call, Throwable t) {
 
                                             }
-                                        }
+                                        });
 
-                                        @Override
-                                        public void onFailure(Call<ReviewListRes> call, Throwable t) {
+                                    }
 
-                                        }
-                                    });
-
+                                    return false;
                                 }
 
-                                return false;
-                            }
-
-                        });
+                            });
 
 
-                        popupMenu.show();
+                            popupMenu.show();
 
 
-                    }
-                });
+                        }
+                    });
+                }
+
 
                 imgViewList[0].setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -271,6 +335,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
                     }
                 });
 
+                imgUrls.clear();
                 // 사진 여러장 보여주기
                 for (int i = 0; i < review1.photos.size(); i++) {
                     imgUrls.add(review1.photos.get(i).photo);
@@ -301,6 +366,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 for (int i = 0; i < 5; i++) {
                     if (i < review1.rating) {
                         imgViewList[i+2].setImageResource(R.drawable.baseline_star_24);
+                    }else{
+                        imgViewList[i+2].setImageResource(R.drawable.baseline_star_border_24);
                     }
                 }
                 // 별점 처리
@@ -374,72 +441,8 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
             }
         });
-
-        // 댓글을 입력받고 작성까지~~!!
-        editContent.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)){
-                    //키패드 내리기
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editContent.getWindowToken(), 0);
-
-                    comment = editContent.getText().toString();
-                    Comment comment1 = new Comment(comment);
-
-                    Retrofit retrofit1 = NetworkClient.getRetrofitClient(ReviewDetailActivity.this);
-                    ReviewApi api1 = retrofit1.create(ReviewApi.class);
-
-                    Call<CommentRes> call = api1.reviewCommentAdd("Bearer " + token, reviewId, comment1);
-                    call.enqueue(new Callback<CommentRes>() {
-                        @Override
-                        public void onResponse(Call<CommentRes> call, Response<CommentRes> response) {
-                            if (response.isSuccessful()) {
-                                getReviewComment();
-                                editContent.setText("");
-                            } else {
-
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<CommentRes> call, Throwable t) {
-
-                        }
-                    });
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
-        // 가게 정보 보기를 누르면, 가게의 상세페이지로 이동한다.
-        txtDetailStore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ReviewDetailActivity.this, StoreDetailActivity.class);
-                intent.putExtra("storeId", storeId);
-                startActivity(intent);
-            }
-        });
-
-        // 가게 이름을 눌러도 가게의 상세페이지로 이동한다.
-        txtViewList[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ReviewDetailActivity.this, StoreDetailActivity.class);
-                intent.putExtra("storeId", storeId);
-                startActivity(intent);
-            }
-        });
-
-
-
-
-
     }
+
     // 인디케이터 업데이트 메서드
     private void updateIndicator(int position) {
         indicatorLayout.removeAllViews(); // 기존 인디케이터 제거
@@ -557,7 +560,9 @@ public class ReviewDetailActivity extends AppCompatActivity {
         });
     }
 
-
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getReviewDetail();
+    }
 }

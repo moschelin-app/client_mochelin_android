@@ -70,43 +70,6 @@
                     android:background="@drawable/corner"
                     android:scaleType="center" />
 
-                <ImageView
-                    android:id="@+id/imgPhoto3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@drawable/corner"
-                    android:scaleType="center" />
-
-                <ImageView
-                    android:id="@+id/imgPhoto4"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@drawable/corner"
-                    android:scaleType="center" />
-
-                <ImageView
-                    android:id="@+id/imgPhoto5"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@drawable/corner"
-                    android:scaleType="center" />
-
-                <ImageView
-                    android:id="@+id/imgClear"
-                    android:src="@drawable/baseline_clear_24_3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@drawable/corner"
-                    android:scaleType="center" />
-
             </LinearLayout>
 
         </RelativeLayout>
@@ -270,15 +233,16 @@
 
                 <EditText
                     android:id="@+id/editTag"
-                    android:layout_width="250dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="50dp"
                     android:layout_marginRight="10dp"
                     android:ems="10"
-                    android:hint="이 곳을 눌러 태그를 입력하세요."
+                    android:hint="태그를 입력하세요. 예) #태그1#태그2"
                     android:inputType="textMultiLine"
                     android:maxLines="5"
+                    android:textColor="@color/attend"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </RelativeLayout>

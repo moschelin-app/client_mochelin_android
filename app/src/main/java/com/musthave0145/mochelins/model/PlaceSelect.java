@@ -9,6 +9,16 @@ public class PlaceSelect implements Serializable {
 
     public String storeName;
     public String storeAddr;
+
+    public PlaceSelect() {
+    }
+
+    public PlaceSelect(double storeLat, double storeLng, String storeName, String storeAddr) {
+        this.storeLat = storeLat;
+        this.storeLng = storeLng;
+        this.storeName = storeName;
+        this.storeAddr = storeAddr;
+    }
 }
 
 

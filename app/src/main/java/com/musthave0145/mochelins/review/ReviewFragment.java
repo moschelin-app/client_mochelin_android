@@ -17,13 +17,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.musthave0145.mochelins.MapsFragment;
+import com.musthave0145.mochelins.maps.MapsFragment;
 import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.ReviewAdapter;
@@ -92,31 +91,14 @@ public class ReviewFragment extends Fragment {
         }
     }
 
-
-    ImageView imgMenu;
-    ImageView imgAdd;
-    ImageView imgSearch;
-    ImageView imgMenuClear;
-    DrawerLayout reviewDrawer;
-    Integer[] cardViews = { R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
-    CardView[] cardViewList = new CardView[cardViews.length];
-
     RecyclerView recyclerView;
     ReviewAdapter adapter;
     ProgressBar progressBar;
 
     ArrayList<Review> reviewArrayList = new ArrayList<>();
 
-
-    Fragment reviewFragment;
-    Fragment meetingFragment;
-    Fragment mapFragment;
-    Fragment plannerFragment;
-
-
     int offset = 0;
-    int limit = 10;
+    int limit = 5;
 
 
     @Override
@@ -124,11 +106,6 @@ public class ReviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_review, container, false);
 
-        imgMenu = rootView.findViewById(R.id.imgMenu);
-        imgAdd = rootView.findViewById(R.id.imgAdd);
-        imgSearch = rootView.findViewById(R.id.imgSearch);
-        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
-        reviewDrawer = rootView.findViewById(R.id.reviewDrawer);
         progressBar = rootView.findViewById(R.id.progressBar);
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
@@ -155,119 +132,55 @@ public class ReviewFragment extends Fragment {
             }
         });
 
-        // 사이드 메뉴바를 열고 닫는 코드
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewDrawer.openDrawer(GravityCompat.END);
-            }
-        });
 
-        imgMenuClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        // 사이드 메뉴바 안에 카드뷰 연결코드
-        for(int i = 0; i < cardViews.length; i++) {
-            cardViewList[i] = rootView.findViewById(cardViews[i]);
-        }
+//        cardViewList[3].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectBottomNavigationItem(R.id.mapsFragment);
+//                loadFragment(mapFragment);
+//                reviewDrawer.closeDrawer(GravityCompat.END);
+//            }
+//        });
+//        cardViewList[4].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectBottomNavigationItem(R.id.plannerFragment);
+//                loadFragment(plannerFragment);
+//                reviewDrawer.closeDrawer(GravityCompat.END);
+//
+//            }
+//        });
 
-
-
-        imgAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ReviewCreateActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        reviewFragment = new ReviewFragment();
-        meetingFragment = new MeetingFragment();
-        mapFragment = new MapsFragment();
-        plannerFragment = new PlannerFragment();
-
-        cardViewList[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewDrawer.closeDrawer(GravityCompat.END);
-
-                Intent intent = new Intent(getActivity(), InfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        cardViewList[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.reviewFragment);
-                loadFragment(reviewFragment);
-                reviewDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.meetingFragment);
-                loadFragment(meetingFragment);
-                reviewDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.mapsFragment);
-                loadFragment(mapFragment);
-                reviewDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.plannerFragment);
-                loadFragment(plannerFragment);
-                reviewDrawer.closeDrawer(GravityCompat.END);
-
-            }
-        });
-
-        cardViewList[5].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-                UserApi api = retrofit.create(UserApi.class);
-
-                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                String token = sp.getString(Config.ACCESS_TOKEN, "");
-
-                Call<UserRes> call = api.logout("Bearer " + token);
-                call.enqueue(new Callback<UserRes>() {
-                    @Override
-                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
-                        if (response.isSuccessful()){
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.remove(Config.ACCESS_TOKEN);
-                            editor.apply();
-
-                            getActivity().finish();
-                        } else {
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UserRes> call, Throwable t) {
-
-                    }
-                });
-            }
-        });
+//        cardViewList[5].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+//                UserApi api = retrofit.create(UserApi.class);
+//
+//                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+//                String token = sp.getString(Config.ACCESS_TOKEN, "");
+//
+//                Call<UserRes> call = api.logout("Bearer " + token);
+//                call.enqueue(new Callback<UserRes>() {
+//                    @Override
+//                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
+//                        if (response.isSuccessful()){
+//                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                            startActivity(intent);
+//
+//                            getActivity().finish();
+//                        } else {
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<UserRes> call, Throwable t) {
+//
+//                    }
+//                });
+//            }
+//        });
 
 
         adapter = new ReviewAdapter(getActivity(),reviewArrayList);
@@ -291,17 +204,17 @@ public class ReviewFragment extends Fragment {
     }
 
 
-    private void selectBottomNavigationItem(int itemId) {
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView); // 바텀 네비게이션 뷰의 ID를 사용합니다.
-
-        // 바텀 네비게이션 뷰에서 선택한 아이템을 찾아 선택합니다.
-        MenuItem item = bottomNavigationView.getMenu().findItem(itemId);
-
-        // 아이템을 선택한 것처럼 처리합니다.
-        if (item != null) {
-            item.setChecked(true);
-        }
-    }
+//    private void selectBottomNavigationItem(int itemId) {
+//        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView); // 바텀 네비게이션 뷰의 ID를 사용합니다.
+//
+//        // 바텀 네비게이션 뷰에서 선택한 아이템을 찾아 선택합니다.
+//        MenuItem item = bottomNavigationView.getMenu().findItem(itemId);
+//
+//        // 아이템을 선택한 것처럼 처리합니다.
+//        if (item != null) {
+//            item.setChecked(true);
+//        }
+//    }
 
     @Override
     public void onStart() {
@@ -337,14 +250,19 @@ public class ReviewFragment extends Fragment {
 
                     offset += limit;
 
-                } else if (response.code() == 500){
-                    Toast.makeText(getActivity(), "서버에 문제있음",Toast.LENGTH_SHORT).show();
+                } else if(response.code() == 401){
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+
+                    getActivity().finish();
+                }else {
+
                 }
             }
 
             @Override
             public void onFailure(Call<ReviewRes> call, Throwable t) {
-
+                Toast.makeText(getActivity(), "서버에 문제있음",Toast.LENGTH_SHORT).show();
             }
         });
     }

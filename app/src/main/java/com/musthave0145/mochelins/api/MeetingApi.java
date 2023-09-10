@@ -12,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -73,6 +74,55 @@ public interface MeetingApi {
     @Multipart
     @POST("/meeting")
     Call<MeetingListRes> addMeeting(@Header("Authorization") String token,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum);
+
+    @Multipart
+    @PUT("/meeting/{meetingId}")
+    Call<MeetingListRes> editMeeting(@Header("Authorization") String token,
+                                    @Path("meetingId") int meetingId,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum,
+                                    @Part("pay") RequestBody pay,
+                                    @Part MultipartBody.Part photo);
+    @Multipart
+    @PUT("/meeting/{meetingId}")
+    Call<MeetingListRes> editMeeting(@Header("Authorization") String token,
+                                    @Path("meetingId") int meetingId,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum,
+                                    @Part MultipartBody.Part photo);
+    @Multipart
+    @PUT("/meeting/{meetingId}")
+    Call<MeetingListRes> editMeeting(@Header("Authorization") String token,
+                                    @Path("meetingId") int meetingId,
+                                    @Part("content") RequestBody content,
+                                    @Part("storeName") RequestBody storeName,
+                                    @Part("storeLat") RequestBody storeLat,
+                                    @Part("storeLng") RequestBody storeLng,
+                                    @Part("storeAddr") RequestBody storeAddr,
+                                    @Part("date") RequestBody date,
+                                    @Part("maximum") RequestBody maximum,
+                                    @Part("pay") RequestBody pay);
+    @Multipart
+    @PUT("/meeting/{meetingId}")
+    Call<MeetingListRes> editMeeting(@Header("Authorization") String token,
+                                    @Path("meetingId") int meetingId,
                                     @Part("content") RequestBody content,
                                     @Part("storeName") RequestBody storeName,
                                     @Part("storeLat") RequestBody storeLat,

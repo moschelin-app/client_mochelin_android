@@ -32,6 +32,13 @@ public class Review implements Serializable {
     public int isMine;
     public int reviewCnt;
 
+    public Review() {
+    }
+
+    public Review(int id, int storeId) {
+        this.id = id;
+        this.storeId = storeId;
+    }
 
     public ArrayList<Photos> photos;
 

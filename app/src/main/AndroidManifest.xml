@@ -48,6 +48,9 @@
             android:name=".review.ReviewCreateActivity"
             android:exported="false" />
         <activity
+            android:name=".review.ReviewUpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".meeting.MeetingPlaceSelectActivity"
             android:exported="false" />
         <activity

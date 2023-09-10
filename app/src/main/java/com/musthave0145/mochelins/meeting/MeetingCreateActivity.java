@@ -107,7 +107,7 @@ public class MeetingCreateActivity extends AppCompatActivity {
     int pay = 0;
     PlaceSelect placeSelect = new PlaceSelect();
 
-    Boolean isPay;
+    Boolean isPay = false;
 
     ActivityResultLauncher<Intent> launcher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -343,8 +343,10 @@ public class MeetingCreateActivity extends AppCompatActivity {
                 String scheduel = date + " " + time;
                 int maximum = Integer.parseInt(editPerson.getText().toString().trim());
 
-                if (isPay = true){
+                if (isPay){
                     pay = Integer.parseInt(editMoney.getText().toString());
+                }else {
+                    pay = 0;
                 }
 
                 showProgress();
@@ -358,113 +360,50 @@ public class MeetingCreateActivity extends AppCompatActivity {
 
 //
 
+                // 보낼 미팅의 사진, 내용, 장소 등...
+                RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
+                RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
+                RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
+                RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
+                RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
+                RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
+                RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
+                RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
+
+                Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                        , storeAddrBody, dateBody, maximumBody);
+
                 // 다 있을 때
-                if (photoFile != null && pay != 0) {
+                if (photoFile != null) {
                     // 보낼 파일
                     RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
                     MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
 
-//                // 보낼 미팅의 사진, 내용, 장소 등...
-                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
-                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
-                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
-                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
-                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
-                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
-                    RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
 
-                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
-                                                                , storeAddrBody, dateBody, maximumBody, payBody, photo);
+                     call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                                                                , storeAddrBody, dateBody, maximumBody, photo);
 
-                    call.enqueue(new Callback<MeetingListRes>() {
-                        @Override
-                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
-                            dismissProgress();
-                            if(response.isSuccessful()){finish();}else{}
-                        }
-                        @Override
-                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
-                    });
-                } else if (photoFile == null) {
-                    // 보낼 미팅의 사진, 내용, 장소 등...
-                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
-                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
-                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
-                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
-                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
-                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
-                    RequestBody payBody = RequestBody.create(pay+"", MediaType.parse("text/plain"));
+                     if(pay != 0){
+                         call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                                 , storeAddrBody, dateBody, maximumBody, payBody, photo);
+                     }
 
-                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
+                } else if (pay != 0) {
+
+                    call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
                             , storeAddrBody, dateBody, maximumBody, payBody);
-                    call.enqueue(new Callback<MeetingListRes>() {
-                        @Override
-                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
-                            dismissProgress();
-                            if(response.isSuccessful()){finish();}else{}
-                        }
-                        @Override
-                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
-                    });
-
-                } else if (pay == 0) {
-                    RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
-                    MultipartBody.Part photo = MultipartBody.Part.createFormData("photo", photoFile.getName(), fileBody );
-
-                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
-                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
-                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
-                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
-                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
-                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
-
-                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
-                            , storeAddrBody, dateBody, maximumBody, photo);
-
-                    call.enqueue(new Callback<MeetingListRes>() {
-                        @Override
-                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
-                            dismissProgress();
-                            if(response.isSuccessful()){finish();}else{}
-                        }
-                        @Override
-                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
-                    });
-
-                } else if (photoFile == null && pay == 0) {
-                    RequestBody contentBody = RequestBody.create(content,  MediaType.parse("text/plain"));
-                    RequestBody storeNameBody = RequestBody.create(name, MediaType.parse("text/plain"));
-                    RequestBody storeLatBody = RequestBody.create(lat+"", MediaType.parse("text/plain"));
-                    RequestBody storeLngBody = RequestBody.create(lng+"", MediaType.parse("text/plain"));
-                    RequestBody storeAddrBody = RequestBody.create(placeSelect.storeAddr, MediaType.parse("text/plain"));
-                    RequestBody dateBody = RequestBody.create(scheduel, MediaType.parse("text/plain"));
-                    RequestBody maximumBody = RequestBody.create(maximum+"", MediaType.parse("text/plain"));
-
-                    Call<MeetingListRes> call = api.addMeeting("Bearer " + token, contentBody, storeNameBody, storeLatBody, storeLngBody
-                            , storeAddrBody, dateBody, maximumBody);
-
-                    call.enqueue(new Callback<MeetingListRes>() {
-                        @Override
-                        public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
-                            dismissProgress();
-                            if(response.isSuccessful()){finish();}else{}
-                        }
-                        @Override
-                        public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
-                    });
 
                 }
 
-
-                if(photoFile == null || content.isEmpty() ){
-                    Snackbar.make(txtSave,
-                            "필수항목입니다. 모두 입력하세요.",
-                            Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
+                call.enqueue(new Callback<MeetingListRes>() {
+                    @Override
+                    public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                        dismissProgress();
+                        if(response.isSuccessful()){finish();}else{}
+                    }
+                    @Override
+                    public void onFailure(Call<MeetingListRes> call, Throwable t) {dismissProgress();}
+                });
             }
         });
 
