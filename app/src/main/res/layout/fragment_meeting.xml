@@ -12,31 +12,48 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
             android:minHeight="?attr/actionBarSize">
+            <!--            margin에 마이너스를 줄 수 있다!!-->
 
-            <ImageView
-                android:id="@+id/imgMenu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerHorizontal="false"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                app:srcCompat="@drawable/baseline_menu_24_3" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
 
-            <ImageView
-                android:id="@+id/imgAdd"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="60dp"
-                android:src="@drawable/baseline_add_24_4" />
+                <ImageView
+                    android:id="@+id/imgAdd"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="60dp"
+                    android:src="@drawable/baseline_add_24_4" />
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/imgSearch"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="110dp"
+                    android:src="@drawable/baseline_search_24_4" />
+
+                <ImageView
+                    android:id="@+id/imgMenu"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="false"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/baseline_menu_24_3" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <RelativeLayout
             android:layout_width="match_parent"

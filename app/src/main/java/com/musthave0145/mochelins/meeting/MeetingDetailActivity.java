@@ -2,6 +2,8 @@ package com.musthave0145.mochelins.meeting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -23,6 +25,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
@@ -71,7 +75,14 @@ public class MeetingDetailActivity extends AppCompatActivity {
     Meeting meeting;
 
     MapView mapView;
-    Button btnApply;
+    GoogleMap googleMap;
+    CardView btnApply;
+    TextView txtApply;
+    String MEETING_ATTEND  = "모임 신청";
+    String MEETING_ATTEND_CANCLE = "모임 취소";
+
+    CardView btnMeetingChat;
+    TextView txtMeetingChat;
 
     int meetingId;
     String token;
@@ -83,12 +94,23 @@ public class MeetingDetailActivity extends AppCompatActivity {
     // TODO: 본인이 올린 모임글이면, 프로필 사진 오른쪽에 3점메뉴버튼을 표시하고, 수정과 삭제 메뉴를 표시해야 한다.
 
 
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_detail);
+
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                MeetingDetailActivity.this.googleMap = googleMap;
+            }
+        });
+
+
         meetingId = getIntent().getIntExtra("meetingId",0);
 //        meeting = (Meeting) getIntent().getSerializableExtra("meeting");
 //        int meetingId = meeting.id;
@@ -98,11 +120,10 @@ public class MeetingDetailActivity extends AppCompatActivity {
         for (int i = 0; i < textViews.length ; i++) {
             textViewsList[i] = findViewById(textViews[i]);
         }
-        mapView = findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
         imgPhoto = findViewById(R.id.storePhoto);
         imgBack = findViewById(R.id.imgBack);
         btnApply = findViewById(R.id.btnApply);
+        txtApply = findViewById(R.id.txtApply);
         imgMyMenu = findViewById(R.id.imgMyButton);
 
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -113,8 +134,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
         });
 
         getNetworkData();
-
-
 
         //
         imgMyMenu.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +167,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
 
         });
+
 
 
 
@@ -193,24 +213,26 @@ public class MeetingDetailActivity extends AppCompatActivity {
                     }
 
                     textViewsList[2].setText(count);
+                    if(meeting.attend != meeting.maximum){
+                        textViewsList[2].setTextColor(ContextCompat.getColor(MeetingDetailActivity.this, R.color.attend));
+                    }else {
+                        textViewsList[2].setTextColor(ContextCompat.getColor(MeetingDetailActivity.this, R.color.maximum));
+                    }
 
                     textViewsList[3].setText("  "+meeting.storeName+"  ");
 
                     textViewsList[4].setText("최대 " + meeting.maximum + "명 참여 가능");
 
                     // 구글맵 셋팅
-                    mapView.getMapAsync(new OnMapReadyCallback() {
-                        @Override
-                        public void onMapReady(@NonNull GoogleMap googleMap) {
-                            LatLng storeLatLng = new LatLng(meeting.storeLat, meeting.storeLng);
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, 16));
+                    LatLng storeLatLng = new LatLng(meeting.storeLat, meeting.storeLng);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, 18));
 
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.position(storeLatLng).title(meeting.storeName);
-                            googleMap.addMarker(markerOptions).setTag(0);
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(storeLatLng).title(meeting.storeName);
+                    googleMap.addMarker(markerOptions).setTag(0);
 
-                        }
-                    });
+
+
                     //  약속 일정 가공해서 보여주기
                     String newDate = "";
 
@@ -282,7 +304,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
     // 모임 참가 신청 API 실행 메서드
     void attendMeeting() {
-        btnApply.setText("모임 참가 신청");
+        txtApply.setText(MEETING_ATTEND);
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,7 +339,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
     // 모임참가 취소 API 실행 메서드
     void cancleMeeting() {
-        btnApply.setText("모임 참가 취소");
+        txtApply.setText(MEETING_ATTEND_CANCLE);
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

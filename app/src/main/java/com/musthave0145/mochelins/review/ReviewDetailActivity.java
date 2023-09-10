@@ -68,6 +68,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
 
     MapView mapView;
+    GoogleMap googleMap;
 
     CircleImageView imgProfile;
 
@@ -108,6 +109,13 @@ public class ReviewDetailActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.viewPager2);
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                ReviewDetailActivity.this.googleMap = googleMap;
+            }
+        });
 
         imgProfile = findViewById(R.id.imgProfile);
         indicatorLayout = findViewById(R.id.indicatorLayout);
@@ -338,17 +346,12 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 txtViewList[9].setText("조회수 "+ review1.view);
 
                 // 맵 세팅
-                mapView.getMapAsync(new OnMapReadyCallback() {
-                    @Override
-                    public void onMapReady(@NonNull GoogleMap googleMap) {
-                        LatLng storeLatLng = new LatLng(review1.storeLat, review1.storeLng);
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, 16));
+                LatLng storeLatLng = new LatLng(review1.storeLat, review1.storeLng);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, 18));
 
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(storeLatLng).title(review1.storeName);
-                        googleMap.addMarker(markerOptions).setTag(0);
-                    }
-                });
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(storeLatLng).title(review1.storeName);
+                googleMap.addMarker(markerOptions).setTag(0);
 
                 // 가게 주소
                 txtViewList[10].setText(review1.storeAddr);

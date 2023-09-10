@@ -103,7 +103,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 holder.txtTagList[i].setVisibility(View.INVISIBLE);
                 holder.txtTagList[i].setText("");
             }
-
         }
 
 
@@ -111,6 +110,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         String strViews = "조회수 " + review.view;
         String strComments = "댓글수 " + review.commentCnt;
         String strLikes = "좋아요 " + review.likeCnt;
+        Log.i("확인", "" + review.likeCnt);
+
+
 
         // 조회수, 댓글수, 좋아요수를 보여주자!!
         holder.txtViews.setText(strViews);

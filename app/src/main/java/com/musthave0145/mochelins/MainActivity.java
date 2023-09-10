@@ -5,6 +5,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment meetingFragment;
     Fragment mapsFragment;
     Fragment plannerFragment;
+    Fragment oldFragment;
 //    Toolbar toolbar;
     String token;
 
@@ -95,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
 
     boolean loadFragment(Fragment fragment){
         if(fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, fragment)
-                    .commit();// 화면 전환 코드
+            FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+
+
+            fragmentManager.replace(R.id.fragment, fragment).commit();
+
+
             return true;
         } else {
             return false;

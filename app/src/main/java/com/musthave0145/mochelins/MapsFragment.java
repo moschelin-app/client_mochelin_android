@@ -88,9 +88,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
 
-        private MapData clickMapData;
-
-
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
@@ -124,6 +121,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     CardView cardView;
     CardView researchCardView;
 
+    String token;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -143,6 +142,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         cardView.setVisibility(View.GONE);
         researchCardView.setVisibility(View.GONE);
+
+        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        token = sp.getString(Config.ACCESS_TOKEN, "");
 
 
         //
@@ -278,8 +280,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
         MapApi api = retrofit.create(MapApi.class);
-        SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String token = sp.getString(Config.ACCESS_TOKEN, "");
+
         Call<MapListRes> call = api.getPlaceList("Bearer " + token, lat, lng, mapZoomDis.get(zoom));
         call.enqueue(new Callback<MapListRes>() {
 
@@ -353,9 +354,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                                     Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
                                     StoreApi api = retrofit.create(StoreApi.class);
-                                    SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                                    String token = sp.getString(Config.ACCESS_TOKEN, "");
-
                                     Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
                                     Log.d("storeName", "인사");
                                     call.enqueue(new Callback<StoreRes>() {
@@ -383,7 +381,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                                 // 게시글 내용
                                                 txtContent.setText(store.content);
                                                 //가게 사진
-                                                Glide.with(MapsFragment.this).load(store.photo).into(photo);
+                                                Glide.with(MapsFragment.this).load(store.photo)
+                                                        .error(R.drawable.not_image).into(photo);
                                                 //별점
                                                 ratingBar.setRating((float) isRatingValue);
 

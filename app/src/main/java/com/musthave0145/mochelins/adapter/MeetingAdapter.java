@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -60,10 +61,11 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
                         .error(R.drawable.not_image).into(holder.imgPhoto);
 
 
-        String strDis = String.format("%.2f",meeting.distance) + "km";
-        holder.txtDistance.setText("📍 "+ strDis);
-        holder.txtStoreName.setText("  "+meeting.storeName+"  ");
+        String strDis = String.format("%.2f",meeting.distance) + " km";
+        holder.txtDistance.setText(strDis);
+        holder.txtStoreName.setText(meeting.storeName);
         holder.txtMeetName.setText(meeting.content);
+        holder.txtStoreAddress.setText(meeting.storeAddr);
 
 
 
@@ -107,6 +109,12 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         String strCurrentPerson = meeting.attend + " / " + meeting.maximum;
         holder.txtMeetCount.setText(strCurrentPerson);
 
+        if(meeting.attend != meeting.maximum){
+            holder.txtMeetCount.setTextColor(ContextCompat.getColor(context, R.color.attend));
+        }else {
+            holder.txtMeetCount.setTextColor(ContextCompat.getColor(context, R.color.maximum));
+        }
+
 
     }
 
@@ -124,6 +132,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         TextView txtMeetName;
         TextView txtStoreAddress;
         TextView txtMeetingDate;
+
 
         Integer[] imgProfileInteger = {R.id.imgProfile1, R.id.imgProfile2, R.id.imgProfile3,
                                         R.id.imgProfile4, R.id.imgProfile5, R.id.imgProfile6,
