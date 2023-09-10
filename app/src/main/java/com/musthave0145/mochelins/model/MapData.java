@@ -8,4 +8,8 @@ public class MapData implements Serializable {
     public double storeLat;
     public double storeLng;
     public double rating;
+
+    public double getRating() {
+        return Math.floor(this.rating * 10) / 10.0;
+    }
 }

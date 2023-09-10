@@ -95,12 +95,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         // 태그를 보여주는데, 선택된 태그가 없으면 가리고 보여주자!
 
 
-        for(int i = 0; i < review.tags.size(); i++){
-            if(i >= holder.txtTagList.length){
-                break;
+        for(int i = 0; i < holder.txtTagList.length; i++){
+            if(i < review.tags.size()){
+                holder.txtTagList[i].setVisibility(View.VISIBLE);
+                holder.txtTagList[i].setText("#"+review.tags.get(i).name);
+            }else {
+                holder.txtTagList[i].setVisibility(View.INVISIBLE);
+                holder.txtTagList[i].setText("");
             }
-            holder.txtTagList[i].setVisibility(View.VISIBLE);
-            holder.txtTagList[i].setText("#"+review.tags.get(i).name);
+
         }
 
 

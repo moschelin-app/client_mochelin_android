@@ -21,20 +21,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgPerson"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/baseline_add_24" />
 
@@ -42,18 +42,15 @@
                     android:id="@+id/txtPerson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="clip_vertical"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:text="작성자" />
 
                 <TextView
                     android:id="@+id/txtTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center_vertical"
                     android:text="작성시간" />
 
             </LinearLayout>
@@ -61,9 +58,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="175dp"
-                android:layout_marginLeft="15dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp">
 
                 <ImageView
@@ -111,7 +106,7 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -120,112 +115,120 @@
                     android:id="@+id/imgStar"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
                     app:srcCompat="@drawable/baseline_star_24" />
 
                 <TextView
                     android:id="@+id/txtRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_toRightOf="@id/imgStar"
                     android:text="평점"
+                    android:textColor="#050505"
                     android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/txtStoreName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="6dp"
-                    android:text="상호명" />
-            </LinearLayout>
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/txtRating"
+                    android:text="상호명"
+                    android:textColor="#050505" />
+            </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtTag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/bubble"
-                    android:padding="2dp"
-                    android:text="태그1"
-                    android:textSize="10sp"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/txtTag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/bubble"
-                    android:padding="2dp"
-                    android:text="태그2"
-                    android:textSize="10sp"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/txtTag3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/bubble"
-                    android:padding="2dp"
-                    android:text="태그3"
-                    android:textSize="10sp"
-                    android:visibility="invisible" />
-
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtViews"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_toLeftOf="@id/txtComments"
-                        android:text="조회수"
-                        android:textSize="12dp"
-                        tools:ignore="TextSizeCheck" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtComments"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_toLeftOf="@id/txtLikes"
-                        android:text="댓글수"
-                        android:textSize="12dp"
-                        tools:ignore="TextSizeCheck" />
+                        <TextView
+                            android:id="@+id/txtTag1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/tag_background"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:text="태그1"
+                            android:textColor="@color/attend"
+                            android:textSize="10sp"
+                            android:visibility="invisible" />
 
-                    <TextView
-                        android:id="@+id/txtLikes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
-                        android:text="좋아요"
-                        android:textSize="12dp"
-                        tools:ignore="TextSizeCheck" />
-                </RelativeLayout>
+                        <TextView
+                            android:id="@+id/txtTag3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/tag_background"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:text="태그3"
+                            android:textColor="@color/attend"
+                            android:textSize="10sp"
+                            android:visibility="invisible" />
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/txtTag2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/tag_background"
+                            android:maxLines="1"
+                            android:padding="2dp"
+                            android:text="태그2"
+                            android:textColor="@color/attend"
+                            android:textSize="10sp"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtViews"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:maxLines="1"
+                            android:text="조회수"
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/txtComments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:maxLines="1"
+                            android:text="댓글수"
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/txtLikes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:text="좋아요"
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

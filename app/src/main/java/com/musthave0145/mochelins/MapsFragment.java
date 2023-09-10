@@ -238,10 +238,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     }
 
     private void setDefaultMarker(){
+        // 해당 마커를 누를시 리뷰 1개를 가져옴
+        MapData clickedMapData = customMapArrayList.get((int) choiceMarker.getTag());
+
+
         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
         LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
         TextView textView = customMarkerView.findViewById(R.id.textView);
         textView.setTextColor(Color.BLACK);
+        textView.setText(clickedMapData.getRating() + "");
         linearLayout.setBackgroundResource(R.drawable.corner1);
 
         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
@@ -296,9 +301,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                         imageView.setImageResource(R.drawable.baseline_star_24);
 
-                        double rating = Math.floor(mapData.rating * 10) / 10.0;
-
-                        String strRating = rating + "";
+                        String strRating = mapData.getRating() + "";
                         textView.setText(strRating);
                         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
                         MarkerOptions markerOptions = new MarkerOptions()
@@ -327,12 +330,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                                 Log.i("숫자", markerIndex + "");
                                 if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
+                                    // 해당 마커를 누를시 리뷰 1개를 가져옴
+                                    MapData clickedMapData = customMapArrayList.get(markerIndex);
+
+
                                     // 커스텀 마커 레이아웃 설정
                                     // 마커가 선택되었을때 이미지를 변경
                                     View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                                     LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
                                     TextView textView = customMarkerView.findViewById(R.id.textView);
                                     textView.setTextColor(Color.WHITE);
+
+                                    textView.setText(clickedMapData.getRating() + "");
                                     linearLayout.setBackgroundResource(R.drawable.corner_select);
 
                                     BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
@@ -341,9 +350,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                                     choiceMarker = marker;
 
-
-                                    // 해당 마커를 누를시 리뷰 1개를 가져옴
-                                    MapData clickedMapData = customMapArrayList.get(markerIndex);
 
                                     Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
                                     StoreApi api = retrofit.create(StoreApi.class);
