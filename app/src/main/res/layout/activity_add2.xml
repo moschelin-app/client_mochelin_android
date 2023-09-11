@@ -132,7 +132,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtStore"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_margin="10dp"
@@ -140,14 +139,15 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtStore1"
+                android:id="@+id/txtStore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@null"
                 android:hint="가게를 입력하세요."
                 android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -161,7 +161,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -169,7 +168,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtMenu1"
+                android:id="@+id/txtMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

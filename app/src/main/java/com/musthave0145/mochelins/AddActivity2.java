@@ -49,8 +49,8 @@ public class AddActivity2 extends AppCompatActivity {
     txtMoney = findViewById(R.id.txtMoney1);
     btnCash = findViewById(R.id.btnCash);
     btnCard = findViewById(R.id.btnCard);
-    txtStore1 = findViewById(R.id.txtStore1);
-    txtMenu1 = findViewById(R.id.txtMenu1);
+    txtStore1 = findViewById(R.id.txtStore);
+    txtMenu1 = findViewById(R.id.txtMenu);
     btnInput = findViewById(R.id.btnInput);
 
 
