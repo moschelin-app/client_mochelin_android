@@ -36,7 +36,7 @@
 
 
         <EditText
-            android:id="@+id/txtMoney"
+            android:id="@+id/txtMoney1"
             android:layout_width="408dp"
             android:layout_height="61dp"
             android:layout_alignParentStart="true"

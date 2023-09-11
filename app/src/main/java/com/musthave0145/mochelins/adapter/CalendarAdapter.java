@@ -22,10 +22,17 @@ import com.musthave0145.mochelins.model.OnItemListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
     ArrayList<LocalDate> dayList;
 
     OnItemListener onItemListener;
+
+    // 유저가 선택한 날짜를 담는 멤버변수 selectedDate!
+    public LocalDate selectedDate = null;
+
+    // 오늘 날짜를 담는 멤버변수
+    public LocalDate todayDate = LocalDate.now();
 
     public CalendarAdapter(ArrayList<LocalDate> dayList){
         this.dayList = dayList;
@@ -50,12 +57,20 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
         if (day == null) {
             holder.dayText.setText("");
+            holder.parentView.setBackgroundResource(0); // 배경 제거
         } else {
             holder.dayText.setText(String.valueOf(day.getDayOfMonth()));
 
-            //현재 날짜 색상 칠하기
-            if (day.equals(CalendarUtil.selectedDate)) {
+            // 오늘 날짜 배경 색상 칠하기
+            if (day.equals(todayDate) && !day.equals(selectedDate)) {
                 holder.parentView.setBackgroundColor(LTGRAY);
+            } else {
+                holder.parentView.setBackgroundColor(Color.WHITE); // 다른 날짜의 배경을 흰색으로 설정
+            }
+
+            // 선택된 날짜에 테두리 적용
+            if (day.equals(selectedDate)) {
+                holder.parentView.setBackgroundResource(R.drawable.corner); // 테두리 리소스를 지정하세요.
             }
         }
         //날짜 적용
@@ -66,6 +81,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             holder.dayText.setTextColor(Color.RED);
         }
         //날짜 클릭 이벤트
+        holder.parentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedDate = day; // 선택된 날짜 업데이트
+                notifyDataSetChanged(); // 선택된 날짜가 변경되었으므로 RecyclerView를 업데이트합니다.
+            }
+        });
 
     }
 
@@ -85,6 +107,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             dayText =itemView.findViewById(R.id.dayText);
 
             parentView = itemView.findViewById(R.id.parentView);
+
+
 
         }
     }

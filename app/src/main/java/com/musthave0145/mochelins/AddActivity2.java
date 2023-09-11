@@ -1,35 +1,23 @@
 package com.musthave0145.mochelins;
 
-import static android.graphics.Color.GRAY;
-import static android.graphics.Color.RED;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.musthave0145.mochelins.api.AccountBookApi;
 import com.musthave0145.mochelins.api.NetworkClient;
-import com.musthave0145.mochelins.api.NetworkClient1;
 import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Account;
-import com.musthave0145.mochelins.model.AccountListRes;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,7 +45,7 @@ public class AddActivity2 extends AppCompatActivity {
 
         setContentView(R.layout.activity_add2);
     txtday = findViewById(R.id.txtday);
-    txtMoney = findViewById(R.id.txtMoney);
+    txtMoney = findViewById(R.id.txtMoney1);
     btnCash = findViewById(R.id.btnCash);
     btnCard = findViewById(R.id.btnCard);
     txtStore1 = findViewById(R.id.txtStore1);

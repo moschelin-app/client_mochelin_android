@@ -15,7 +15,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,8 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -43,26 +40,20 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.MapApi;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.StoreApi;
 import com.musthave0145.mochelins.config.Config;
-import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.MapData;
 import com.musthave0145.mochelins.model.MapListRes;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.Store;
 import com.musthave0145.mochelins.model.StoreRes;
 import com.musthave0145.mochelins.review.ReviewDetailActivity;
-import com.musthave0145.mochelins.review.ReviewFragment;
-import com.musthave0145.mochelins.user.InfoActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -164,7 +155,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
         LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
-        TextView textView = customMarkerView.findViewById(R.id.textView);
+        TextView textView = customMarkerView.findViewById(R.id.txtMoney1);
         textView.setTextColor(Color.BLACK);
         textView.setText(clickedMapData.getRating() + "");
         linearLayout.setBackgroundResource(R.drawable.corner1);
@@ -214,7 +205,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         // 커스텀 마커 레이아웃 설정
                         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                         ImageView imageView = customMarkerView.findViewById(R.id.imageView);
-                        TextView textView = customMarkerView.findViewById(R.id.textView);
+                        TextView textView = customMarkerView.findViewById(R.id.txtMoney1);
 
                         imageView.setImageResource(R.drawable.baseline_star_24);
 
@@ -255,7 +246,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                     // 마커가 선택되었을때 이미지를 변경
                                     View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                                     LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
-                                    TextView textView = customMarkerView.findViewById(R.id.textView);
+                                    TextView textView = customMarkerView.findViewById(R.id.txtMoney1);
                                     textView.setTextColor(Color.WHITE);
 
                                     textView.setText(clickedMapData.getRating() + "");

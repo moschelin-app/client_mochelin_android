@@ -357,7 +357,7 @@
                 app:srcCompat="@drawable/outline_pageview_24" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/txtMeetType1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

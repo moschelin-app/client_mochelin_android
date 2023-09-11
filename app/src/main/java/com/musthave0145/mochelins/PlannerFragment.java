@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,23 +94,14 @@ public class PlannerFragment extends Fragment {
     }
 
 
-    ImageView imgMenu;
-    ImageView imgMenuClear;
-    DrawerLayout plannerDrawer;
-    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-            R.id.cardMap, R.id.cardPlanner , R.id.cardLogout};
-    CardView[] cardViewList = new CardView[cardViews.length];
-
-    Fragment reviewFragment;
-    Fragment meetingFragment;
-    Fragment mapFragment;
-    Fragment plannerFragment;
 
     TextView monthYearText;
     LocalDate selectedDate;
     ImageView pre_btn;
     ImageView next_btn;
     RecyclerView recyclerView;
+    ImageButton btnPre;
+    ImageButton btnNext;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -118,147 +110,46 @@ public class PlannerFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_planner, container, false);
 
-        imgMenu = rootView.findViewById(R.id.imgMenu);
-        imgMenuClear = rootView.findViewById(R.id.imgMenuClear);
-        plannerDrawer = rootView.findViewById(R.id.plannerDrawer);
+
         monthYearText = rootView.findViewById(R.id.monthYearText);
 
 
-        // 사이드 메뉴바를 열고 닫는 코드
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                plannerDrawer.openDrawer(GravityCompat.END);
-            }
-        });
 
-        imgMenuClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                plannerDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        // 사이드 메뉴바 안에 카드뷰 연결코드
-        for(int i = 0; i < cardViews.length; i++) {
-            cardViewList[i] = rootView.findViewById(cardViews[i]);
-        }
-
-        reviewFragment = new ReviewFragment();
-        meetingFragment = new MeetingFragment();
-        mapFragment = new MapsFragment();
-        plannerFragment = new PlannerFragment();
-
-        // 내 정보 액티비티 이동
-        cardViewList[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                plannerDrawer.closeDrawer(GravityCompat.END);
-
-                Intent intent = new Intent(getActivity(), InfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // 프래그먼트간 이동
-        cardViewList[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.reviewFragment);
-                loadFragment(reviewFragment);
-                plannerDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.meetingFragment);
-                loadFragment(meetingFragment);
-                plannerDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.mapsFragment);
-                loadFragment(mapFragment);
-                plannerDrawer.closeDrawer(GravityCompat.END);
-            }
-        });
-        cardViewList[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectBottomNavigationItem(R.id.plannerFragment);
-                loadFragment(plannerFragment);
-                plannerDrawer.closeDrawer(GravityCompat.END);
-
-            }
-        });
-
-        cardViewList[5].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-                UserApi api = retrofit.create(UserApi.class);
-
-                SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                String token = sp.getString(Config.ACCESS_TOKEN, "");
-
-                Call<UserRes> call = api.logout("Bearer " + token);
-                call.enqueue(new Callback<UserRes>() {
-                    @Override
-                    public void onResponse(Call<UserRes> call, Response<UserRes> response) {
-                        if (response.isSuccessful()){
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putBoolean(Config.SAVE_AUTO, false);
-
-                            editor.apply();
-
-                            getActivity().finish();
-
-                        } else {
-                            
-                            // 안내 메시지 넣어야함
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UserRes> call, Throwable t) {
-
-                    }
-                });
-            }
-        });
         monthYearText = rootView.findViewById(R.id.monthYearText);
-        pre_btn = rootView.findViewById(R.id.pre_btn);
-        next_btn = rootView.findViewById(R.id.next_btn);
+        btnPre = rootView.findViewById(R.id.btnPre);
+        btnNext = rootView.findViewById(R.id.btnNext);
+
        recyclerView = rootView.findViewById(R.id.recyclerView);
         //현재 날짜
         CalendarUtil.selectedDate =LocalDate.now();
 
         //화면 설정
         setMonthView();
-        pre_btn.setOnClickListener(new View.OnClickListener() {
+
+
+        // 전달로 넘어가는 버튼
+        btnPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //현재 월-1 변수에 담기
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
                 setMonthView();
             }
         });
 
-        //다음달 버튼 이벤트
-        next_btn.setOnClickListener(new View.OnClickListener() {
+        // 다음달로 넘어가는 버튼.
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 //현재 월+1 변수에 담기
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
                 setMonthView();
+
             }
         });
+
 
         FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -275,12 +166,12 @@ public class PlannerFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O) //이것 역시 코드가 api 버전이 안맞아서 맞춤
 
     private String monthYearFromDate(LocalDate date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월");
         return date.format(formatter);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String yearMonthFromDate(LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월");
 
         return date.format(formatter);
     }
@@ -292,7 +183,6 @@ public class PlannerFragment extends Fragment {
         monthYearText.setText(monthYearFromDate(CalendarUtil.selectedDate));
         //해당 월 날짜 가져오기
         ArrayList<LocalDate> dayList = daysInMonthArray(CalendarUtil.selectedDate);
-
         CalendarAdapter adapter = new CalendarAdapter(dayList);
 
         //레이아웃 설정(열 7개)
