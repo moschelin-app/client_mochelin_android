@@ -12,13 +12,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -96,6 +100,7 @@ public class StoreDetailActivity extends AppCompatActivity {
         });
 
 
+        showProgress();
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
         token = sp.getString(Config.ACCESS_TOKEN, "");
 
@@ -107,6 +112,7 @@ public class StoreDetailActivity extends AppCompatActivity {
         call.enqueue(new Callback<StoreRes>() {
             @Override
             public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
+                dismissProgress();
                 if (response.isSuccessful()){
 
                     store = response.body().item;
@@ -123,7 +129,7 @@ public class StoreDetailActivity extends AppCompatActivity {
                     }
 //                    Log.i("테스트", store.storeName);
                     txtStoreName.setText(store.storeName);
-                    txtStar.setText(store.rating+"");
+                    txtStar.setText(store.getRating()+"");
 
                     // 별점 수 대로 별 보여주기
                     for (int i = 0; i < 5; i++) {
@@ -131,8 +137,11 @@ public class StoreDetailActivity extends AppCompatActivity {
                             imgStarList[i].setImageResource(R.drawable.baseline_star_24);
                         }
                     }
-
-
+                    if(bottomNavigationView.getSelectedItemId() == R.id.storeMeeting){
+                        bottomNavigationView.setSelectedItemId(R.id.storeMeeting);
+                    }else if(bottomNavigationView.getSelectedItemId() == R.id.storeReview){
+                        bottomNavigationView.setSelectedItemId(R.id.storeReview);
+                    }
 
                 } else {
                     Log.i("에러 테스트", response.body().toString());
@@ -143,6 +152,7 @@ public class StoreDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<StoreRes> call, Throwable t) {
+                dismissProgress();
                 Log.i("실패 테스트", t.getMessage());
 
             }
@@ -182,6 +192,7 @@ public class StoreDetailActivity extends AppCompatActivity {
                     fragment = storeReviewFragment;
 
                 } else if (itemId == R.id.storeMap) {
+                    bundle.putSerializable("store", store);
                     storeMapFragment.setArguments(bundle);
 
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(lineView.getLayoutParams());
@@ -198,11 +209,6 @@ public class StoreDetailActivity extends AppCompatActivity {
         });
         //
 
-
-
-
-
-
     }
     boolean loadFragment(Fragment fragment){
         if(fragment != null) {
@@ -217,9 +223,20 @@ public class StoreDetailActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bottomNavigationView.setSelectedItemId(R.id.storeMeeting);
+
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
     }
 }

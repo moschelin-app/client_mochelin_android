@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -87,6 +88,9 @@ public class StoreMeetingFragment extends Fragment {
 
     int storeId;
 
+    int offset = 0;
+    int limit = 5;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,37 +109,64 @@ public class StoreMeetingFragment extends Fragment {
 
         if (this.getArguments() != null){
             storeId = this.getArguments().getInt("storeId" , 0);
+            offset = 0;
+            meetingArrayList.clear();
 
-            progressBar.setVisibility(View.VISIBLE);
-            Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-            StoreApi api = retrofit.create(StoreApi.class);
-            Call<MeetingListRes> call = api.getStoreMeetingList("Bearer " + token, storeId , 0, 10);
-            call.enqueue(new Callback<MeetingListRes>() {
+            getMeetingList();
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (response.isSuccessful()){
-                        meetingArrayList.clear();
-                        meetingArrayList.addAll(response.body().items);
-                        adapter = new StoreMeetingAdapter(getActivity(), meetingArrayList);
-                        recyclerView.setAdapter(adapter);
-
-                    } else {
-
-                    }
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
                 }
 
                 @Override
-                public void onFailure(Call<MeetingListRes> call, Throwable t) {
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int lastPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition(); //맨 마지막 위치
+                    int totalCount = recyclerView.getAdapter().getItemCount(); //arrayList값의 크기를 가져온다.
 
+                    if(lastPosition + 1 == totalCount){ //스크롤을 데이터 맨 끝까지 한 상태이므로
+                        //네트워크를 통해서 데이터를 추가로 받아오면 된다.
+                        getMeetingList();
+                    }
                 }
             });
         }
 
-
+        adapter = new StoreMeetingAdapter(getActivity(), meetingArrayList);
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
 
+
+    private void getMeetingList(){
+        progressBar.setVisibility(View.VISIBLE);
+        Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+        StoreApi api = retrofit.create(StoreApi.class);
+        Call<MeetingListRes> call = api.getStoreMeetingList("Bearer " + token, storeId , offset, limit);
+        call.enqueue(new Callback<MeetingListRes>() {
+            @Override
+            public void onResponse(Call<MeetingListRes> call, Response<MeetingListRes> response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                if (response.isSuccessful()){
+                    meetingArrayList.addAll(response.body().items);
+
+                    offset += limit;
+
+                    adapter.notifyDataSetChanged();
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MeetingListRes> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 
 }

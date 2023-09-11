@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,6 +85,9 @@ public class StoreReviewFragment extends Fragment {
 
     int storeId;
 
+    int offset = 0;
+    int limit = 5;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,35 +106,64 @@ public class StoreReviewFragment extends Fragment {
 
         if (this.getArguments() != null){
             storeId = this.getArguments().getInt("storeId" , 0);
+            offset = 0;
+            reviewArrayList.clear();
 
-            progressBar.setVisibility(View.VISIBLE);
-            Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
-            StoreApi api = retrofit.create(StoreApi.class);
+            getReviewList();
 
-            Call<ReviewRes> call = api.getStoreReviewList("Bearer " + token, storeId,0, 10);
-            call.enqueue(new Callback<ReviewRes>() {
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (response.isSuccessful()){
-                        reviewArrayList.clear();
-                        reviewArrayList.addAll(response.body().items);
-                        adapter = new StoreReviewAdapter(getActivity(), reviewArrayList);
-                        recyclerView.setAdapter(adapter);
-                    } else {
-
-                    }
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
                 }
 
                 @Override
-                public void onFailure(Call<ReviewRes> call, Throwable t) {
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int lastPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition(); //맨 마지막 위치
+                    int totalCount = recyclerView.getAdapter().getItemCount(); //arrayList값의 크기를 가져온다.
 
+                    if(lastPosition + 1 == totalCount){ //스크롤을 데이터 맨 끝까지 한 상태이므로
+                        //네트워크를 통해서 데이터를 추가로 받아오면 된다.
+                        getReviewList();
+                    }
                 }
             });
 
-
         }
 
+        adapter = new StoreReviewAdapter(getActivity(), reviewArrayList);
+        recyclerView.setAdapter(adapter);
+
         return rootView;
+    }
+
+    private void getReviewList(){
+        progressBar.setVisibility(View.VISIBLE);
+        Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
+        StoreApi api = retrofit.create(StoreApi.class);
+
+        Call<ReviewRes> call = api.getStoreReviewList("Bearer " + token, storeId,offset, limit);
+        call.enqueue(new Callback<ReviewRes>() {
+            @Override
+            public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                if (response.isSuccessful()){
+                    reviewArrayList.addAll(response.body().items);
+
+                    offset += limit;
+
+                    adapter.notifyDataSetChanged();
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewRes> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 }

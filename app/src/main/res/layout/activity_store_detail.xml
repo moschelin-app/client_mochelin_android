@@ -17,19 +17,20 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/imgStore"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                app:srcCompat="@drawable/baseline_image_24" />
+
+            <ImageView
                 android:id="@+id/imgBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:translationZ="50dp"
-                app:srcCompat="@drawable/baseline_arrow_back_24_3" />
-
-            <ImageView
-                android:id="@+id/imgStore"
-                android:layout_width="match_parent"
-                android:layout_height="210dp"
-                app:srcCompat="@drawable/baseline_image_24" />
+                app:srcCompat="@drawable/baseline_arrow_back_24_2"
+                />
 
         </RelativeLayout>
 
@@ -43,9 +44,10 @@
             android:layout_marginRight="100dp"
             android:fontFamily="@font/nanumbrush"
             android:gravity="center"
-            android:maxLines="3"
+            android:maxLines="2"
             android:text="&quot;마약 김밥은 바로 서구청 마약김밥&quot;\n소스에 찍어먹으면 GOOD!\nVery Good!"
-            android:textSize="16sp" />
+            android:textSize="17sp"
+            android:textColor="@color/black"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -59,7 +61,8 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
                 android:text="서구청 마약김밥"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -115,7 +118,8 @@
                     android:layout_marginLeft="7dp"
                     android:gravity="center"
                     android:text="0"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -170,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3.5dp"
             android:layout_marginRight="10dp"
             app:defaultNavHost="true"
             app:navGraph="@navigation/store_nav" />

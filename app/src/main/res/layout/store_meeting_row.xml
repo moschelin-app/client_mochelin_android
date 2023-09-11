@@ -12,25 +12,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        app:cardCornerRadius="5dp">
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/storePhoto"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
                     android:background="@drawable/corner"
                     android:scaleType="centerCrop"
                     android:src="@drawable/baseline_image_24" />
@@ -39,8 +40,7 @@
                     android:id="@+id/txtMeetingDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:text="8.15(토) 13:00"
                     android:textSize="10dp"
@@ -51,55 +51,63 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imgProfile"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
                         android:src="@drawable/default_profile" />
 
                     <TextView
                         android:id="@+id/txtName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="5"
                         android:text="작성자" />
+
+                    <ImageView
+                        android:id="@+id/imgMyMenu"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:visibility="invisible"
+                        app:srcCompat="@drawable/baseline_more_vert_24" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/txtContent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:maxLines="2"
                         android:text="여기에 모임 이름이 적힐겁니다. 사랑합니다 원준님^^"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -107,7 +115,6 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -116,7 +123,6 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -125,7 +131,6 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -134,7 +139,6 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -143,7 +147,6 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -151,7 +154,6 @@
                         android:id="@+id/imgProfile6"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -160,7 +162,6 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginTop="6dp"
                         android:src="@drawable/baseline_account_circle_24"
                         android:visibility="invisible" />
 
@@ -173,19 +174,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="15dp"
+                            android:layout_alignParentBottom="true"
                             android:text="7 / 8"
-                            android:textSize="12dp"
+                            android:textSize="15sp"
                             tools:ignore="TextSizeCheck" />
 
                         <ImageView
                             android:id="@+id/imageView2"
                             android:layout_width="21dp"
                             android:layout_height="21dp"
+                            android:layout_alignParentBottom="true"
                             android:layout_centerInParent="true"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_toLeftOf="@id/txtMeetCount"
                             android:src="@drawable/baseline_people_outline_24" />
 
                     </RelativeLayout>

@@ -2,13 +2,22 @@ package com.musthave0145.mochelins.store;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.model.Store;
+import com.musthave0145.mochelins.review.ReviewDetailActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +66,34 @@ public class StoreMapFragment extends Fragment {
         }
     }
 
+
+    MapView mapView;
+    Store store;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_store_map, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_store_map, container, false);
+
+        store = (Store) getArguments().getSerializable("store");
+
+        mapView = rootView.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                // 맵 세팅
+                LatLng storeLatLng = new LatLng(store.storeLat, store.storeLng);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, 19));
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(storeLatLng).title(store.storeName);
+                googleMap.addMarker(markerOptions).setTag(0);
+            }
+        });
+
+        return rootView;
     }
 }
