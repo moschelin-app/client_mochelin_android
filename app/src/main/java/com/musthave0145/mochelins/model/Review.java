@@ -40,14 +40,14 @@ public class Review implements Serializable {
         this.storeId = storeId;
     }
 
-    public ArrayList<Photos> photos;
+    public ArrayList<Photos> photos = new ArrayList<>();
 
     public class Photos implements Serializable{
         public String photo;
     }
 
 
-    public ArrayList<tagName> tags;
+    public ArrayList<tagName> tags = new ArrayList<>();
 
     public class tagName implements Serializable{
         public String name;

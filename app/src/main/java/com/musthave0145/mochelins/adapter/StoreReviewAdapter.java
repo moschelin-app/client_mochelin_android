@@ -1,13 +1,21 @@
 package com.musthave0145.mochelins.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +23,16 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.musthave0145.mochelins.R;
+import com.musthave0145.mochelins.api.NetworkClient;
+import com.musthave0145.mochelins.api.ReviewApi;
+import com.musthave0145.mochelins.config.Config;
 import com.musthave0145.mochelins.model.Review;
+import com.musthave0145.mochelins.model.ReviewListRes;
 import com.musthave0145.mochelins.review.ReviewDetailActivity;
+import com.musthave0145.mochelins.review.ReviewUpdateActivity;
+import com.musthave0145.mochelins.store.StoreDetailActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +42,10 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.ViewHolder>{
 
@@ -61,11 +80,70 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
         // 내 글인지도 알 수 없다.
         if (review.isMine == 1) {
             holder.imgMyMenu.setVisibility(View.VISIBLE);
+
+            holder.imgMyMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenu popupMenu = new PopupMenu(context, holder.imgMyMenu);
+                    MenuInflater inf = popupMenu.getMenuInflater();
+                    inf.inflate(R.menu.delete_menu, popupMenu.getMenu());
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            if (menuItem.getItemId() == R.id.menuDelete) {
+                                showProgress();
+                                SharedPreferences sp = context.getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                                String token = sp.getString(Config.ACCESS_TOKEN, "");
+
+                                Retrofit retrofit1 = NetworkClient.getRetrofitClient(context);
+                                ReviewApi api1 = retrofit1.create(ReviewApi.class);
+
+                                Call<ReviewListRes> call1 = api1.deleteReview("Bearer " + token, review.id);
+                                call1.enqueue(new Callback<ReviewListRes>() {
+                                    @Override
+                                    public void onResponse(Call<ReviewListRes> call, Response<ReviewListRes> response) {
+                                        dismissProgress();
+                                        if (response.isSuccessful()){
+                                            ((StoreDetailActivity) context).finish();
+                                            ((StoreDetailActivity) context).overridePendingTransition(0, 0);
+                                            Intent intent = ((StoreDetailActivity) context).getIntent();
+                                            context.startActivity(intent);
+                                            ((StoreDetailActivity) context).overridePendingTransition(0,0);
+                                        } else {
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ReviewListRes> call, Throwable t) {
+                                        dismissProgress();
+                                    }
+                                });
+
+                            }
+
+                            return false;
+                        }
+
+                    });
+
+
+                    popupMenu.show();
+
+
+                }
+            });
+        }else {
+            holder.imgMyMenu.setVisibility(View.INVISIBLE);
         }
+
         // 별점 수 대로 별 보여주기
         for (int i = 0; i < 5; i++) {
             if (i < review.rating) {
                 holder.imgStarList[i].setImageResource(R.drawable.baseline_star_24);
+            }else{
+                holder.imgStarList[i].setImageResource(R.drawable.baseline_star_border_24);
             }
         }
 
@@ -95,18 +173,23 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
         // 작성 글 세팅하기
         holder.txtContent.setText(review.content);
 
+
         // 태그가 달린 만큼 보여주자.
-        for(int i = 0; i < review.tags.size(); i++){
-            if(i >= 3){
-                break;
+        for(int i = 0; i < 3; i++){
+            if(i < review.tags.size()){
+                holder.txtTagList[i].setVisibility(View.VISIBLE);
+                holder.txtTagList[i].setText("#" + review.tags.get(i).name);
+            }else{
+                holder.txtTagList[i].setVisibility(View.INVISIBLE);
             }
-            holder.txtTagList[i].setVisibility(View.VISIBLE);
-            holder.txtTagList[i].setText("#" + review.tags.get(i).name);
+
         }
 
         // 내가 좋아요 한 게시물은 꽉 찬 하트로 보여주자.
         if(review.isLike == 1){
             holder.imgLike.setImageResource(R.drawable.baseline_favorite_24);
+        }else {
+            holder.imgLike.setImageResource(R.drawable.baseline_favorite_border_24_2);
         }
 
         // 좋아요 수도 보여주자!
@@ -114,10 +197,6 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
 
         // 조회수를 보여주자!
         holder.txtView.setText("조회수 "+review.view);
-
-
-
-
     }
 
     @Override
@@ -182,5 +261,21 @@ public class StoreReviewAdapter extends RecyclerView.Adapter<StoreReviewAdapter.
                 }
             });
         }
+    }
+
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(context);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(context));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
     }
 }

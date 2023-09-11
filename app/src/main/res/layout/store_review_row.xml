@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp"
         android:layout_margin="10dp">
 
         <LinearLayout
@@ -42,7 +44,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="7dp"
                         android:layout_marginTop="11dp"
-                        android:text="작성자" />
+                        android:text="작성자"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/txtReview"
@@ -123,85 +126,73 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_margin="15dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/reviewPhoto"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/corner"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/baseline_image_24" />
-
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/reviewPhoto"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/corner"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/baseline_image_24" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
 
                     <TextView
                         android:id="@+id/txtContent"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_height="45dp"
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text="여기에 모임 이름이 적힐겁니다. 사랑합니다 원준님^^"
-                        android:textSize="14sp" />
+                        android:textSize="15sp"
+                        android:textColor="@color/black"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="15dp">
 
                         <TextView
                             android:id="@+id/txtTag1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="7dp"
-                            android:background="@drawable/bubble"
+                            android:background="@drawable/tag_background"
                             android:padding="2dp"
                             android:text=" #서구청 "
-                            android:textColor="#4E80FF"
+                            android:textColor="@color/attend"
                             android:textSize="10sp"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
 
                         <TextView
                             android:id="@+id/txtTag2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="7dp"
-                            android:background="@drawable/bubble"
+                            android:background="@drawable/tag_background"
                             android:padding="2dp"
                             android:text=" #서구청 "
-                            android:textColor="#4E80FF"
+                            android:textColor="@color/attend"
                             android:textSize="10sp"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
 
                         <TextView
                             android:id="@+id/txtTag3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="7dp"
-                            android:background="@drawable/bubble"
+                            android:background="@drawable/tag_background"
                             android:padding="2dp"
                             android:text=" #서구청 "
-                            android:textColor="#4E80FF"
+                            android:textColor="@color/attend"
                             android:textSize="10sp"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
                     </LinearLayout>
 
                     <LinearLayout

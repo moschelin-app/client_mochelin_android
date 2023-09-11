@@ -22,4 +22,8 @@ public class Store implements Serializable {
     public String summary;
 
 
+    public double getRating() {
+        return Math.floor(this.rating * 10) / 10.0;
+    }
+
 }
