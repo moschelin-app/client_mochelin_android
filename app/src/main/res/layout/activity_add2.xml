@@ -19,14 +19,14 @@
         android:layout_height="46dp"
         android:textAlignment="center">
 
-        <EditText
-            android:id="@+id/txtday"
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
-            android:text="2023.08.12"
-            android:textAlignment="center"
-            android:textColor="#1B1A1A"
-            android:textSize="23sp" />
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="날짜를 선택하세요."
+            android:textSize="20sp" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -49,9 +49,11 @@
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginBottom="8dp"
-            android:hint="150,000원"
+            android:background="@null"
+            android:hint="금액을 입력하세요"
             android:textAlignment="center"
-            android:textSize="35sp" />
+            android:textColor="@color/colorPressed"
+            android:textSize="26sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -85,6 +87,7 @@
                     android:layout_marginEnd="11dp"
                     android:layout_marginBottom="460dp"
                     android:background="@drawable/bubble"
+                    android:paddingTop="5dp"
                     android:text="현금"
                     android:textAlignment="center"
                     android:textColor="#151414"
@@ -104,6 +107,7 @@
                     android:layout_marginEnd="11dp"
                     android:layout_marginBottom="460dp"
                     android:background="@drawable/bubble"
+                    android:paddingTop="5dp"
                     android:text="카드"
                     android:textAlignment="center"
                     android:textColor="#151414"
@@ -128,7 +132,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtStore"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_margin="10dp"
@@ -136,13 +139,15 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtStore1"
+                android:id="@+id/txtStore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="빽보이"
+                android:background="@null"
+                android:hint="가게를 입력하세요."
                 android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -156,7 +161,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -164,11 +168,11 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtMenu1"
+                android:id="@+id/txtMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="뺵보이피자"
+                android:hint="내용을 입력하세요."
                 android:textColor="#131313"
                 android:textSize="20sp" />
         </LinearLayout>

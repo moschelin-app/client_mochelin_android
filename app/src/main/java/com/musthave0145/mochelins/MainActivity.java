@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                     fragment = mapsFragment;
                 } else if (itemId == R.id.plannerFragment) {
                     fragment = plannerFragment;
+                    imgAdd.setVisibility(View.VISIBLE);
+
                 }
                 return loadFragment(fragment);
             }
@@ -140,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }else if(bottomNavigationView.getSelectedItemId() == R.id.meetingFragment){
                     Intent intent = new Intent(MainActivity.this, MeetingCreateActivity.class);
+                    startActivity(intent);
+                } else if (bottomNavigationView.getSelectedItemId() == R.id.plannerFragment) {
+                    Intent intent = new Intent(MainActivity.this, AddActivity2.class);
                     startActivity(intent);
                 }
             }

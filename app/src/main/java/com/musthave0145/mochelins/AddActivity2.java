@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +25,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class AddActivity2 extends AppCompatActivity {
-    EditText txtday;
+    TextView txtDate;
     EditText txtMoney;
     TextView btnCash;
     TextView btnCard;
@@ -44,12 +45,12 @@ public class AddActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add2);
-    txtday = findViewById(R.id.txtday);
+    txtDate = findViewById(R.id.txtDate);
     txtMoney = findViewById(R.id.txtMoney1);
     btnCash = findViewById(R.id.btnCash);
     btnCard = findViewById(R.id.btnCard);
-    txtStore1 = findViewById(R.id.txtStore1);
-    txtMenu1 = findViewById(R.id.txtMenu1);
+    txtStore1 = findViewById(R.id.txtStore);
+    txtMenu1 = findViewById(R.id.txtMenu);
     btnInput = findViewById(R.id.btnInput);
 
 
@@ -67,6 +68,8 @@ public class AddActivity2 extends AppCompatActivity {
         final GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(this, R.drawable.bubble);
 
 
+
+        // 현금 또는 카드 버튼을 눌렀을 때 동작
         btnCash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,9 +78,11 @@ public class AddActivity2 extends AppCompatActivity {
                     // 현재 빨간색 배경인 경우, 원래 색으로 변경
                     // 투명한 배경으로 설정
                     btnCard.setBackgroundResource(R.drawable.bubble); // Card 버튼도 투명한 배경으로 설정
+                    btnCard.setTextColor(Color.BLACK);
                 } else  {
                     // 현재 원래 색인 경우, 빨간색으로 변경
                     btnCash.setBackgroundResource(R.drawable.bubble1);
+                    btnCash.setTextColor(Color.WHITE);
                     btnCard.setBackgroundResource(R.drawable.bubble);// 빨간색 배경으로 설정
                     payment = "현금";
 
@@ -97,9 +102,11 @@ public class AddActivity2 extends AppCompatActivity {
                     // 현재 빨간색 배경인 경우, 원래 색으로 변경
                     // 투명한 배경으로 설정
                     btnCash.setBackgroundResource(R.drawable.bubble); // Cash 버튼도 투명한 배경으로 설정
+                    btnCash.setTextColor(Color.BLACK);
                 } else {
                     // 현재 원래 색인 경우, 빨간색으로 변경
                     btnCard.setBackgroundResource(R.drawable.bubble1); // 빨간색 배경으로 설정
+                    btnCard.setTextColor(Color.WHITE);
                     btnCash.setBackgroundResource(R.drawable.bubble);
                     payment = "카드";
                 }
@@ -121,7 +128,7 @@ public class AddActivity2 extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            date = txtday.getText().toString().trim();
+            date = txtDate.getText().toString().trim();
 
             money = txtMoney.getText().toString().trim();
             store = txtStore1.getText().toString().trim();
