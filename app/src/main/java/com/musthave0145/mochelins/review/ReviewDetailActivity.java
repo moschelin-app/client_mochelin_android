@@ -269,7 +269,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
             public void onResponse(Call<ReviewRes> call, Response<ReviewRes> response) {
                 Review review1 = response.body().item;
 
-                if(review1.isMine == 0){
+                if(review1.isMine == 1){
                     // 메뉴를 내가 쓴 리뷰면 보여주자!!
                     imgMyButton.setVisibility(View.VISIBLE);
 
