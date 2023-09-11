@@ -151,15 +151,7 @@ public class PlannerFragment extends Fragment {
         });
 
 
-        FloatingActionButton fab = rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //FAB 클릭 시 AddActivity 시작
-                Intent intent = new Intent(getActivity(),AddActivity2.class);
-                startActivity(intent);
-            }
-        });
+
         return rootView;
     }
 
