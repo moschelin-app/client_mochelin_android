@@ -20,6 +20,7 @@
                 android:id="@+id/imgStore"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/baseline_image_24" />
 
             <ImageView

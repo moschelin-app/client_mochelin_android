@@ -10,6 +10,7 @@ public class Store implements Serializable {
     public String content;
     public String storeName;
     public String storeAddr;
+    public String storePhoto;
     public int view;
     public double rating;
     public String photo;

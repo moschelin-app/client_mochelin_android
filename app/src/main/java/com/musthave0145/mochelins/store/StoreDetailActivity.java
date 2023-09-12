@@ -120,7 +120,7 @@ public class StoreDetailActivity extends AppCompatActivity {
 
 
                     // 대표 이미지 설정
-                    Glide.with(StoreDetailActivity.this).load(store.photo).error(R.drawable.not_image).into(imgStore);
+                    Glide.with(StoreDetailActivity.this).load(store.storePhoto).error(R.drawable.not_image).into(imgStore);
                     // 리뷰요약 설정
                     if (store.summary.isEmpty()){
                         txtStoreSum.setVisibility(View.GONE);
