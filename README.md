@@ -1,7 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=300&section=header&text=🍳%20Welcome%20to%20visit%20Mochelin%20Client%20👋&fontSize=45)
 - 대표사진 (PPT 첫 화면 사진)
-- <img src="![모슐랭](https://github.com/moschelin-app/client_mochelin_android/assets/124113134/7bc26fee-0d77-4429-9206-6837977db62e)
- width="100" height="200">
+
 ---
 # 당신이 찾는 맛집! 주변의 새로운 만남이 있는 곳, 모슐랭🍴
 
