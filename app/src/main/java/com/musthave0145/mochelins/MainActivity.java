@@ -28,6 +28,7 @@ import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.UserRes;
 import com.musthave0145.mochelins.review.ReviewCreateActivity;
 import com.musthave0145.mochelins.review.ReviewFragment;
+import com.musthave0145.mochelins.search.SearchActivity;
 import com.musthave0145.mochelins.user.InfoActivity;
 import com.musthave0145.mochelins.user.LoginActivity;
 import com.musthave0145.mochelins.user.RegisterActivity;
@@ -97,7 +98,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         // 탭바 화면이랑 연결
