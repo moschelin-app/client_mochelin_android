@@ -30,8 +30,10 @@
                     android:id="@+id/imgSearch"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/baseline_search_24_4"
-                    android:layout_marginRight="5dp"/>
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/imgAdd"

@@ -352,19 +352,21 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 app:cardBackgroundColor="#F36B6B"
                 app:cardCornerRadius="5dp"
-                app:cardElevation="8dp">
+                app:cardElevation="8dp"
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/txtMeetingChat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
                     android:gravity="center"
                     android:text="채팅방"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:layout_margin="10dp"/>
+                    android:textSize="18sp" />
 
 
             </androidx.cardview.widget.CardView>

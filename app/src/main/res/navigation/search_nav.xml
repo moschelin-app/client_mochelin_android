@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_nav"
+    app:startDestination="@id/historyFragment">
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.musthave0145.mochelins.search.HistoryFragment"
+        android:label="HistoryFragment" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.musthave0145.mochelins.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/searchReviewFragment"
+        android:name="com.musthave0145.mochelins.search.SearchReviewFragment"
+        android:label="fragment_search_review"
+        tools:layout="@layout/fragment_search_review" />
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.musthave0145.mochelins.search.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" />
+    <fragment
+        android:id="@+id/searchMeetingFragment"
+        android:name="com.musthave0145.mochelins.search.SearchMeetingFragment"
+        android:label="fragment_search_meeting"
+        tools:layout="@layout/fragment_search_meeting" />
+    <fragment
+        android:id="@+id/searchStoreFragment"
+        android:name="com.musthave0145.mochelins.search.SearchStoreFragment"
+        android:label="fragment_search_store"
+        tools:layout="@layout/fragment_search_store" />
+
+</navigation>

@@ -43,7 +43,7 @@ import retrofit2.Retrofit;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment implements TextWatcher {
+public class SearchFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,12 +75,12 @@ public class SearchFragment extends Fragment implements TextWatcher {
         fragment.setArguments(args);
         return fragment;
     }
-    private SearchAdapter searchAdapter;
-    public SearchRecentAdapter searchRecentAdpater;
-    EditText searchQuery;
-    ImageView btn_search;
-    TextView txtHistory;
-    String sword;
+
+
+    RecyclerView recyclerView;
+    SearchAdapter adapter;
+    ArrayList<SearchRel> searchRecentArrayList = new ArrayList<>();
+    String search;
 
 
     @Override
@@ -96,87 +96,22 @@ public class SearchFragment extends Fragment implements TextWatcher {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_search, container, false);
-        EditText editText = rootView.findViewById(R.id.searchQuery);
 
-        editText.addTextChangedListener(this);
+        search = this.getArguments().getString("search");
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView4);
-        searchAdapter = new SearchAdapter(this, getList(), sword);
-
-        searchQuery =rootView.findViewById(R.id.searchQuery);
-        btn_search = rootView.findViewById(R.id.btn_search);
-
-            btn_search.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    sword = searchQuery.getText().toString().trim();
-                    if(!sword.isEmpty()) {
-                        searchAdapter.setSearchQuery(sword);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("keyword", sword);
-                        ResultFragment resultFragment = new ResultFragment();
-                        resultFragment.setArguments(bundle);
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragmentContainerView, resultFragment);
-                        transaction.commit();
-                    }else{
-                        Toast.makeText(getActivity(),"검색어를 입력하세요",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-        searchQuery.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String keyword = s.toString().trim();
-                SpannableString spannableString = new SpannableString(keyword);
-                // 검색어가 비어 있으면 최근 검색어(txtHistory)를 보이도록 설정
-                searchAdapter.setSearchQuery(keyword);
-                sword = searchQuery.getText().toString().trim();
-                getList();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        recyclerView.setAdapter(searchAdapter);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        getList();
+
 
         return rootView;
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void getList() {
 
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        searchAdapter.getFilter().filter(s.toString());
-        sword = searchQuery.getText().toString().trim();
-        getList();
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
-
-    ArrayList<SearchRecent> recentArrayList = new ArrayList<>();
-
-
-    ArrayList<SearchRel> RelArrayList = new ArrayList<>();
-    List<String> searchList = new ArrayList<>() ;
-
-
-    private List<String> getList(){
+        searchRecentArrayList.clear();
 
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
 
@@ -185,23 +120,20 @@ public class SearchFragment extends Fragment implements TextWatcher {
         SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
         String token = sp.getString(Config.ACCESS_TOKEN, "");
 
-        Call<SearchRelRes> call = api.getRelList("Bearer " + token,sword);
-        final List<String> resultList = new ArrayList<>();
+        Call<SearchRelRes> call = api.getRelList("Bearer " + token, search);
+
         call.enqueue(new Callback<SearchRelRes>() {
             @Override
             public void onResponse(Call<SearchRelRes> call, Response<SearchRelRes> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     SearchRelRes searchRelRes = response.body();
-                    List<SearchRel> searchRelList = searchRelRes.items;
 
-                    for (SearchRel searchRel : searchRelList) {
-                        resultList.add(searchRel.search);
-                    }
+                    searchRecentArrayList.addAll(searchRelRes.items);
 
-
-
-                }else {
+                    adapter = new SearchAdapter(getActivity(), searchRecentArrayList, search);
+                    recyclerView.setAdapter(adapter);
+                } else {
 
                 }
             }
@@ -210,10 +142,5 @@ public class SearchFragment extends Fragment implements TextWatcher {
             public void onFailure(Call<SearchRelRes> call, Throwable t) {
             }
         });
-
-        return resultList;
-
     }
-
-
 }

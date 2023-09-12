@@ -126,15 +126,7 @@ public class ResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_result,container,false);
         imgback = rootView.findViewById(R.id.imgback);
-        imgback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                HistoryFragment historyFragment = new HistoryFragment();
-                transaction.replace(R.id.fragmentContainerView,historyFragment);
-                transaction.commit();
-            }
-        });
+
         txtSearchStore = rootView.findViewById(R.id.txtSearchStore);
         txtSearchStoreAddr=rootView.findViewById(R.id.txtSearchStoreAddr);
         SScardView = rootView.findViewById(R.id.SScardView);
@@ -149,7 +141,7 @@ public class ResultFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 SearchMeetingFragment searchMeetingFragment = new SearchMeetingFragment();
-                transaction.replace(R.id.fragmentContainerView,searchMeetingFragment);
+//                transaction.replace(R.id.fragmentContainerView,searchMeetingFragment);
                 transaction.commit();
                 Bundle bundle =getArguments();
                 if (bundle != null) {
@@ -167,7 +159,7 @@ public class ResultFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 SearchReviewFragment searchReviewFragment = new SearchReviewFragment();
-                transaction.replace(R.id.fragmentContainerView,searchReviewFragment);
+//                transaction.replace(R.id.fragmentContainerView,searchReviewFragment);
                 Bundle bundle =getArguments();
                 if (bundle != null) {
                     String data = bundle.getString("key");
@@ -185,7 +177,7 @@ public class ResultFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 SearchUserFragment searchUserFragment = new SearchUserFragment();
-                transaction.replace(R.id.fragmentContainerView,searchUserFragment);
+//                transaction.replace(R.id.fragmentContainerView,searchUserFragment);
                 transaction.commit();
 
             }
@@ -196,7 +188,7 @@ public class ResultFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 SearchStoreFragment searchstoreFragment = new SearchStoreFragment();
-                transaction.replace(R.id.fragmentContainerView,searchstoreFragment);
+//                transaction.replace(R.id.fragmentContainerView,searchstoreFragment);
                 transaction.commit();
             }
         });

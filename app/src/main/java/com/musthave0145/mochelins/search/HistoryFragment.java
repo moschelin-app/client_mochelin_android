@@ -77,35 +77,26 @@ public class HistoryFragment extends Fragment {
     }
     RecyclerView recyclerView;
     SearchRecentAdapter adapter;
-
-    EditText searchQuery;
+    ArrayList<SearchRecent> searchRecentArrayList = new ArrayList<>();
+//    ArrayList<>
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_history,container,false);
-        recyclerView =rootView.findViewById(R.id.recyclerView4);
+        recyclerView =rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        searchQuery = rootView.findViewById(R.id.searchQuery3);
-
-        searchQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                SearchFragment searchFragment = new SearchFragment();
-                transaction.replace(R.id.fragmentContainerView,searchFragment);
-                transaction.commit();
-            }
-        });
 
         addNetworkData();
 
         return rootView;
     }
-    ArrayList<SearchRecent> searchRecentArrayList = new ArrayList<>();
+
     private void addNetworkData() {
+        searchRecentArrayList.clear();
+
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
 
         SearchApi api = retrofit.create(SearchApi.class);

@@ -98,13 +98,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-        imgSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
+//        imgSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
         // 탭바 화면이랑 연결

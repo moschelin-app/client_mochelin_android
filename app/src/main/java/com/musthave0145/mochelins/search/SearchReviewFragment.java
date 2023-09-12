@@ -98,7 +98,7 @@ public class SearchReviewFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 ResultFragment resultFragment = new ResultFragment();
-                transaction.replace(R.id.fragmentContainerView, resultFragment);
+//                transaction.replace(R.id.fragmentContainerView, resultFragment);
                 transaction.commit();
             }
         });
