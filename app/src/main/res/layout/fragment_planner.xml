@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/plannerDrawer"
-    tools:context=".PlannerFragment">
+    tools:context=".acountbook.PlannerFragment">
 
 
     <LinearLayout
@@ -160,7 +160,7 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/txtMoney1"
+                    android:id="@+id/txtMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -1,31 +1,28 @@
 package com.musthave0145.mochelins.model;
 
-import com.google.gson.annotations.SerializedName;
+
 
 public class Account {
-     @SerializedName("storeName")
-     private String storeName;
 
-     @SerializedName("price")
-     private int price;
+     public String storeName;
+     public String price;
+     public String payment;
+     public String date;
+     public String content;
 
-     @SerializedName("payment")
-     private String payment;
 
-     @SerializedName("content")
-     private String content;
-
-     @SerializedName("date")
-     private String date;
-
-     @SerializedName("accountBooksId")
-     private int accountBooksId;
-     public Account(String storeName, int price, String payment, String content, String date, int accountBooksId) {
+     public Account(String storeName, String price, String payment, String date, String content) {
           this.storeName = storeName;
           this.price = price;
           this.payment = payment;
-          this.content = content;
           this.date = date;
-          this.accountBooksId = accountBooksId;
+          this.content = content;
+     }
+
+     public Account(String storeName, String price, String payment, String date) {
+          this.storeName = storeName;
+          this.price = price;
+          this.payment = payment;
+          this.date = date;
      }
 }

@@ -100,6 +100,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         //초기화
         TextView dayText;
         View parentView;
+        TextView payCount;
 
         public CalendarViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,6 +108,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             dayText =itemView.findViewById(R.id.dayText);
 
             parentView = itemView.findViewById(R.id.parentView);
+            payCount = itemView.findViewById(R.id.payCount);
 
 
 

@@ -4,13 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddActivity2"
+    tools:context=".acountbook.AddActivity2"
     android:orientation="vertical">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp">
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize">
+
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/baseline_arrow_back_24_2" />
+
+        <TextView
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="false"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal|top"
+            android:text="지출"
+            android:textSize="28sp" />
 
     </RelativeLayout>
 
@@ -24,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:text="날짜를 선택하세요."
             android:textSize="20sp" />
 
@@ -35,25 +56,24 @@
         android:layout_gravity="center">
 
 
-        <EditText
-            android:id="@+id/txtMoney1"
-            android:layout_width="408dp"
-            android:layout_height="61dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="3dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="8dp"
-            android:background="@null"
-            android:hint="금액을 입력하세요"
-            android:textAlignment="center"
-            android:textColor="@color/colorPressed"
-            android:textSize="26sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPrice"
+            style="@style/Widget.App.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPrice"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="금액 입력"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -73,51 +93,32 @@
                 android:text="지불방식"
                 android:textSize="20sp" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/btnCash"
-                    android:layout_width="79dp"
-                    android:layout_height="37dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="21dp"
-                    android:layout_marginEnd="11dp"
-                    android:layout_marginBottom="460dp"
+                    android:layout_width="65dp"
+                    android:layout_height="30dp"
+                    android:paddingTop="1dp"
                     android:background="@drawable/bubble"
-                    android:paddingTop="5dp"
+                    android:layout_marginLeft="20dp"
                     android:text="현금"
                     android:textAlignment="center"
-                    android:textColor="#151414"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_card"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17"
-                    app:layout_constraintVertical_bias="1.0" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/btnCard"
-                    android:layout_width="85dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="21dp"
-                    android:layout_marginEnd="11dp"
-                    android:layout_marginBottom="460dp"
+                    android:layout_width="65dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp"
+                    android:paddingTop="1dp"
                     android:background="@drawable/bubble"
-                    android:paddingTop="5dp"
                     android:text="카드"
                     android:textAlignment="center"
-                    android:textColor="#151414"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_card"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17"
-                    app:layout_constraintVertical_bias="1.0" />
-            </LinearLayout>
+                    android:textSize="18sp" />
+            </RelativeLayout>
 
         </LinearLayout>
     </RelativeLayout>
@@ -138,16 +139,24 @@
                 android:text="가게"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/txtStore"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutStore"
+                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@null"
-                android:hint="가게를 입력하세요."
-                android:textColor="#000000"
-                android:textSize="20sp"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editStore"
+                    style="@style/TextInputEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="가게 입력"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </RelativeLayout>
 
@@ -167,14 +176,24 @@
                 android:text="내용"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/txtMenu"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutContent"
+                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="내용을 입력하세요."
-                android:textColor="#131313"
-                android:textSize="20sp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editContent"
+                    style="@style/TextInputEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="내용 입력"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
     </RelativeLayout>
@@ -188,17 +207,7 @@
             android:id="@+id/btnInput"
             android:layout_width="174dp"
             android:layout_height="55dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="120dp"
-            android:layout_marginLeft="120dp"
-            android:layout_marginEnd="117dp"
-            android:layout_marginRight="117dp"
-            android:layout_marginBottom="26dp"
+            android:layout_centerInParent="true"
             android:background="@drawable/bubble1"
             android:padding="10dp"
             android:text="입력"

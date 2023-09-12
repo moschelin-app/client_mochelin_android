@@ -39,7 +39,7 @@
             android:name=".store.StoreDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".AddActivity2"
+            android:name=".acountbook.AddActivity2"
             android:exported="false" />
         <activity
             android:name=".user.EditActivity"

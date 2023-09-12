@@ -155,7 +155,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
         LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
-        TextView textView = customMarkerView.findViewById(R.id.txtMoney1);
+        TextView textView = customMarkerView.findViewById(R.id.txtMoney);
         textView.setTextColor(Color.BLACK);
         textView.setText(clickedMapData.getRating() + "");
         linearLayout.setBackgroundResource(R.drawable.corner1);
@@ -205,7 +205,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         // 커스텀 마커 레이아웃 설정
                         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                         ImageView imageView = customMarkerView.findViewById(R.id.imageView);
-                        TextView textView = customMarkerView.findViewById(R.id.txtMoney1);
+                        TextView textView = customMarkerView.findViewById(R.id.txtMoney);
 
                         imageView.setImageResource(R.drawable.baseline_star_24);
 
@@ -246,7 +246,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                     // 마커가 선택되었을때 이미지를 변경
                                     View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                                     LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
-                                    TextView textView = customMarkerView.findViewById(R.id.txtMoney1);
+                                    TextView textView = customMarkerView.findViewById(R.id.txtMoney);
                                     textView.setTextColor(Color.WHITE);
 
                                     textView.setText(clickedMapData.getRating() + "");

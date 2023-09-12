@@ -2,6 +2,7 @@ package com.musthave0145.mochelins.api;
 
 import com.musthave0145.mochelins.model.Account;
 import com.musthave0145.mochelins.model.AccountListRes;
+import com.musthave0145.mochelins.model.AcountRes;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -14,8 +15,8 @@ import retrofit2.http.Part;
 public interface AccountBookApi {
 
     @POST("/account")
-    Call<Void> addAccount(@Header("Authorization") String token,
-                             @Body Account account);
+    Call<AcountRes> addAccount(@Header("Authorization") String token,
+                               @Body Account account);
 
 
 }

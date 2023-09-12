@@ -6,35 +6,23 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.musthave0145.mochelins.maps.MapsFragment;
-import com.musthave0145.mochelins.PlannerFragment;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.adapter.ReviewAdapter;
 import com.musthave0145.mochelins.api.NetworkClient;
 import com.musthave0145.mochelins.api.ReviewApi;
-import com.musthave0145.mochelins.api.UserApi;
 import com.musthave0145.mochelins.config.Config;
-import com.musthave0145.mochelins.meeting.MeetingFragment;
 import com.musthave0145.mochelins.model.Review;
 import com.musthave0145.mochelins.model.ReviewRes;
-import com.musthave0145.mochelins.model.UserRes;
-import com.musthave0145.mochelins.user.InfoActivity;
 import com.musthave0145.mochelins.user.LoginActivity;
 
 import java.util.ArrayList;
