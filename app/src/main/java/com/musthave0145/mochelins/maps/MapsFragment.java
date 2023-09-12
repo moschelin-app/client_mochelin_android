@@ -103,8 +103,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     ImageView photo;
     CardView cardView;
     CardView researchCardView;
-    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
+//    Integer[] cardViews = {R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
+//            R.id.cardMap, R.id.cardLogout};
 
     String token;
 

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.AccountBookApi;
 import com.musthave0145.mochelins.api.NetworkClient;
@@ -34,6 +35,9 @@ public class AddActivity2 extends AppCompatActivity {
     TextInputEditText editPrice;
     TextInputEditText editStore;
     TextInputEditText editContent;
+    TextInputLayout layoutPrice;
+    TextInputLayout layoutStore;
+    TextInputLayout layoutContent;
     TextView btnCash;
     TextView btnCard;
     TextView btnInput;
@@ -62,6 +66,9 @@ public class AddActivity2 extends AppCompatActivity {
         editStore = findViewById(R.id.editStore);
         editContent = findViewById(R.id.editContent);
         btnInput = findViewById(R.id.btnInput);
+        layoutPrice = findViewById(R.id.layoutPrice);
+        layoutStore = findViewById(R.id.layoutStore);
+
 
         // 날짜 선택을 눌렀을 때의 동작
         txtDate.setOnClickListener(new View.OnClickListener() {
@@ -152,11 +159,15 @@ public class AddActivity2 extends AppCompatActivity {
         btnInput.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             price = editPrice.getText().toString().trim();
             storeName = editStore.getText().toString().trim();
             content = editContent.getText().toString().trim();
 
+            if (selectDate == "" && price == "" && storeName == "" && payment ==""){
+
+                Toast.makeText(AddActivity2.this, "필수 항목을 확인하세요.", Toast.LENGTH_SHORT).show();
+
+            }
 
             String date = selectDate;
 

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment reviewFragment;
     Fragment meetingFragment;
     Fragment mapsFragment;
-    Fragment plannerFragment;
+//    Fragment plannerFragment;
 
 
     ImageView imgMenu;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout mainDrawer;
     ImageView imgMenuClear;
     Integer[] sideView = { R.id.cardMe, R.id.cardReview, R.id.cardMeeting,
-            R.id.cardMap, R.id.cardPlanner, R.id.cardLogout};
+            R.id.cardMap, R.id.cardLogout};
     CardView[] sideViewList = new CardView[sideView.length];
 
 //    Toolbar toolbar;
@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
         reviewFragment = new ReviewFragment();
         meetingFragment = new MeetingFragment();
         mapsFragment = new MapsFragment();
-        plannerFragment = new PlannerFragment();
+        // 가게부 제외
+//        plannerFragment = new PlannerFragment();
 
         // 탭바가 눌렸을 때 프레그먼트 이동
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -125,11 +126,12 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.mapsFragment) {
                     imgAdd.setVisibility(View.GONE);
                     fragment = mapsFragment;
-                } else if (itemId == R.id.plannerFragment) {
-                    fragment = plannerFragment;
-                    imgAdd.setVisibility(View.VISIBLE);
-
                 }
+//                    else if (itemId == R.id.plannerFragment) {
+//                    fragment = plannerFragment;
+//                    imgAdd.setVisibility(View.VISIBLE);
+//
+//                }
                 return loadFragment(fragment);
             }
         });
@@ -144,10 +146,11 @@ public class MainActivity extends AppCompatActivity {
                 }else if(bottomNavigationView.getSelectedItemId() == R.id.meetingFragment){
                     Intent intent = new Intent(MainActivity.this, MeetingCreateActivity.class);
                     startActivity(intent);
-                } else if (bottomNavigationView.getSelectedItemId() == R.id.plannerFragment) {
-                    Intent intent = new Intent(MainActivity.this, AddActivity2.class);
-                    startActivity(intent);
                 }
+//                    else if (bottomNavigationView.getSelectedItemId() == R.id.plannerFragment) {
+//                    Intent intent = new Intent(MainActivity.this, AddActivity2.class);
+//                    startActivity(intent);
+//                }
             }
         });
 
@@ -208,17 +211,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        sideViewList[4].setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                bottomNavigationView.setSelectedItemId(R.id.plannerFragment);
+//                loadFragment(plannerFragment);
+//                mainDrawer.closeDrawer(GravityCompat.END);
+//
+//            }
+//        });
+
         sideViewList[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bottomNavigationView.setSelectedItemId(R.id.plannerFragment);
-                loadFragment(plannerFragment);
-                mainDrawer.closeDrawer(GravityCompat.END);
-
-            }
-        });
-
-        sideViewList[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Retrofit retrofit = NetworkClient.getRetrofitClient(MainActivity.this);

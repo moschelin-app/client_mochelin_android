@@ -20,9 +20,4 @@
         android:name="com.musthave0145.mochelins.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
-    <fragment
-        android:id="@+id/plannerFragment"
-        android:name="com.musthave0145.mochelins.acountbook.PlannerFragment"
-        android:label="fragment_planner"
-        tools:layout="@layout/fragment_planner" />
 </navigation>
