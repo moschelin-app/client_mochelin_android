@@ -18,7 +18,6 @@
 
 ## 💬 Language <br/>
 [![java Badge](https://img.shields.io/badge/-java-orange?style=flat)](https://www.oracle.com/java/technologies/downloads/)
-[![python Badge](https://img.shields.io/badge/-python-blue?style=flat)](https://www.python.org/)
 <br/>
 
 ## 🛠️ Tool<br/>
