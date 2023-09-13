@@ -1,5 +1,5 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=300&section=header&text=🍳%20Welcome%20to%20visit%20Mochelin%20Client%20👋&fontSize=45)
-- 대표사진 (PPT 첫 화면 사진)
+![main](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/ba1cdca6-b93e-4d61-bdaa-f56bea3d32c0)
+
 
 ---
 # 당신이 찾는 맛집! 주변의 새로운 만남이 있는 곳, 모슐랭🍴
@@ -46,3 +46,10 @@
 - Sliding Up Panel Layout
 
 ## Screen Shot
+<p align="center">
+<img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/1.jpg?raw=true" width="23%" height="35%">
+<img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/2.jpg?raw=true" width="23%" height="35%">
+<img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/3.jpg?raw=true" width="23%" height="35%">
+<img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/4.jpg?raw=true" width="23%" height="35%">
+</p>
+<br>
