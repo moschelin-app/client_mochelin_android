@@ -2,7 +2,7 @@
 
 
 ---
-# 당신이 찾는 맛집! 주변의 새로운 만남이 있는 곳, 모슐랭🍴
+# 🍳 당신이 찾는 맛집! 주변의 새로운 만남이 있는 곳, 모슐랭🍴
 
 ## 📌 Project Explanation
 
@@ -16,7 +16,7 @@
 - 위치 기반 서비스 : 유저의 현 위치를 기반으로, 가까운 가게의 리뷰와 모임을 확인할 수 있고 간략히 지도에 표시해서 간편하게 볼 수 있습니다.
 
 
-## 📚 Language <br/>
+## 💬 Language <br/>
 [![java Badge](https://img.shields.io/badge/-java-orange?style=flat)](https://www.oracle.com/java/technologies/downloads/)
 <br/>
 
@@ -35,7 +35,7 @@
 
 <br/>
 
-## Librarys
+## 📚 Librarys
 - Navigation
 - TabBar
 - RetroFit2
@@ -45,7 +45,7 @@
 - Google Maps
 - Sliding Up Panel Layout
 
-## Screen Shot
+## 📸 Screen Shot
 <p align="center">
 <img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/1.jpg?raw=true" width="23%" height="35%">
 <img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/2.jpg?raw=true" width="23%" height="35%">
