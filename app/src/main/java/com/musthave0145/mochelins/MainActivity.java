@@ -3,13 +3,19 @@ package com.musthave0145.mochelins;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
 
 //    Toolbar toolbar;
     String token;
+    boolean isLocationReady;
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+    double lat;
+    double lng;
 
 
     @Override
@@ -255,6 +267,37 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        // 로케이션 리스터를 만든다.
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                // 여러분들의 로직 작성.
+
+                // 위도 가져오는 코드.
+                // location.getLatitude();
+                // 경도 가져오는 코드.
+                // location.getLongitude();
+
+                lat = location.getLatitude();
+                lng = location.getLongitude();
+
+                isLocationReady = true;
+            }
+        };
+
+        if( ActivityCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED ){
+
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION} ,
+                    100);
+            return;
+        }
     }
 
     boolean loadFragment(Fragment fragment){
@@ -268,6 +311,34 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else {
             return false;
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 100){
+
+            if( ActivityCompat.checkSelfPermission(MainActivity.this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED ){
+
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION} ,
+                        100);
+                return;
+            }
+
+            // 위치기반 허용하였으므로,
+            // 로케이션 매니저에, 리스너를 연결한다. 그러면 동작한다.
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    3000,
+                    -1,
+                    locationListener);
+
         }
 
     }
