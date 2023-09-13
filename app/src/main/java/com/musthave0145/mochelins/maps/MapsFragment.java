@@ -81,19 +81,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         put(21, 23/setDis);
     }};
     int zoom = 16;
-
     Marker choiceMarker;
-
     ArrayList<MapData> customMapArrayList = new ArrayList<>();
-
     LocationManager locationManager;
     LocationListener locationListener;
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
-
     RatingBar ratingBar;
     TextView txtName;
     TextView txtVicinity;
@@ -124,20 +119,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         photo = rootView.findViewById(R.id.storePhoto);
         cardView = rootView.findViewById(R.id.cardView);
         researchCardView  = rootView.findViewById(R.id.researchCardView);
-
         mapView = rootView.findViewById(R.id.mapView);
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState);
-
         cardView.setVisibility(View.GONE);
         researchCardView.setVisibility(View.GONE);
-
         SharedPreferences sp = getActivity().getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
         token = sp.getString(Config.ACCESS_TOKEN, "");
-
         return rootView;
     }
-
 
     private Bitmap viewToBitmap(View view) {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -147,26 +137,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         view.draw(canvas);
         return bitmap;
     }
-
     private void setDefaultMarker(){
         // 해당 마커를 누를시 리뷰 1개를 가져옴
         MapData clickedMapData = customMapArrayList.get((int) choiceMarker.getTag());
-
-
         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
         LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
         TextView textView = customMarkerView.findViewById(R.id.txtMoney);
         textView.setTextColor(Color.BLACK);
         textView.setText(clickedMapData.getRating() + "");
         linearLayout.setBackgroundResource(R.drawable.corner1);
-
         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
-
         choiceMarker.setIcon(icon);
-
         choiceMarker=null;
     }
-
     private void setMapCenter(){
         LatLng latLng = new LatLng(lat, lng);
         CameraPosition.Builder builder = new CameraPosition.Builder();
@@ -177,19 +160,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     }
 
 
-
     private void getStoreList(){
 
         // 위치를 이동할때마다 가게를 불러오니, 마커와 배열의 값을 초기화 시킴
         customMapArrayList.clear();
         mMap.clear();
-
         Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
         MapApi api = retrofit.create(MapApi.class);
-
         Call<MapListRes> call = api.getPlaceList("Bearer " + token, lat, lng, mapZoomDis.get(zoom));
         call.enqueue(new Callback<MapListRes>() {
-
             @Override
             public void onResponse(Call<MapListRes> call, Response<MapListRes> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -197,18 +176,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     MapListRes mapList = response.body();
                     Log.d("안녕", "안녕");
                     customMapArrayList.addAll(mapList.items);
-
                     for (int i = 0; i < customMapArrayList.size(); i++) {
                         MapData mapData = customMapArrayList.get(i);
-
                         LatLng location = new LatLng(mapData.storeLat, mapData.storeLng);
                         // 커스텀 마커 레이아웃 설정
                         View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                         ImageView imageView = customMarkerView.findViewById(R.id.imageView);
                         TextView textView = customMarkerView.findViewById(R.id.txtMoney);
-
                         imageView.setImageResource(R.drawable.baseline_star_24);
-
                         String strRating = mapData.getRating() + "";
                         textView.setText(strRating);
                         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
@@ -216,65 +191,50 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                 .position(location)
                                 .title(mapData.storeName)
                                 .icon(icon);
-
                         Marker marker = mMap.addMarker(markerOptions);
                         marker.setTag(i);
                         marker.showInfoWindow();
                     }
-
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(@NonNull Marker marker) {
                             cardView.setVisibility(View.VISIBLE);
                             Integer markerIndexInteger = (Integer) marker.getTag();
-
                             if (markerIndexInteger != null) {
                                 int markerIndex = markerIndexInteger.intValue();
-
                                 // 선택되었던 마커가 존재하면 원래대로 돌림
                                 if (choiceMarker != null) {
                                     setDefaultMarker();
                                 }
-
                                 Log.i("숫자", markerIndex + "");
                                 if (markerIndex >= 0 && markerIndex < customMapArrayList.size()) {
                                     // 해당 마커를 누를시 리뷰 1개를 가져옴
                                     MapData clickedMapData = customMapArrayList.get(markerIndex);
-
-
                                     // 커스텀 마커 레이아웃 설정
                                     // 마커가 선택되었을때 이미지를 변경
                                     View customMarkerView = LayoutInflater.from(getActivity()).inflate(R.layout.marker_layout, null);
                                     LinearLayout linearLayout = customMarkerView.findViewById(R.id.linearLayout);
                                     TextView textView = customMarkerView.findViewById(R.id.txtMoney);
                                     textView.setTextColor(Color.WHITE);
-
                                     textView.setText(clickedMapData.getRating() + "");
                                     linearLayout.setBackgroundResource(R.drawable.corner_select);
-
                                     BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(viewToBitmap(customMarkerView));
-
                                     marker.setIcon(icon);
-
                                     choiceMarker = marker;
-
 
                                     Retrofit retrofit = NetworkClient.getRetrofitClient(getActivity());
                                     StoreApi api = retrofit.create(StoreApi.class);
                                     Call<StoreRes> call = api.getStoreList("Bearer " + token, clickedMapData.storeId);
-                                    Log.d("storeName", "인사");
                                     call.enqueue(new Callback<StoreRes>() {
                                         @Override
                                         public void onResponse(Call<StoreRes> call, Response<StoreRes> response) {
                                             if (response.isSuccessful() && response.body() != null) {
                                                 StoreRes storeList = response.body();
                                                 Store store = storeList.item;
-                                                Log.d("storeName", "성공했어");
                                                 int isLikeValue = store.likeCnt;
                                                 String isLikeString = String.valueOf(isLikeValue);
                                                 int isviewValue = (int) store.view;
                                                 String isViewString = String.valueOf(isviewValue);
-
                                                 double isRatingValue = store.rating;
                                                 int isStringInt = (int) isRatingValue;
                                                 //가게이름
@@ -292,7 +252,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                                         .error(R.drawable.not_image).into(photo);
                                                 //별점
                                                 ratingBar.setRating((float) isRatingValue);
-
                                                 // 선택된 가게의 리뷰 클릭 시
                                                 cardView.setOnClickListener(new View.OnClickListener() {
                                                     @Override
@@ -301,10 +260,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                                         Review review = new Review(store.id, store.storeId);
                                                         intent.putExtra("review", review);
                                                         startActivity(intent);
-
                                                     }
                                                 });
-
                                             } else {
                                                 Log.d("ApiResponse", "storeList is null");
                                             }
@@ -315,23 +272,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                                             Log.e("API Call Error", "Error fetching store details", t);
                                         }
                                     });
-
                                 }
                             }
                             return false;
                         }
                     });
-
                     mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(@NonNull LatLng latLng) {
                             cardView.setVisibility(View.GONE);
-
                             // 선택되었던 마커가 존재할 경우 이미지 설정을 원래대로 돌림
                             if (choiceMarker != null) {
                                 setDefaultMarker();
                             }
-
                         }
                     });
                 }
@@ -348,9 +301,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         showProgress();
-
         MapsFragment.this.mMap = googleMap;
-
         // 확대 최대 비율 설정
         mMap.setMinZoomPreference(14.f);
 
@@ -372,19 +323,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-
                 // 내 위치를 가져올때 딱 한번만 카메라를 이동함
                 if(isLocationReady==false){
-
                     lat = location.getLatitude();
                     lng = location.getLongitude();
-
                     setMapCenter();
-
                     getStoreList();
-
-
-
                     // 카메라 이동이 끝났을때 사용
                     mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                         @Override
@@ -392,12 +336,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                             // 위도, 경도, 줌 배율을 가져옴
                             LatLng latLng = mMap.getCameraPosition().target;
 //                    Log.i("확인", latLng.toString());
-
                             lat = latLng.latitude;
                             lng = latLng.longitude;
-
                             zoom = ((int) mMap.getCameraPosition().zoom ) -1;
-
                             if(isLocationReady == true){
                                 researchCardView.setVisibility(View.VISIBLE);
                             }

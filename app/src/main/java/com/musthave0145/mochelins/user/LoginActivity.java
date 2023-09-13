@@ -34,6 +34,7 @@ import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.AccessTokenInfo;
+import com.musthave0145.mochelins.LocatiojnPermissionActivity;
 import com.musthave0145.mochelins.MainActivity;
 import com.musthave0145.mochelins.R;
 import com.musthave0145.mochelins.api.NetworkClient;
@@ -205,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
                             editor.apply();
 
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, LocatiojnPermissionActivity.class);
                             startActivity(intent);
 
                             finish();
@@ -292,17 +293,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Unit invoke(com.kakao.sdk.user.model.User kakao_user, Throwable throwable) {
                 if(kakao_user != null){
-
                     showProgress();
-
                     long kakaoId = kakao_user.getId();
                     String email = kakao_user.getKakaoAccount().getEmail();
                     String name = kakao_user.getKakaoAccount().getProfile().getNickname();
                     String profile = kakao_user.getKakaoAccount().getProfile().getProfileImageUrl();
 
-
                     User user = new User(email,name, profile, kakaoId);
-
                     Retrofit retrofit = NetworkClient.getRetrofitClient(LoginActivity.this);
                     UserApi api = retrofit.create(UserApi.class);
                     Call<UserRes> call = api.login_kakao(user);
@@ -311,9 +308,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<UserRes> call, Response<UserRes> response) {
                             dismissProgress();
-
                             if(response.isSuccessful()){
-
                                 String token = response.body().accessToken;
 
                                 SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
@@ -321,7 +316,7 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString(Config.ACCESS_TOKEN, token);
                                 editor.apply();
 
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, LocatiojnPermissionActivity.class);
                                 startActivity(intent);
 
                                 finish();
