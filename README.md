@@ -42,7 +42,7 @@
 - Glide
 - Common-io
 - Kakao Login API
-- Google Maps
+- Google Maps API
 - Sliding Up Panel Layout
 
 ## 📸 Screen Shot
