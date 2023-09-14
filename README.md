@@ -21,7 +21,6 @@
 <br/>
 
 ## 🛠️ Tool<br/>
-[![Postman Badge](https://img.shields.io/badge/Postman-FF6C37?style=flat&logo=Postman&logoColor=white)](https://www.postman.com/downloads/)
 [![Android Studio Badge](https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=Android%20Studio&logoColor=white)](https://developer.android.com/studio)
 <br/>
 
