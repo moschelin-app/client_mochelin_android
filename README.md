@@ -50,8 +50,7 @@
 <img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/2.jpg?raw=true" width="23%" height="35%">
 <img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/3.jpg?raw=true" width="23%" height="35%">
 <img src="https://github.com/moschelin-app/client_mochelin_android/blob/main/projectimage/4.jpg?raw=true" width="23%" height="35%">
-<img src="![모슐랭1](https://github.com/moschelin-app/client_mochelin_android/assets/124113134/11863580-9e66-4ef5-b0fb-d700c666f8a6)
-".jpg?raw=true" width="23%" height="35%">
+<img src="![모슐랭1](https://github.com/moschelin-app/client_mochelin_android/assets/124113134/11863580-9e66-4ef5-b0fb-d700c666f8a6).jpg?raw=true" width="23%" height="35%">
 </p>
 <br>
 
