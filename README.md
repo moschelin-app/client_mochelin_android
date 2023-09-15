@@ -1,4 +1,4 @@
-![모슐랭1](https://github.com/moschelin-app/client_mochelin_android/assets/124113134/3d6bcba1-9ff9-4434-b339-c790cd690d9b)![모슐랭1](https://github.com/moschelin-app/client_mochelin_android/assets/124113134/e098c6fb-0cbd-4de1-bc79-9965ac849b81)![main](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/ba1cdca6-b93e-4d61-bdaa-f56bea3d32c0)
+![main](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/ba1cdca6-b93e-4d61-bdaa-f56bea3d32c0)
 
 
 ---
