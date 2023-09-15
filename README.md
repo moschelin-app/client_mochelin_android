@@ -62,7 +62,7 @@
 ## 📸 Screen Shot
 <p align="center">
 
-![카카오로그인](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/161fd4ce-c761-48ad-a72a-058fed8a21d8)
+![로그인수정](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/6089fb2a-fc22-4fcd-a8ae-586e610819d9)
 ![리뷰](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/c9dbcc9f-fc0d-41f6-98ed-f4fb00f6da7c)
 ![모임](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/6a710e6f-c832-419e-95b1-69a9e9d7cfce)
 ![지도](https://github.com/moschelin-app/client_mochelin_android/assets/124220561/ef2608c2-6473-4d0d-8f5e-e3583c23f84e)
