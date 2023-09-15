@@ -9,6 +9,9 @@
    <img src="https://github.com/moschelin-app/client_mochelin_android/assets/108748094/99a28583-68cf-4bc1-9b01-49b79ac3143a" width=300 hight=300/>
    <img src="https://github.com/moschelin-app/client_mochelin_android/assets/108748094/75635ab2-086e-4c42-955b-fae1cb8d8056" width=300 hight=300/>
 <br><br>
+
+</div>
+<div>
 <h3> 
 타인과 만나는 것에 원하면서도 두려워하는 젊은 세대들이 많고,<br> 
 사회 전반적으로 외로움 수준이 최근 다시 높아진 상황을 보았을때 사람들과 쉽게 만날 수 있는 방법이 없을까?<br>
@@ -16,8 +19,7 @@
 자신이 관심 있고 좋아하는 음식의 리뷰를 확인하면서 같이 음식을 먹을 수 있게 하는 모임을 만들 수 있다면, 
 <br>타인과 만나는데 있어서 조금 더 쉽게 만날수 있게 도움을 주는 앱이 있으면 해서 만들었습니다.
 </h3>
-  
-</div>
+   </div>
 
 
 ---
